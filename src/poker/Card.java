@@ -1,5 +1,7 @@
 package poker;
 
+import java.util.Objects;
+
 /**
  * Card
  *
@@ -49,5 +51,23 @@ public class Card implements Comparable<Card> {
     @Override
     public String toString() {
         return value.getSymbol();
+    }
+
+    /**
+     * Try parsing a card
+     * @param text Text to be parsed
+     * @return The parsed card or null if the parsing failed
+     */
+    public static Card tryParse(String text){
+        Value cardValue = null;
+        for(var value: Value.values()) {
+            if(Objects.equals(text, value.getSymbol()))
+            {
+                cardValue = value;
+                break;
+            }
+        }
+        if(cardValue == null) return null;
+        return new Card(cardValue);
     }
 }

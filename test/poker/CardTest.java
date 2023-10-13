@@ -1,6 +1,7 @@
+package poker;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import poker.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,7 +35,21 @@ class CardTest {
      * **/
     @Test
     void testEquals() {
-        assertFalse(c1.equals(c2));
-        assertTrue(c1.equals(c3));
+        assertNotEquals(c1, c2);
+        assertEquals(c1, c3);
+    }
+
+    /**
+     * Test card parsing
+     * **/
+    @Test
+    void testParsing() {
+        assertNull(Card.tryParse(""));
+        assertNull(Card.tryParse("1"));
+        assertNull(Card.tryParse("26"));
+        assertNull(Card.tryParse("W"));
+        assertEquals(new Card(Value.THREE), Card.tryParse("3"));
+        assertEquals(new Card(Value.TEN), Card.tryParse("10"));
+        assertEquals(new Card(Value.KING), Card.tryParse("K"));
     }
 }

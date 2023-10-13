@@ -1,5 +1,7 @@
 package poker;
 
+import java.text.ParseException;
+
 /**
  * Hand
  * @author Team B
@@ -30,6 +32,28 @@ public class Hand {
             string = string + card.toString() + " ";
         }
         return string;
+    }
+
+    /**
+     * Parses hand
+     * @param text Hand input
+     * @return The cards of the hand
+     * @throws IllegalArgumentException The input doesn't contain the exacts number of card that is expected for that game
+     * @throws ParseException The input contains an invalid card
+     */
+    public static Card[] parse(String text, int handSize) throws IllegalArgumentException, ParseException {
+        var cards = new Card[handSize];
+        var cardsUnparsed = text.split(" ");
+
+        if (cardsUnparsed.length != handSize)
+            throw new IllegalArgumentException("Hand must contain exactly " + handSize + " cards");
+
+        for (int i = 0; i < handSize; i++) {
+            cards[i] = Card.tryParse(cardsUnparsed[i]);
+            if (cards[i] == null)
+                throw new ParseException("Couldn't parse card (" + cardsUnparsed[i] + ")", i);
+        }
+        return cards;
     }
 
 
