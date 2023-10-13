@@ -37,11 +37,11 @@ public class Hand {
     /**
      * Parses hand
      * @param text Hand input
-     * @return The cards of the hand
+     * @return The parsed hand
      * @throws IllegalArgumentException The input doesn't contain the exacts number of card that is expected for that game
      * @throws ParseException The input contains an invalid card
      */
-    public static Card[] parse(String text, int handSize) throws IllegalArgumentException, ParseException {
+    public static Hand parse(String text, int handSize) throws IllegalArgumentException, ParseException {
         var cards = new Card[handSize];
         var cardsUnparsed = text.split(" ");
 
@@ -53,7 +53,7 @@ public class Hand {
             if (cards[i] == null)
                 throw new ParseException("Couldn't parse card (" + cardsUnparsed[i] + ")", i);
         }
-        return cards;
+        return new Hand(cards);
     }
 
 
