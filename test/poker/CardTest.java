@@ -37,4 +37,18 @@ class CardTest {
         assertFalse(c1.equals(c2));
         assertTrue(c1.equals(c3));
     }
+
+    /**
+     * Test card parsing
+     * **/
+    @Test
+    void testParsing() {
+        assertNull(Card.tryParse(""));
+        assertNull(Card.tryParse("1"));
+        assertNull(Card.tryParse("26"));
+        assertNull(Card.tryParse("W"));
+        assertEquals(new Card(Value.THREE), Card.tryParse("3"));
+        assertEquals(new Card(Value.TEN), Card.tryParse("10"));
+        assertEquals(new Card(Value.KING), Card.tryParse("K"));
+    }
 }

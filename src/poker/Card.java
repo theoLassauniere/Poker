@@ -49,6 +49,11 @@ public class Card implements Comparable<Card> {
         return value.getSymbol();
     }
 
+    /**
+     * Try parsing a card
+     * @param text Text to be parsed
+     * @return The parsed card or null if the parsing failed
+     */
     public static Card tryParse(String text){
         Value cardValue = null;
         for(var value: Value.values()) {
