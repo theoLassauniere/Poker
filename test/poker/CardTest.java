@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import poker.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -8,6 +9,9 @@ class CardTest {
     Card c2;
     Card c3;
 
+    /**
+     * Initialize Cards for testing
+     * **/
     @BeforeEach
     void setUp() {
         c1 = new Card(Value.EIGHT);
@@ -15,6 +19,9 @@ class CardTest {
         c3 = new Card(Value.EIGHT);
     }
 
+    /**
+     * Test the compareTo method with all the possibilities (equality,superiority,inferiority)
+     * **/
     @Test
     void testCompareTo() {
         assertEquals(0,c1.compareTo(c3));
@@ -22,6 +29,9 @@ class CardTest {
         assertEquals(-1,c1.compareTo(c2));
     }
 
+    /**
+     * Test the equals method with an equality and an inequality
+     * **/
     @Test
     void testEquals() {
         assertFalse(c1.equals(c2));
