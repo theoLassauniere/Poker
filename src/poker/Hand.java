@@ -2,7 +2,7 @@ package poker;
 
 /**
  * Hand
- * @author TeamB
+ * @author Team B
  */
 
 public class Hand {
@@ -14,6 +14,13 @@ public class Hand {
      */
     public Hand(Card[] hand){
         this.cards = hand;
+    }
+
+    /**
+     * Gets cards
+     */
+    public Card[] getCards() {
+        return cards;
     }
 
     @Override
@@ -28,9 +35,6 @@ public class Hand {
 
     /**
      * Swap method used in the sort method ; swap two cards based on their indexes
-     * @param indexCard1
-     * @param indexCard2
-     *
      */
     private void swap(int indexCard1, int indexCard2) {
         Card carteTest = this.cards[indexCard1];
@@ -51,5 +55,13 @@ public class Hand {
             }
             swap(i, swapIndex);
         }
+    }
+
+    public int[] occurrences(){
+        var values = new int[Value.values().length];
+        for (Card card : cards){
+            values[card.getValue().ordinal()]++;
+        }
+        return values;
     }
 }

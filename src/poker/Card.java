@@ -17,6 +17,10 @@ public class Card implements Comparable<Card> {
         this.value = value;
     }
 
+    public Value getValue() {
+        return value;
+    }
+
     /**
      * Compares the value of the current card with another card
      */
