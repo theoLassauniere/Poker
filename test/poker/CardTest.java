@@ -1,6 +1,7 @@
+package poker;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import poker.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,8 +35,8 @@ class CardTest {
      * **/
     @Test
     void testEquals() {
-        assertFalse(c1.equals(c2));
-        assertTrue(c1.equals(c3));
+        assertNotEquals(c1, c2);
+        assertEquals(c1, c3);
     }
 
     /**
