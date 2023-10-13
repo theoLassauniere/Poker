@@ -4,7 +4,7 @@ import java.text.ParseException;
 
 /**
  * Hand
- * @author TeamB
+ * @author Team B
  */
 
 public class Hand {
@@ -16,6 +16,13 @@ public class Hand {
      */
     public Hand(Card[] hand){
         this.cards = hand;
+    }
+
+    /**
+     * Gets cards
+     */
+    public Card[] getCards() {
+        return cards;
     }
 
     @Override
@@ -30,11 +37,11 @@ public class Hand {
     /**
      * Parses hand
      * @param text Hand input
-     * @return The cards of the hand
+     * @return The parsed hand
      * @throws IllegalArgumentException The input doesn't contain the exacts number of card that is expected for that game
      * @throws ParseException The input contains an invalid card
      */
-    public static Card[] parse(String text, int handSize) throws IllegalArgumentException, ParseException {
+    public static Hand parse(String text, int handSize) throws IllegalArgumentException, ParseException {
         var cards = new Card[handSize];
         var cardsUnparsed = text.split(" ");
 
@@ -46,15 +53,12 @@ public class Hand {
             if (cards[i] == null)
                 throw new ParseException("Couldn't parse card (" + cardsUnparsed[i] + ")", i);
         }
-        return cards;
+        return new Hand(cards);
     }
 
 
     /**
      * Swap method used in the sort method ; swap two cards based on their indexes
-     * @param indexCard1
-     * @param indexCard2
-     *
      */
     private void swap(int indexCard1, int indexCard2) {
         Card carteTest = this.cards[indexCard1];
@@ -75,5 +79,13 @@ public class Hand {
             }
             swap(i, swapIndex);
         }
+    }
+
+    public int[] occurrences(){
+        var values = new int[Value.values().length];
+        for (Card card : cards){
+            values[card.getValue().ordinal()]++;
+        }
+        return values;
     }
 }
