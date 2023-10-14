@@ -3,13 +3,15 @@ package poker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 import java.text.ParseException;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 /**
  * @author Team B
  */
-public class HandTest {
+class HandTest {
     Hand hand1;
     Hand hand2;
     Hand hand3;
@@ -97,9 +99,9 @@ public class HandTest {
         assertThrowsExactly(ParseException.class, () -> Hand.parse("26", 1));
         assertThrowsExactly(ParseException.class, () -> Hand.parse("W", 1));
         assertThrowsExactly(IllegalArgumentException.class, () -> Hand.parse("3 5", 1));
-        assertArrayEquals(new Card[]{new Card(Value.THREE)}, Hand.parse("3", 1));
-        assertArrayEquals(new Card[]{new Card(Value.TEN)}, Hand.parse("10", 1));
-        assertArrayEquals(new Card[]{new Card(Value.KING)}, Hand.parse("K", 1));
+        assertArrayEquals(new Card[]{new Card(Value.THREE)}, Hand.parse("3", 1).getCards());
+        assertArrayEquals(new Card[]{new Card(Value.TEN)}, Hand.parse("10", 1).getCards());
+        assertArrayEquals(new Card[]{new Card(Value.KING)}, Hand.parse("K", 1).getCards());
     }
 
 }
