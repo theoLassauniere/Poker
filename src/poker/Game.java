@@ -9,10 +9,20 @@ import java.util.Scanner;
  * @author Team B
  */
 public class Game {
+    public static final int DEFAULT_HAND_SIZE = 1;
+
     public final int handSize;
 
     public Game(int handSize) {
         this.handSize = handSize;
+    }
+
+    public static void main(String[] args) {
+        try {
+            new Game(DEFAULT_HAND_SIZE).start();
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e); // TODO
+        }
     }
 
     /**
