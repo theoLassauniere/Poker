@@ -7,7 +7,7 @@ import java.text.ParseException;
  * @author Team B
  */
 
-public class Hand {
+public class Hand implements Comparable<Hand>{
     private final Card[] cards;
 
     /**
@@ -87,5 +87,16 @@ public class Hand {
             values[card.getValue().ordinal()]++;
         }
         return values;
+    }
+
+
+    @Override
+    public int compareTo(Hand otherHand) {
+        int cardIndex = 0;
+        while(cards[cardIndex].compareTo(otherHand.getCards()[cardIndex])==0){
+            cardIndex++;
+            if(cardIndex==cards.length) return 0;
+        }
+        return cards[cardIndex].compareTo(otherHand.getCards()[cardIndex]);
     }
 }

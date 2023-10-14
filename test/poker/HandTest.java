@@ -11,9 +11,12 @@ import java.text.ParseException;
  */
 public class HandTest {
     Hand hand1;
+    Hand hand2;
+    Hand hand3;
 
     @BeforeEach
     void setUp() {
+
         Card[] main1 = new Card[] {
                 new Card(Value.EIGHT),
                 new Card(Value.KING),
@@ -21,7 +24,25 @@ public class HandTest {
                 new Card(Value.TWO),
                 new Card(Value.FIVE)
         };
+        Card[] main2 = new Card[] {
+                new Card(Value.EIGHT),
+                new Card(Value.KING),
+                new Card(Value.EIGHT),
+                new Card(Value.TWO),
+                new Card(Value.FIVE)
+        };
+
+        Card[] main3 = new Card[]{
+                new Card(Value.ACE),
+                new Card(Value.KING),
+                new Card(Value.EIGHT),
+                new Card(Value.TWO),
+                new Card(Value.FIVE)
+        };
+
         hand1 = new Hand(main1);
+        hand2 = new Hand(main2);
+        hand3 = new Hand(main3);
     }
 
     @Test
@@ -42,6 +63,16 @@ public class HandTest {
                 new Card(Value.TWO)
 
         },hand1.getCards());
+    }
+
+    /**
+     * Test the compareTo method with all the possibilities (equality,superiority,inferiority)
+     * **/
+    @Test
+    void compareToTest(){
+        assertEquals(0,hand1.compareTo(hand2));
+        assertEquals(1,hand3.compareTo(hand1));
+        assertEquals(-1,hand1.compareTo(hand3));
     }
 
     @Test
