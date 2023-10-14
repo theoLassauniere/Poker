@@ -17,16 +17,14 @@ public class Game {
 
     /**
      * Start the game, create the hands with the entries
-     *
-     * @throws IllegalArgumentException
-     * @throws ParseException
      */
     public void start() throws IllegalArgumentException, ParseException {
-        System.out.print("Main 1:");
-        Scanner hand1 = new Scanner(System.in);
-        System.out.print("Main 2:");
-        Scanner hand2 = new Scanner(System.in);
-        Hand handOne = Hand.parse(hand1.nextLine(), handSize);
-        Hand handTwo = Hand.parse(hand1.nextLine(), handSize);
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Main 1: ");
+        Hand hand1 = Hand.parse(scanner.nextLine(), handSize);
+        System.out.print("Main 2: ");
+        Hand hand2 = Hand.parse(scanner.nextLine(), handSize);
+
+        System.out.println(hand1.compareTo(hand2)); // TODO
     }
 }
