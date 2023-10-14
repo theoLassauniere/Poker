@@ -4,17 +4,19 @@ import java.text.ParseException;
 
 /**
  * Hand
+ *
  * @author Team B
  */
 
-public class Hand implements Comparable<Hand>{
+public class Hand implements Comparable<Hand> {
     private final Card[] cards;
 
     /**
      * Hand constructor
+     *
      * @param hand a tab of cards
      */
-    public Hand(Card[] hand){
+    public Hand(Card[] hand) {
         this.cards = hand;
     }
 
@@ -36,10 +38,11 @@ public class Hand implements Comparable<Hand>{
 
     /**
      * Parses hand
+     *
      * @param text Hand input
      * @return The parsed hand
      * @throws IllegalArgumentException The input doesn't contain the exacts number of card that is expected for that game
-     * @throws ParseException The input contains an invalid card
+     * @throws ParseException           The input contains an invalid card
      */
     public static Hand parse(String text, int handSize) throws IllegalArgumentException, ParseException {
         var cards = new Card[handSize];
@@ -69,10 +72,10 @@ public class Hand implements Comparable<Hand>{
     /**
      * Sort the hand in descending order
      */
-    public void sortHand(){
-        for (int i = 0; i< cards.length; i++){
+    public void sortHand() {
+        for (int i = 0; i < cards.length; i++) {
             int swapIndex = i;
-            for (int j=i+1;j< cards.length;j++){
+            for (int j = i + 1; j < cards.length; j++) {
                 if (cards[swapIndex].compareTo(cards[j]) < 0) {
                     swapIndex = j;
                 }
@@ -81,9 +84,9 @@ public class Hand implements Comparable<Hand>{
         }
     }
 
-    public int[] occurrences(){
+    public int[] occurrences() {
         var values = new int[Value.values().length];
-        for (Card card : cards){
+        for (Card card : cards) {
             values[card.getValue().ordinal()]++;
         }
         return values;
@@ -93,9 +96,9 @@ public class Hand implements Comparable<Hand>{
     @Override
     public int compareTo(Hand otherHand) {
         int cardIndex = 0;
-        while(cards[cardIndex].compareTo(otherHand.getCards()[cardIndex])==0){
+        while (cards[cardIndex].compareTo(otherHand.getCards()[cardIndex]) == 0) {
             cardIndex++;
-            if(cardIndex==cards.length) return 0;
+            if (cardIndex == cards.length) return 0;
         }
         return cards[cardIndex].compareTo(otherHand.getCards()[cardIndex]);
     }

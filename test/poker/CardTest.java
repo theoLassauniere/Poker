@@ -12,7 +12,7 @@ class CardTest {
 
     /**
      * Initialize Cards for testing
-     * **/
+     **/
     @BeforeEach
     void setUp() {
         c1 = new Card(Value.EIGHT);
@@ -22,17 +22,17 @@ class CardTest {
 
     /**
      * Test the compareTo method with all the possibilities (equality,superiority,inferiority)
-     * **/
+     **/
     @Test
     void testCompareTo() {
-        assertEquals(0,c1.compareTo(c3));
-        assertEquals(1,c2.compareTo(c1));
-        assertEquals(-1,c1.compareTo(c2));
+        assertEquals(0, c1.compareTo(c3));
+        assertEquals(1, c2.compareTo(c1));
+        assertEquals(-1, c1.compareTo(c2));
     }
 
     /**
      * Test the equals method with an equality and an inequality
-     * **/
+     **/
     @Test
     void testEquals() {
         assertNotEquals(c1, c2);
@@ -41,7 +41,7 @@ class CardTest {
 
     /**
      * Test card parsing
-     * **/
+     **/
     @Test
     void testParsing() {
         assertNull(Card.tryParse(""));

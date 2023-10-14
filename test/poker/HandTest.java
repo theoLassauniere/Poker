@@ -18,14 +18,14 @@ class HandTest {
     @BeforeEach
     void setUp() {
 
-        Card[] main1 = new Card[] {
+        Card[] main1 = new Card[]{
                 new Card(Value.EIGHT),
                 new Card(Value.KING),
                 new Card(Value.EIGHT),
                 new Card(Value.TWO),
                 new Card(Value.FIVE)
         };
-        Card[] main2 = new Card[] {
+        Card[] main2 = new Card[]{
                 new Card(Value.EIGHT),
                 new Card(Value.KING),
                 new Card(Value.EIGHT),
@@ -54,7 +54,7 @@ class HandTest {
                 new Card(Value.EIGHT),
                 new Card(Value.TWO),
                 new Card(Value.FIVE)
-        },hand1.getCards());
+        }, hand1.getCards());
         hand1.sortHand();
         assertArrayEquals(new Card[]{
                 new Card(Value.KING),
@@ -63,17 +63,17 @@ class HandTest {
                 new Card(Value.FIVE),
                 new Card(Value.TWO)
 
-        },hand1.getCards());
+        }, hand1.getCards());
     }
 
     /**
      * Test the compareTo method with all the possibilities (equality,superiority,inferiority)
-     * **/
+     **/
     @Test
-    void compareToTest(){
-        assertEquals(0,hand1.compareTo(hand2));
-        assertEquals(1,hand3.compareTo(hand1));
-        assertEquals(-1,hand1.compareTo(hand3));
+    void compareToTest() {
+        assertEquals(0, hand1.compareTo(hand2));
+        assertEquals(1, hand3.compareTo(hand1));
+        assertEquals(-1, hand1.compareTo(hand3));
     }
 
     @Test
@@ -84,8 +84,8 @@ class HandTest {
                 new Card(Value.EIGHT),
                 new Card(Value.TWO),
                 new Card(Value.FIVE)
-        },hand1.getCards());
-        assertArrayEquals(new int[]{1,0,0,1,0,0,2,0,0,0,0,1,0},hand1.occurrences());
+        }, hand1.getCards());
+        assertArrayEquals(new int[]{1, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 1, 0}, hand1.occurrences());
     }
 
     /**
