@@ -81,6 +81,10 @@ public class Hand {
         }
     }
 
+    /**
+     * occurrences method
+     * @return an int tab
+     */
     public int[] occurrences(){
         var values = new int[Value.values().length];
         for (Card card : cards){
