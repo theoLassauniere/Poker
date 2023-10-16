@@ -29,11 +29,12 @@ public class Hand implements Comparable<Hand> {
 
     @Override
     public String toString() {
-        String string = "";
+        StringBuilder string = new StringBuilder();
         for (Card card : cards) {
-            string = string + card.toString() + " ";
+            string.append(card.toString()).append(" ");
         }
-        return string;
+        string.setLength(string.length()-1);
+        return string.toString();
     }
 
     /**
