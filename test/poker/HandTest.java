@@ -11,9 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Team B
  */
 class HandTest {
-    Hand hand1;
-    Hand hand2;
-    Hand hand3;
+    Hand hand1,hand2,hand3,hand4;
 
     @BeforeEach
     void setUp() {
@@ -41,9 +39,18 @@ class HandTest {
                 new Card(Value.FIVE)
         };
 
+        Card[] main4 = new Card[]{
+                new Card(Value.ACE),
+                new Card(Value.TWO),
+                new Card(Value.EIGHT),
+                new Card(Value.TWO),
+                new Card(Value.FIVE)
+        };
+
         hand1 = new Hand(main1);
         hand2 = new Hand(main2);
         hand3 = new Hand(main3);
+        hand4 = new Hand(main4);
     }
 
     @Test
@@ -70,10 +77,21 @@ class HandTest {
      * Test the compareTo method with all the possibilities (equality,superiority,inferiority)
      **/
     @Test
-    void compareToTest() {
-        assertEquals(0, hand1.compareTo(hand2));
-        assertEquals(1, hand3.compareTo(hand1));
-        assertEquals(-1, hand1.compareTo(hand3));
+    void compareTo() {
+        assertEquals(1,hand2.compareTo(hand3));
+        assertEquals(-1,hand3.compareTo(hand1));
+        assertEquals(0,hand1.compareTo(hand2));
+        assertEquals(1,hand2.compareTo(hand4));
+    }
+
+    /**
+     * Test the compareCards method with all the possibilities (equality,superiority,inferiority)
+     **/
+    @Test
+    void compareCards(){
+        assertEquals(0, hand1.compareCards(hand2));
+        assertEquals(1, hand3.compareCards(hand1));
+        assertEquals(-1, hand1.compareCards(hand3));
     }
 
     @Test
