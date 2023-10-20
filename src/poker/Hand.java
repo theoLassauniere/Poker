@@ -1,6 +1,7 @@
 package poker;
 
 import java.text.ParseException;
+import java.util.Arrays;
 
 /**
  * Hand
@@ -97,7 +98,6 @@ public class Hand implements Comparable<Hand> {
         return values;
     }
 
-
     @Override
     public int compareTo(Hand otherHand) {
         int cardIndex = 0;
@@ -106,5 +106,15 @@ public class Hand implements Comparable<Hand> {
             if (cardIndex == cards.length) return 0;
         }
         return cards[cardIndex].compareTo(otherHand.getCards()[cardIndex]);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Hand hand && compareTo(hand) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(cards);
     }
 }
