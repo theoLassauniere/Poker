@@ -104,7 +104,6 @@ public class Hand implements Comparable<Hand> {
      * @param otherHand the other hand to be compared.
      * @return Compare patterns and values of cards between the two hands
      */
-    @Override
     public int compareTo(Hand otherHand) {
         int testPatterns = comparePatterns(otherHand);
         if(testPatterns!=0) return testPatterns;
@@ -139,7 +138,9 @@ public class Hand implements Comparable<Hand> {
      **/
     public void deleteCardInPattern(HashMap<Patterns,ArrayList<Integer>> patterns){
         for(int i=0;i<cards.length;i++){
-            if(patterns.values().contains(cards[i])) cards[i] = null;
+            for(Patterns p: patterns.keySet()) {
+                if (cards[i] !=null && patterns.get(p).contains(cards[i].getValue().ordinal())) {cards[i] = null;}
+            }
         }
     }
 
