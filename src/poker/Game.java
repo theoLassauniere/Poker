@@ -9,7 +9,7 @@ import java.util.Scanner;
  * @author Team B
  */
 public class Game {
-    public static final int DEFAULT_HAND_SIZE = 1;
+    public static final int DEFAULT_HAND_SIZE = 5;
 
     public final int handSize;
 
@@ -35,6 +35,44 @@ public class Game {
         System.out.print("Main 2: ");
         Hand hand2 = Hand.parse(scanner.nextLine(), handSize);
 
-        System.out.println(hand1.compareTo(hand2)); // TODO
+        hand1.sortHand();
+        hand2.sortHand();
+
+        printResult(hand1.getResult(hand2)); // TODO
     }
+
+    public void printResult(int[] result){
+        int valueWinning = result[2];
+        switch (result[1]){
+            case -2:// equality case
+                System.out.println("Egalité");
+                break;
+            case -1: // without patterns case
+                if (result[0] == 1) {
+                    System.out.println("La main " + 1 + " gagne avec la carte la plus haute : " + valueWinning); //It is possible to take name of enum thanks to index to print the good value for exemple if we have an ACE for the moment print 14 not ACE, so if it is possible better than do if or switch
+                }
+                else{
+                    System.out.println("La main " + 2 + " gagne avec la carte la plus haute : " + valueWinning);
+                }
+                break;
+            case 2: //put the index of the Pair in enum
+                if (result[0] == 1) {
+                    System.out.println("La main " + 1 + " gagne avec une paire de : " + valueWinning);
+                }
+                else {
+                    System.out.println("La main " + 2 + " gagne avec une paire de : " + valueWinning);
+                }
+                break;
+            case 1://put the index of the Brelan in enumm
+                if (result[0] == 1) {
+                    System.out.println("La main " + 1 + " gagne avec un brelan de : " + valueWinning);
+                }
+                else {
+                    System.out.println("La main " + 2 + " gagne avec un brelan de : " + valueWinning);
+                }
+                break;
+        }
+    }
+
+
 }

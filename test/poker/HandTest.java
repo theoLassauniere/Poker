@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Team B
  */
 class HandTest {
-    Hand hand1,hand2,hand3,hand4,hand5,hand6;
+    Hand hand1,hand2,hand3,hand4,hand5,hand6,hand7,hand8;
 
     @BeforeEach
     void setUp() {
@@ -26,6 +26,7 @@ class HandTest {
                 new Card(Value.TWO),
                 new Card(Value.FIVE)
         };
+
         Card[] main2 = new Card[]{
                 new Card(Value.EIGHT),
                 new Card(Value.KING),
@@ -66,12 +67,120 @@ class HandTest {
                 new Card(Value.FIVE)
         };
 
+        Card[] main7 =  new Card[]{
+                new Card(Value.KING),
+                new Card(Value.TWO),
+                new Card(Value.EIGHT),
+                new Card(Value.SEVEN),
+                new Card(Value.FIVE)
+        };
+
+        Card[] main8 = new Card[]{
+                new Card(Value.EIGHT),
+                new Card(Value.KING),
+                new Card(Value.EIGHT),
+                new Card(Value.SEVEN),
+                new Card(Value.ACE)
+        };
+
+
         hand1 = new Hand(main1);
         hand2 = new Hand(main2);
         hand3 = new Hand(main3);
         hand4 = new Hand(main4);
         hand5 = new Hand(main5);
         hand6 = new Hand(main6);
+        hand7 = new Hand(main7);
+        hand8 = new Hand(main8);
+
+    }
+
+    /**
+     * Some test needs sorted hand because method work only if the hands are sort like getresult
+     */
+    void setUpSort() {
+
+        Card[] main1 = new Card[]{
+                new Card(Value.EIGHT),
+                new Card(Value.KING),
+                new Card(Value.EIGHT),
+                new Card(Value.TWO),
+                new Card(Value.FIVE)
+        };
+
+        Card[] main2 = new Card[]{
+                new Card(Value.EIGHT),
+                new Card(Value.KING),
+                new Card(Value.EIGHT),
+                new Card(Value.TWO),
+                new Card(Value.FIVE)
+        };
+
+        Card[] main3 = new Card[]{
+                new Card(Value.ACE),
+                new Card(Value.KING),
+                new Card(Value.EIGHT),
+                new Card(Value.TWO),
+                new Card(Value.FIVE)
+        };
+
+        Card[] main4 = new Card[]{
+                new Card(Value.ACE),
+                new Card(Value.TWO),
+                new Card(Value.EIGHT),
+                new Card(Value.TWO),
+                new Card(Value.FIVE)
+        };
+
+        Card[] main5 = new Card[]{
+                new Card(Value.TWO),
+                new Card(Value.TWO),
+                new Card(Value.EIGHT),
+                new Card(Value.EIGHT),
+                new Card(Value.FIVE)
+        };
+
+        Card[] main6 = new Card[]{
+                new Card(Value.TWO),
+                new Card(Value.TWO),
+                new Card(Value.EIGHT),
+                new Card(Value.TWO),
+                new Card(Value.FIVE)
+        };
+
+        Card[] main7 =  new Card[]{
+                new Card(Value.KING),
+                new Card(Value.TWO),
+                new Card(Value.EIGHT),
+                new Card(Value.SEVEN),
+                new Card(Value.FIVE)
+        };
+
+        Card[] main8 = new Card[]{
+                new Card(Value.EIGHT),
+                new Card(Value.KING),
+                new Card(Value.EIGHT),
+                new Card(Value.SEVEN),
+                new Card(Value.ACE)
+        };
+
+
+        hand1 = new Hand(main1);
+        hand1.sortHand();
+        hand2 = new Hand(main2);
+        hand2.sortHand();
+        hand3 = new Hand(main3);
+        hand3.sortHand();
+        hand4 = new Hand(main4);
+        hand4.sortHand();
+        hand5 = new Hand(main5);
+        hand5.sortHand();
+        hand6 = new Hand(main6);
+        hand6.sortHand();
+        hand7 = new Hand(main7);
+        hand7.sortHand();
+        hand8 = new Hand(main8);
+        hand8.sortHand();
 
     }
 
@@ -100,24 +209,36 @@ class HandTest {
      **/
     @Test
     void compareTo() {
-        setUp();
         assertEquals(1,hand2.compareTo(hand3));
-        setUp();
         assertEquals(-1,hand3.compareTo(hand1));
-        setUp();
         assertEquals(0,hand1.compareTo(hand2));
         setUp();
         assertEquals(1,hand2.compareTo(hand4));
     }
 
     /**
-     * Test for the function comparePatterns and at the same time the function deleteCardInPattern with the equality of the comparaison between Hand1 and Hand2
+     * Test for the getResult method with all cases
+     */
+    @Test
+    void getResultTest(){
+        setUpSort();
+        assertArrayEquals(new int[]{0,-2,0},hand1.getResult(hand2));
+        setUpSort();
+        assertArrayEquals(new int[]{1,-1,14},hand3.getResult(hand7));
+        assertArrayEquals(new int[]{1,2,8},hand1.getResult(hand3));
+        assertArrayEquals(new int[]{1,2,8},hand1.getResult(hand4));
+        setUpSort();
+        assertArrayEquals(new int[]{-1,-1,14},hand1.getResult(hand8));
+    }
+
+    /**
+     * Test for the function comparePatterns and at the same time the function deleteCardInPattern when we have an equality of patterns like in the comparaison between Hand1 and Hand2
      */
     @Test
     void testComparePattern(){
-        assertEquals(1,hand2.compareTo(hand3));
-        assertEquals(-1,hand3.compareTo(hand1));
-        assertEquals(1,hand2.compareTo(hand4));
+        assertEquals(1,hand2.comparePatterns(hand3)[0]);
+        assertEquals(-1,hand3.comparePatterns(hand1)[0]);
+        assertEquals(1,hand2.comparePatterns(hand4)[0]);
         assertArrayEquals(new Card[] {
                 new Card(Value.EIGHT),
                 new Card(Value.KING),
@@ -125,7 +246,6 @@ class HandTest {
                 new Card(Value.TWO),
                 new Card(Value.FIVE)
         },hand2.getCards());
-
         assertArrayEquals(new Card[]{
                 new Card(Value.ACE),
                 new Card(Value.TWO),
@@ -133,8 +253,8 @@ class HandTest {
                 new Card(Value.TWO),
                 new Card(Value.FIVE)
         },hand4.getCards());
-        assertEquals(1,hand6.compareTo(hand4));
-        assertEquals(0,hand1.compareTo(hand2));
+        assertEquals(1,hand6.comparePatterns(hand4)[0]);
+        assertEquals(0,hand1.comparePatterns(hand2)[0]);
         assertArrayEquals(new Card[] {
                 null,
                 new Card(Value.KING),
@@ -142,7 +262,6 @@ class HandTest {
                 new Card(Value.TWO),
                 new Card(Value.FIVE)
         },hand2.getCards());
-
         assertArrayEquals(new Card[] {
                 null,
                 new Card(Value.KING),
@@ -157,9 +276,9 @@ class HandTest {
      **/
     @Test
     void compareCards(){
-        assertEquals(0, hand1.compareCards(hand2));
-        assertEquals(1, hand3.compareCards(hand1));
-        assertEquals(-1, hand1.compareCards(hand3));
+        assertEquals(0, hand1.compareCards(hand2)[0]);
+        assertEquals(1, hand3.compareCards(hand1)[0]);
+        assertEquals(-1, hand1.compareCards(hand3)[0]);
     }
 
     @Test
@@ -185,7 +304,7 @@ class HandTest {
         testArray.add(Value.EIGHT.ordinal());
         test.put(Patterns.Pair,testArray);
         assertEquals(test,hand2.getPatterns());
-        testArray.add(0,Value.TWO.ordinal());
+        testArray.add(Value.TWO.ordinal());
         test.put(Patterns.Pair,testArray);
         assertEquals(test,hand5.getPatterns());
         test = new HashMap<>();

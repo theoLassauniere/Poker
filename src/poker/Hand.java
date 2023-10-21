@@ -105,8 +105,12 @@ public class Hand implements Comparable<Hand> {
      * @return Compare patterns and values of cards between the two hands
      */
     public int compareTo(Hand otherHand) {
-        int testPatterns = comparePatterns(otherHand);
-        if(testPatterns!=0) return testPatterns;
+        return getResult(otherHand)[0];
+    }
+
+    public int[] getResult(Hand otherHand) {
+        int[] testPatterns = comparePatterns(otherHand);
+        if(testPatterns[0]!=0) return testPatterns;
         else return compareCards(otherHand);
     }
 
@@ -114,22 +118,30 @@ public class Hand implements Comparable<Hand> {
      * @param otherHand the other hand to be compared.
      * @return Compare the values of cards in hand with cards of otherHand (without cards in Patterns)
      */
-    public int compareCards(Hand otherHand){
+    public int[] compareCards(Hand otherHand){
         int cardIndex = 0;
         int cardIndex2 = 0;
         while (cardIndex<cards.length) {
+
             if(cards[cardIndex]!=null){
-                while (cardIndex2<otherHand.getCards().length && otherHand.getCards()[cardIndex]!=null){
+                while (cardIndex2<otherHand.getCards().length && otherHand.getCards()[cardIndex2]==null){
                     cardIndex2++;
                 }
-                if(cards[cardIndex].compareTo(otherHand.getCards()[cardIndex])!=0){
-                    return cards[cardIndex].compareTo(otherHand.getCards()[cardIndex]);
+                int compare = cards[cardIndex].compareTo(otherHand.getCards()[cardIndex2]);
+                if(compare>0){
+                    int[] result = {1,-1,cards[cardIndex].getValue().ordinal()+2};
+                    return result;
+                }
+                else if(compare<0){
+                    int[] result = {-1,-1,otherHand.getCards()[cardIndex].getValue().ordinal()+2};
+                    return result;
                 }
                 cardIndex2 ++;
             }
             cardIndex++;
         }
-        return 0;
+        int[] result = {0, -2 ,0};
+        return result;
     }
 
     /**
@@ -148,20 +160,28 @@ public class Hand implements Comparable<Hand> {
      * @param otherHand the other hand to be compared.
      * @return Compare the current hand with otherHand with the patterns
      **/
-    public int comparePatterns(Hand otherHand){
+    public int[] comparePatterns(Hand otherHand){
         HashMap<Patterns,ArrayList<Integer>> HandOnePatterns = getPatterns();
         HashMap<Patterns,ArrayList<Integer>> HandTwoPatterns = otherHand.getPatterns();
         for(Patterns p: Patterns.values()){
-            if(HandOnePatterns.containsKey(p)&&!HandTwoPatterns.containsKey(p)) return 1;
-            else if(!HandOnePatterns.containsKey(p)&&HandTwoPatterns.containsKey(p)) return -1;
+            if(HandOnePatterns.containsKey(p)&&!HandTwoPatterns.containsKey(p)) {int[] result = {1,p.ordinal(),HandOnePatterns.get(p).get(0)+2}; return result;}
+            else if(!HandOnePatterns.containsKey(p)&&HandTwoPatterns.containsKey(p))  {int[] result = {-1,p.ordinal(),HandTwoPatterns.get(p).get(0)+2}; return result;}
             else if(HandOnePatterns.containsKey(p)&&HandTwoPatterns.containsKey(p)){
                 int res = HandOnePatterns.get(p).get(0).compareTo(HandTwoPatterns.get(p).get(0));
-                if(res!=0) return res;
+                if(res!=0) {
+                    if (res >0){
+                        int[] result = {1,p.ordinal(),HandOnePatterns.get(p).get(0)+2}; return result;
+                    }
+                    else {
+                        int[] result = {-1,p.ordinal(),HandTwoPatterns.get(p).get(0)+2}; return result;
+                    }
+                }
             }
         }
         deleteCardInPattern(HandOnePatterns);
         otherHand.deleteCardInPattern(HandTwoPatterns);
-        return 0;
+        int[] result = {0, -2 ,0};
+        return result;
     }
 
     /**
@@ -181,12 +201,13 @@ public class Hand implements Comparable<Hand> {
                     break;
             }
             if(p!=null){
-                if(result.containsKey(p)) result.get(p).add(i);
+                if(result.containsKey(p)) result.get(p).add(0,i);
                 else result.put(p,new ArrayList<>(Arrays.asList(i)));
             }
         }
         return result;
     }
+
 
     @Override
     public boolean equals(Object obj) {
