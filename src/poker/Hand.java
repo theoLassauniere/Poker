@@ -1,9 +1,7 @@
 package poker;
 
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Hand
@@ -13,6 +11,7 @@ import java.util.HashMap;
 
 public class Hand implements Comparable<Hand> {
     private final Card[] cards;
+    private boolean isSorted;
 
     /**
      * Hand constructor
@@ -21,6 +20,7 @@ public class Hand implements Comparable<Hand> {
      */
     public Hand(Card[] hand) {
         this.cards = hand;
+        isSorted = false;
     }
 
     /**
@@ -36,7 +36,7 @@ public class Hand implements Comparable<Hand> {
         for (Card card : cards) {
             string.append(card.toString()).append(" ");
         }
-        string.setLength(string.length()-1);
+        string.setLength(string.length() - 1);
         return string.toString();
     }
 
@@ -46,7 +46,7 @@ public class Hand implements Comparable<Hand> {
      * @param text Hand input
      * @return The parsed hand
      * @throws IllegalArgumentException The input doesn't contain the exacts number of card that is expected for that game
-     * @throws ParseException The input contains an invalid card
+     * @throws ParseException           The input contains an invalid card
      */
     public static Hand parse(String text, int handSize) throws IllegalArgumentException, ParseException {
         var cards = new Card[handSize];
@@ -77,6 +77,7 @@ public class Hand implements Comparable<Hand> {
      * Sort the hand in descending order
      */
     public void sortHand() {
+        if (isSorted()) return;
         for (int i = 0; i < cards.length; i++) {
             int swapIndex = i;
             for (int j = i + 1; j < cards.length; j++) {
@@ -86,6 +87,7 @@ public class Hand implements Comparable<Hand> {
             }
             swap(i, swapIndex);
         }
+        isSorted = true;
     }
 
     /**
