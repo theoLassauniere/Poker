@@ -91,15 +91,38 @@ public class Hand implements Comparable<Hand> {
     }
 
     /**
-     * occurrences method
-     * @return an int tab
+     * Are the cards sorted?
      */
-    public int[] occurrences() {
-        var values = new int[Value.values().length];
-        for (Card card : cards) {
-            values[card.getValue().ordinal()]++;
-        }
+    public boolean isSorted() {
+        return isSorted;
+    }
+
+    /**
+     * Gets number of occurrences of each Value
+     */
+    public Map<Value, Integer> occurrences() {
+        var values = new EnumMap<Value, Integer>(Value.class);
+        for (Card card : cards) values.merge(card.getValue(), 1, Integer::sum);
         return values;
+    }
+
+    /**
+     * Gets the patterns and card values that realize them
+     **/
+    public Map<Patterns, ArrayList<Value>> getPatterns() {
+        EnumMap<Patterns, ArrayList<Value>> result = new EnumMap<>(Patterns.class);
+        for (var entry : occurrences().entrySet()) {
+            Patterns p = switch (entry.getValue()) {
+                case 2 -> Patterns.PAIR;
+                case 3 -> Patterns.BRELAN;
+                default -> null;
+            };
+            if (p != null) {
+                if (result.containsKey(p)) result.get(p).add(0, entry.getKey());
+                else result.put(p, new ArrayList<>(List.of(entry.getKey())));
+            }
+        }
+        return result;
     }
 
     /**
@@ -112,7 +135,7 @@ public class Hand implements Comparable<Hand> {
 
     public int[] getResult(Hand otherHand) {
         int[] testPatterns = comparePatterns(otherHand);
-        if(testPatterns[0]!=0) return testPatterns;
+        if (testPatterns[0] != 0) return testPatterns;
         else return compareCards(otherHand);
     }
 
@@ -120,40 +143,38 @@ public class Hand implements Comparable<Hand> {
      * @param otherHand the other hand to be compared.
      * @return Compare the values of cards in hand with cards of otherHand (without cards in Patterns)
      */
-    public int[] compareCards(Hand otherHand){
+    public int[] compareCards(Hand otherHand) {
         int cardIndex = 0;
         int cardIndex2 = 0;
-        while (cardIndex<cards.length) {
+        while (cardIndex < cards.length) {
 
-            if(cards[cardIndex]!=null){
-                while (cardIndex2<otherHand.getCards().length && otherHand.getCards()[cardIndex2]==null){
+            if (cards[cardIndex] != null) {
+                while (cardIndex2 < otherHand.getCards().length && otherHand.getCards()[cardIndex2] == null) {
                     cardIndex2++;
                 }
                 int compare = cards[cardIndex].compareTo(otherHand.getCards()[cardIndex2]);
-                if(compare>0){
-                    int[] result = {1,-1,cards[cardIndex].getValue().ordinal()+2};
-                    return result;
+                if (compare > 0) {
+                    return new int[]{1, -1, cards[cardIndex].getValue().ordinal() + 2};
+                } else if (compare < 0) {
+                    return new int[]{-1, -1, otherHand.getCards()[cardIndex].getValue().ordinal() + 2};
                 }
-                else if(compare<0){
-                    int[] result = {-1,-1,otherHand.getCards()[cardIndex].getValue().ordinal()+2};
-                    return result;
-                }
-                cardIndex2 ++;
+                cardIndex2++;
             }
             cardIndex++;
         }
-        int[] result = {0, -2 ,0};
-        return result;
+        return new int[]{0, -2, 0};
     }
 
     /**
      * @param patterns the HashMap obtained by the getPatterns() method
-     * Delete all the cards in hand when also located in Pattern
+     *                 Delete all the cards in hand when also located in Pattern
      **/
-    public void deleteCardInPattern(HashMap<Patterns,ArrayList<Integer>> patterns){
-        for(int i=0;i<cards.length;i++){
-            for(Patterns p: patterns.keySet()) {
-                if (cards[i] !=null && patterns.get(p).contains(cards[i].getValue().ordinal())) {cards[i] = null;}
+    public void deleteCardInPattern(Map<Patterns, ArrayList<Value>> patterns) {
+        for (int i = 0; i < cards.length; i++) {
+            for (Patterns p : patterns.keySet()) {
+                if (cards[i] != null && patterns.get(p).contains(cards[i].getValue())) {
+                    cards[i] = null;
+                }
             }
         }
     }
@@ -162,52 +183,28 @@ public class Hand implements Comparable<Hand> {
      * @param otherHand the other hand to be compared.
      * @return Compare the current hand with otherHand with the patterns
      **/
-    public int[] comparePatterns(Hand otherHand){
-        HashMap<Patterns,ArrayList<Integer>> HandOnePatterns = getPatterns();
-        HashMap<Patterns,ArrayList<Integer>> HandTwoPatterns = otherHand.getPatterns();
-        for(Patterns p: Patterns.values()){
-            if(HandOnePatterns.containsKey(p)&&!HandTwoPatterns.containsKey(p)) {int[] result = {1,p.ordinal(),HandOnePatterns.get(p).get(0)+2}; return result;}
-            else if(!HandOnePatterns.containsKey(p)&&HandTwoPatterns.containsKey(p))  {int[] result = {-1,p.ordinal(),HandTwoPatterns.get(p).get(0)+2}; return result;}
-            else if(HandOnePatterns.containsKey(p)&&HandTwoPatterns.containsKey(p)){
+    public int[] comparePatterns(Hand otherHand) {
+        var HandOnePatterns = getPatterns();
+        var HandTwoPatterns = otherHand.getPatterns();
+        for (Patterns p : Patterns.values()) {
+            if (HandOnePatterns.containsKey(p) && !HandTwoPatterns.containsKey(p)) {
+                return new int[]{1, p.ordinal(), HandOnePatterns.get(p).get(0).ordinal() + 2};
+            } else if (!HandOnePatterns.containsKey(p) && HandTwoPatterns.containsKey(p)) {
+                return new int[]{-1, p.ordinal(), HandTwoPatterns.get(p).get(0).ordinal() + 2};
+            } else if (HandOnePatterns.containsKey(p) && HandTwoPatterns.containsKey(p)) {
                 int res = HandOnePatterns.get(p).get(0).compareTo(HandTwoPatterns.get(p).get(0));
-                if(res!=0) {
-                    if (res >0){
-                        int[] result = {1,p.ordinal(),HandOnePatterns.get(p).get(0)+2}; return result;
-                    }
-                    else {
-                        int[] result = {-1,p.ordinal(),HandTwoPatterns.get(p).get(0)+2}; return result;
+                if (res != 0) {
+                    if (res > 0) {
+                        return new int[]{1, p.ordinal(), HandOnePatterns.get(p).get(0).ordinal() + 2};
+                    } else {
+                        return new int[]{-1, p.ordinal(), HandTwoPatterns.get(p).get(0).ordinal() + 2};
                     }
                 }
             }
         }
         deleteCardInPattern(HandOnePatterns);
         otherHand.deleteCardInPattern(HandTwoPatterns);
-        int[] result = {0, -2 ,0};
-        return result;
-    }
-
-    /**
-     * @return Create an HashMap with occurrences by patterns
-     * **/
-    public HashMap<Patterns,ArrayList<Integer>> getPatterns(){
-        HashMap<Patterns,ArrayList<Integer>> result = new HashMap<>();
-        int[] occurrences = occurrences();
-        for(int i=0;i< occurrences().length;i++){
-            Patterns p = null;
-            switch (occurrences[i]){
-                case 2:
-                    p = Patterns.Pair;
-                    break;
-                case 3:
-                    p = Patterns.Brelan;
-                    break;
-            }
-            if(p!=null){
-                if(result.containsKey(p)) result.get(p).add(0,i);
-                else result.put(p,new ArrayList<>(Arrays.asList(i)));
-            }
-        }
-        return result;
+        return new int[]{0, -2, 0};
     }
 
 

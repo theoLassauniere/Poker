@@ -1,5 +1,5 @@
 package poker;
 
 public enum Patterns {
-    Carré,Brelan,Pair;
+    CARRÉ, BRELAN, PAIR;
 }

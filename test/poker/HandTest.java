@@ -192,28 +192,23 @@ class HandTest {
                 new Card(Value.TWO),
                 new Card(Value.FIVE)
         }, hand1.getCards());
-        assertArrayEquals(new int[]{1, 0, 0, 1, 0, 0, 2, 0, 0, 0, 0, 1, 0}, hand1.occurrences());
+        assertEquals(Map.of(
+                Value.TWO, 1,
+                Value.FIVE, 1,
+                Value.EIGHT, 2,
+                Value.KING, 1
+        ), hand1.occurrences());
     }
 
     /**
      * Test of the function getPatterns in Hand class with all the case possible of pattern in a Hand
      */
     @Test
-    void testGetPattern(){
-        HashMap<Patterns, ArrayList<Integer>> test = new HashMap<>();
-        assertEquals(test,hand3.getPatterns());
-        ArrayList<Integer> testArray = new ArrayList<>();
-        testArray.add(Value.EIGHT.ordinal());
-        test.put(Patterns.Pair,testArray);
-        assertEquals(test,hand2.getPatterns());
-        testArray.add(Value.TWO.ordinal());
-        test.put(Patterns.Pair,testArray);
-        assertEquals(test,hand5.getPatterns());
-        test = new HashMap<>();
-        testArray = new ArrayList<>();
-        testArray.add(Value.TWO.ordinal());
-        test.put(Patterns.Brelan,testArray);
-        assertEquals(test,hand6.getPatterns());
+    void testGetPattern() {
+        assertEquals(Map.of(), hand3.getPatterns());
+        assertEquals(Map.of(Patterns.PAIR, new ArrayList<>(List.of(Value.EIGHT))), hand2.getPatterns());
+        assertEquals(Map.of(Patterns.PAIR, new ArrayList<>(List.of(Value.EIGHT, Value.TWO))), hand5.getPatterns());
+        assertEquals(Map.of(Patterns.BRELAN, new ArrayList<>(List.of(Value.TWO))), hand6.getPatterns());
     }
 
     /**
