@@ -121,15 +121,15 @@ class HandTest {
      */
     @Test
     void getResultTest() {
-        assertArrayEquals(new int[]{0, -2, 0}, hand1.getResult(hand2));
+        assertEquals(new HandComparison(0, Patterns.EQUALITY, null), hand1.getResult(hand2));
         setUp();
-        assertArrayEquals(new int[]{1, -1, 14}, hand3.getResult(hand7));
-        assertArrayEquals(new int[]{1, 2, 8}, hand1.getResult(hand3));
-        assertArrayEquals(new int[]{1, 2, 8}, hand1.getResult(hand4));
+        assertEquals(new HandComparison(1, Patterns.HIGHER, Value.ACE), hand3.getResult(hand7));
+        assertEquals(new HandComparison(1, Patterns.PAIR, Value.EIGHT), hand1.getResult(hand3));
+        assertEquals(new HandComparison(1, Patterns.PAIR, Value.EIGHT), hand1.getResult(hand4));
         setUp();
         hand1.sortHand();
         hand8.sortHand();
-        assertArrayEquals(new int[]{-1, -1, 14}, hand1.getResult(hand8));
+        assertEquals(new HandComparison(-1, Patterns.HIGHER, Value.ACE), hand1.getResult(hand8));
     }
 
     /**
@@ -138,39 +138,11 @@ class HandTest {
      */
     @Test
     void testComparePattern() {
-        assertEquals(1, hand2.comparePatterns(hand3)[0]);
-        assertEquals(-1, hand3.comparePatterns(hand1)[0]);
-        assertEquals(1, hand2.comparePatterns(hand4)[0]);
-        assertArrayEquals(new Card[]{
-                new Card(Value.EIGHT),
-                new Card(Value.KING),
-                new Card(Value.EIGHT),
-                new Card(Value.TWO),
-                new Card(Value.FIVE)
-        }, hand2.getCards());
-        assertArrayEquals(new Card[]{
-                new Card(Value.ACE),
-                new Card(Value.TWO),
-                new Card(Value.EIGHT),
-                new Card(Value.TWO),
-                new Card(Value.FIVE)
-        }, hand4.getCards());
-        assertEquals(1, hand6.comparePatterns(hand4)[0]);
-        assertEquals(0, hand1.comparePatterns(hand2)[0]);
-        assertArrayEquals(new Card[]{
-                null,
-                new Card(Value.KING),
-                null,
-                new Card(Value.TWO),
-                new Card(Value.FIVE)
-        }, hand2.getCards());
-        assertArrayEquals(new Card[]{
-                null,
-                new Card(Value.KING),
-                null,
-                new Card(Value.TWO),
-                new Card(Value.FIVE)
-        }, hand1.getCards());
+        assertEquals(new HandComparison(1, Patterns.PAIR, Value.EIGHT), hand2.comparePatterns(hand3));
+        assertEquals(new HandComparison(-1, Patterns.PAIR, Value.EIGHT), hand3.comparePatterns(hand1));
+        assertEquals(new HandComparison(1, Patterns.PAIR, Value.EIGHT), hand2.comparePatterns(hand4));
+        assertEquals(new HandComparison(1, Patterns.THREE_OF_A_KIND, Value.TWO), hand6.comparePatterns(hand4));
+        assertEquals(new HandComparison(0, Patterns.EQUALITY, null), hand1.comparePatterns(hand2));
     }
 
     /**
@@ -178,9 +150,9 @@ class HandTest {
      **/
     @Test
     void compareCards() {
-        assertEquals(0, hand1.compareCards(hand2)[0]);
-        assertEquals(1, hand3.compareCards(hand1)[0]);
-        assertEquals(-1, hand1.compareCards(hand3)[0]);
+        assertEquals(0, hand1.compareCards(hand2).compareResult());
+        assertEquals(1, hand3.compareCards(hand1).compareResult());
+        assertEquals(-1, hand1.compareCards(hand3).compareResult());
     }
 
     @Test
@@ -208,7 +180,7 @@ class HandTest {
         assertEquals(Map.of(), hand3.getPatterns());
         assertEquals(Map.of(Patterns.PAIR, new ArrayList<>(List.of(Value.EIGHT))), hand2.getPatterns());
         assertEquals(Map.of(Patterns.PAIR, new ArrayList<>(List.of(Value.EIGHT, Value.TWO))), hand5.getPatterns());
-        assertEquals(Map.of(Patterns.BRELAN, new ArrayList<>(List.of(Value.TWO))), hand6.getPatterns());
+        assertEquals(Map.of(Patterns.THREE_OF_A_KIND, new ArrayList<>(List.of(Value.TWO))), hand6.getPatterns());
     }
 
     /**

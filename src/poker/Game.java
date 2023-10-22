@@ -41,36 +41,15 @@ public class Game {
         printResult(hand1.getResult(hand2));
     }
 
-    public void printResult(int[] result){
-        int valueWinning = result[2];
-        switch (result[1]){
-            case -2:// equality case
-                System.out.println("Egalité");
-                break;
-            case -1: // without patterns case
-                if (result[0] == 1) {
-                    System.out.println("La main " + 1 + " gagne avec la carte la plus haute : " + valueWinning); //It is possible to take name of enum thanks to index to print the good value for exemple if we have an ACE for the moment print 14 not ACE, so if it is possible better than do if or switch
-                }
-                else{
-                    System.out.println("La main " + 2 + " gagne avec la carte la plus haute : " + valueWinning);
-                }
-                break;
-            case 2: //put the index of the Pair in enum
-                if (result[0] == 1) {
-                    System.out.println("La main " + 1 + " gagne avec une paire de : " + valueWinning);
-                }
-                else {
-                    System.out.println("La main " + 2 + " gagne avec une paire de : " + valueWinning);
-                }
-                break;
-            case 1://put the index of the Brelan in enum
-                if (result[0] == 1) {
-                    System.out.println("La main " + 1 + " gagne avec un brelan de : " + valueWinning);
-                }
-                else {
-                    System.out.println("La main " + 2 + " gagne avec un brelan de : " + valueWinning);
-                }
-                break;
+    public void printResult(HandComparison result) {
+        switch (result.pattern()) {
+            case EQUALITY -> System.out.println("Egalité");
+            case HIGHER ->
+                    System.out.println("La main " + (result.compareResult() > 0 ? 1 : 2) + " gagne avec la carte la plus haute : " + result.value());
+            case PAIR ->
+                    System.out.println("La main " + (result.compareResult() > 0 ? 1 : 2) + " gagne avec une paire de : " + result.value());
+            case THREE_OF_A_KIND ->
+                    System.out.println("La main " + (result.compareResult() > 0 ? 1 : 2) + " gagne avec un brelan de : " + result.value());
         }
     }
 }

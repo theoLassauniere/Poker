@@ -114,7 +114,7 @@ public class Hand implements Comparable<Hand> {
         for (var entry : occurrences().entrySet()) {
             Patterns p = switch (entry.getValue()) {
                 case 2 -> Patterns.PAIR;
-                case 3 -> Patterns.BRELAN;
+                case 3 -> Patterns.THREE_OF_A_KIND;
                 default -> null;
             };
             if (p != null) {
@@ -130,20 +130,20 @@ public class Hand implements Comparable<Hand> {
      * @return Compare patterns and values of cards between the two hands
      */
     public int compareTo(Hand otherHand) {
-        return getResult(otherHand)[0];
+        return getResult(otherHand).compareResult();
     }
 
-    public int[] getResult(Hand otherHand) {
-        int[] testPatterns = comparePatterns(otherHand);
-        if (testPatterns[0] != 0) return testPatterns;
-        else return compareCards(otherHand);
+    public HandComparison getResult(Hand otherHand) {
+        var testPatterns = comparePatterns(otherHand);
+        if (testPatterns.compareResult() != 0) return testPatterns;
+        return compareCards(otherHand);
     }
 
     /**
      * @param otherHand the other hand to be compared.
      * @return Compare the values of cards in hand with cards of otherHand (without cards in Patterns)
      */
-    public int[] compareCards(Hand otherHand) {
+    public HandComparison compareCards(Hand otherHand) {
         int cardIndex = 0;
         int cardIndex2 = 0;
         while (cardIndex < cards.length) {
@@ -153,16 +153,13 @@ public class Hand implements Comparable<Hand> {
                     cardIndex2++;
                 }
                 int compare = cards[cardIndex].compareTo(otherHand.getCards()[cardIndex2]);
-                if (compare > 0) {
-                    return new int[]{1, -1, cards[cardIndex].getValue().ordinal() + 2};
-                } else if (compare < 0) {
-                    return new int[]{-1, -1, otherHand.getCards()[cardIndex].getValue().ordinal() + 2};
-                }
+                if (compare != 0)
+                    return new HandComparison(compare, Patterns.HIGHER, (compare > 0 ? cards : otherHand.getCards())[cardIndex].getValue());
                 cardIndex2++;
             }
             cardIndex++;
         }
-        return new int[]{0, -2, 0};
+        return new HandComparison(0, Patterns.EQUALITY, null);
     }
 
     /**
@@ -183,28 +180,24 @@ public class Hand implements Comparable<Hand> {
      * @param otherHand the other hand to be compared.
      * @return Compare the current hand with otherHand with the patterns
      **/
-    public int[] comparePatterns(Hand otherHand) {
-        var HandOnePatterns = getPatterns();
-        var HandTwoPatterns = otherHand.getPatterns();
+    public HandComparison comparePatterns(Hand otherHand) {
+        var handOnePatterns = getPatterns();
+        var handTwoPatterns = otherHand.getPatterns();
+
         for (Patterns p : Patterns.values()) {
-            if (HandOnePatterns.containsKey(p) && !HandTwoPatterns.containsKey(p)) {
-                return new int[]{1, p.ordinal(), HandOnePatterns.get(p).get(0).ordinal() + 2};
-            } else if (!HandOnePatterns.containsKey(p) && HandTwoPatterns.containsKey(p)) {
-                return new int[]{-1, p.ordinal(), HandTwoPatterns.get(p).get(0).ordinal() + 2};
-            } else if (HandOnePatterns.containsKey(p) && HandTwoPatterns.containsKey(p)) {
-                int res = HandOnePatterns.get(p).get(0).compareTo(HandTwoPatterns.get(p).get(0));
-                if (res != 0) {
-                    if (res > 0) {
-                        return new int[]{1, p.ordinal(), HandOnePatterns.get(p).get(0).ordinal() + 2};
-                    } else {
-                        return new int[]{-1, p.ordinal(), HandTwoPatterns.get(p).get(0).ordinal() + 2};
-                    }
-                }
+            if (handOnePatterns.containsKey(p) && !handTwoPatterns.containsKey(p)) {
+                return new HandComparison(1, p, handOnePatterns.get(p).get(0));
+            } else if (!handOnePatterns.containsKey(p) && handTwoPatterns.containsKey(p)) {
+                return new HandComparison(-1, p, handTwoPatterns.get(p).get(0));
+            } else if (handOnePatterns.containsKey(p) && handTwoPatterns.containsKey(p)) {
+                int res = Math.max(Math.min(handOnePatterns.get(p).get(0).compareTo(handTwoPatterns.get(p).get(0)), 1), -1);
+                if (res != 0)
+                    return new HandComparison(res, p, (res > 0 ? handOnePatterns : handTwoPatterns).get(p).get(0));
             }
         }
-        deleteCardInPattern(HandOnePatterns);
-        otherHand.deleteCardInPattern(HandTwoPatterns);
-        return new int[]{0, -2, 0};
+        deleteCardInPattern(handOnePatterns);
+        otherHand.deleteCardInPattern(handTwoPatterns);
+        return new HandComparison(0, Patterns.EQUALITY, null);
     }
 
 
