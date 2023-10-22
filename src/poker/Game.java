@@ -21,7 +21,7 @@ public class Game {
         try {
             new Game(DEFAULT_HAND_SIZE).start();
         } catch (Exception e) {
-            System.out.println("ERROR: " + e); // TODO
+            System.err.println("ERROR: " + e); // TODO
         }
     }
 
@@ -38,7 +38,7 @@ public class Game {
         hand1.sortHand();
         hand2.sortHand();
 
-        printResult(hand1.getResult(hand2)); // TODO
+        printResult(hand1.getResult(hand2));
     }
 
     public void printResult(int[] result){
@@ -63,7 +63,7 @@ public class Game {
                     System.out.println("La main " + 2 + " gagne avec une paire de : " + valueWinning);
                 }
                 break;
-            case 1://put the index of the Brelan in enumm
+            case 1://put the index of the Brelan in enum
                 if (result[0] == 1) {
                     System.out.println("La main " + 1 + " gagne avec un brelan de : " + valueWinning);
                 }
@@ -73,6 +73,4 @@ public class Game {
                 break;
         }
     }
-
-
 }
