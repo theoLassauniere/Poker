@@ -1,18 +1,21 @@
 package poker;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.PrintStream;
-import java.text.ParseException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * @author Team B
+ */
 class GameTest {
-    Game oneCardGame,twoCardGame,threeCardGame;
+    Game oneCardGame, twoCardGame, threeCardGame;
 
     /**
      * Initialize Game for testing
@@ -24,86 +27,23 @@ class GameTest {
         threeCardGame = new Game(3);
     }
 
-    @Test
-    void equalityTest(){
-            InputStream inputStream = new ByteArrayInputStream("2 3 4\n2 3 4".getBytes());
-            System.setIn(inputStream);
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            System.setOut(new PrintStream(outputStream));
-            try{
-                threeCardGame.start();
-            }
-            catch (IllegalArgumentException e){
-                System.out.println("Problème avec les entrées");
-            }
-            catch (ParseException e){
-                System.out.println("Problème durant le parsing");
-            }
-
-            String methodOutput = outputStream.toString().trim();
-            assertEquals("Egalité", methodOutput.substring(16));
-    }
-
-    @Test
-    void oneHandPairTest(){
-        InputStream inputStream = new ByteArrayInputStream("2 2 4\n2 3 4".getBytes());
-        System.setIn(inputStream);
+    @ParameterizedTest
+    @CsvSource(value = {
+            "2 3 4;2 3 4;Egalité",
+            "2 2 4;2 3 4;La main 1 gagne avec une paire de : 2",
+            "2 2 4;2 4 4;La main 2 gagne avec une paire de : 4",
+            "2 2 A;2 2 7;La main 1 gagne avec la carte la plus haute : A"
+    }, delimiter = ';')
+    void threeCardGameTest(String firstHand, String secondHand, String output) {
+        // Redirect stdin and stdout
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        System.setIn(new ByteArrayInputStream((firstHand + "\n" + secondHand).getBytes()));
         System.setOut(new PrintStream(outputStream));
-        try{
-            threeCardGame.start();
-        }
-        catch (IllegalArgumentException e){
-            System.out.println("Problème avec les entrées");
-        }
-        catch (ParseException e){
-            System.out.println("Problème durant le parsing");
-        }
 
-        String methodOutput = outputStream.toString().trim();
-        assertEquals("La main 1 gagne avec une paire de : 2", methodOutput.substring(16));
+        assertDoesNotThrow(() -> threeCardGame.start()); // The game should start without errors
 
-    }
-
-    @Test
-    void twoHandDifferentPairTest(){
-        InputStream inputStream = new ByteArrayInputStream("2 2 4\n2 4 4".getBytes());
-        System.setIn(inputStream);
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outputStream));
-        try{
-            threeCardGame.start();
-        }
-        catch (IllegalArgumentException e){
-            System.out.println("Problème avec les entrées");
-        }
-        catch (ParseException e){
-            System.out.println("Problème durant le parsing");
-        }
-
-        String methodOutput = outputStream.toString().trim();
-        assertEquals("La main 2 gagne avec une paire de : 4", methodOutput.substring(16));
-
-    }
-
-    @Test
-    void twoHandSamePairTest(){
-        InputStream inputStream = new ByteArrayInputStream("2 2 A\n2 2 7".getBytes());
-        System.setIn(inputStream);
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(outputStream));
-        try{
-            threeCardGame.start();
-        }
-        catch (IllegalArgumentException e){
-            System.out.println("Problème avec les entrées");
-        }
-        catch (ParseException e){
-            System.out.println("Problème durant le parsing");
-        }
-
-        String methodOutput = outputStream.toString().trim();
-        assertEquals("La main 1 gagne avec la carte la plus haute : 14", methodOutput.substring(16));
+        String methodOutput = outputStream.toString().trim(); // Reads the output stream
+        assertEquals(output, methodOutput.substring("Main 1: Main 2: ".length()));
     }
 
 }
