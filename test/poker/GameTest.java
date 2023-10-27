@@ -36,15 +36,7 @@ class GameTest {
             "2 2 A;2 2 7;La main 1 gagne avec la carte la plus haute : A"
     }, delimiter = ';')
     void threeCardGameTest(String firstHand, String secondHand, String output) {
-        // Redirect stdin and stdout
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        System.setIn(new ByteArrayInputStream((firstHand + "\n" + secondHand).getBytes()));
-        System.setOut(new PrintStream(outputStream));
-
-        assertDoesNotThrow(() -> threeCardGame.start()); // The game should start without errors
-
-        String methodOutput = outputStream.toString().trim(); // Reads the output stream
-        assertEquals(output, methodOutput.substring("Main 1: Main 2: ".length()));
+        gameTest(threeCardGame, firstHand, secondHand, output);
     }
 
     @ParameterizedTest
@@ -61,6 +53,10 @@ class GameTest {
             "A A 4 4;A A 4 4;Égalité"
     }, delimiter = ';')
     void fourCardGameTest(String firstHand, String secondHand, String output) {
+        gameTest(fourCardGame, firstHand, secondHand, output);
+    }
+
+    private void gameTest(Game game, String firstHand, String secondHand, String output) {
         // Redirect stdin and stdout
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         System.setIn(new ByteArrayInputStream((firstHand + "\n" + secondHand).getBytes()));
@@ -70,7 +66,5 @@ class GameTest {
 
         String methodOutput = outputStream.toString().trim(); // Reads the output stream
         assertEquals(output, methodOutput.substring("Main 1: Main 2: ".length()));
-
     }
-
 }
