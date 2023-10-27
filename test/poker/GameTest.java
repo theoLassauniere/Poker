@@ -68,6 +68,7 @@ class GameTest {
 
         String methodOutput = outputStream.toString().trim(); // Reads the output stream
         assertEquals(output, methodOutput.substring("Main 1: Main 2: ".length()));
+
     }
 
 }
