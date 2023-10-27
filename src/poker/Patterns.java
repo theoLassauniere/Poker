@@ -34,5 +34,5 @@ public enum Patterns {
     /**
      * Complete equality
      */
-    EQUALITY;
+    EQUALITY
 }

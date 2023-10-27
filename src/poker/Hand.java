@@ -12,7 +12,7 @@ import java.util.*;
 public class Hand implements Comparable<Hand> {
     private final Card[] cards;
     private boolean isSorted;
-    private Map<Patterns, ArrayList<Value>> patterns;
+    private final Map<Patterns, ArrayList<Value>> patterns;
 
     /**
      * Hand constructor
@@ -23,13 +23,13 @@ public class Hand implements Comparable<Hand> {
         this.cards = hand;
         isSorted = false;
         sortHand();
-        this.patterns = getPatterns();
+        patterns = getPatterns();
     }
 
     /**
      * Gets cards
      */
-    public Card[] getCards() {
+    protected Card[] getCards() {
         return cards;
     }
 
@@ -106,7 +106,7 @@ public class Hand implements Comparable<Hand> {
     public Map<Value, Integer> occurrences() {
 
         var values = new EnumMap<Value, Integer>(Value.class);
-        for (Card card : cards) values.merge(card.getValue(), 1, Integer::sum);
+        for (Card card : cards) values.merge(card.value(), 1, Integer::sum);
         return values;
     }
 
