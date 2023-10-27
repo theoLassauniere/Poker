@@ -136,7 +136,7 @@ class HandTest {
         assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), hand2.comparePatterns(hand4));
         assertEquals(new HandComparison(1, Patterns.THREE_OF_A_KIND, List.of(Value.TWO)), hand6.comparePatterns(hand4));
         assertEquals(new HandComparison(0, Patterns.EQUALITY, null), hand1.comparePatterns(hand2));
-        assertEquals(new HandComparison(1, Patterns.DOUBLE_PAIR, List.of(Value.EIGHT, Value.TWO)), hand5.comparePatterns(hand7)); //TODO : modify the return value of comparePatterns
+        assertEquals(new HandComparison(1, Patterns.DOUBLE_PAIR, List.of(Value.EIGHT, Value.TWO)), hand5.comparePatterns(hand7));
     }
 
     @Test
