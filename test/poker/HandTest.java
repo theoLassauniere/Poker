@@ -139,16 +139,6 @@ class HandTest {
         assertEquals(new HandComparison(1, Patterns.DOUBLE_PAIR, List.of(Value.EIGHT, Value.TWO)), hand5.comparePatterns(hand7)); //TODO : modify the return value of comparePatterns
     }
 
-    /**
-     * Test the compareCards method with all the possibilities (equality,superiority,inferiority)
-     **/
-    @Test
-    void compareCards() {
-        assertEquals(0, hand1.compareCards(hand2).compareResult());
-        assertEquals(1, hand3.compareCards(hand1).compareResult());
-        assertEquals(-1, hand1.compareCards(hand3).compareResult());
-    }
-
     @Test
     void occurrencesTest() {
         assertEquals(Map.of(
@@ -164,10 +154,10 @@ class HandTest {
      */
     @Test
     void testGetPattern() {
-        assertEquals(Map.of(), hand3.getPatterns());
-        assertEquals(Map.of(Patterns.PAIR, new ArrayList<>(List.of(Value.EIGHT))), hand2.getPatterns());
-        assertEquals(Map.of(Patterns.DOUBLE_PAIR, new ArrayList<>(List.of(Value.EIGHT, Value.TWO))), hand5.getPatterns());
-        assertEquals(Map.of(Patterns.THREE_OF_A_KIND, new ArrayList<>(List.of(Value.TWO))), hand6.getPatterns());
+        assertEquals(Map.of(Patterns.HIGHER, new ArrayList<>(List.of(Value.ACE, Value.KING, Value.EIGHT, Value.FIVE, Value.TWO))), hand3.getPatterns());
+        assertEquals(Map.of(Patterns.PAIR, new ArrayList<>(List.of(Value.EIGHT)), Patterns.HIGHER, new ArrayList<>(List.of(Value.KING, Value.FIVE, Value.TWO))), hand2.getPatterns());
+        assertEquals(Map.of(Patterns.DOUBLE_PAIR, new ArrayList<>(List.of(Value.EIGHT, Value.TWO)), Patterns.HIGHER, new ArrayList<>(List.of(Value.FIVE))), hand5.getPatterns());
+        assertEquals(Map.of(Patterns.THREE_OF_A_KIND, new ArrayList<>(List.of(Value.TWO)), Patterns.HIGHER, new ArrayList<>(List.of(Value.EIGHT, Value.FIVE))), hand6.getPatterns());
     }
 
     /**
