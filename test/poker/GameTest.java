@@ -30,7 +30,7 @@ class GameTest {
 
     @ParameterizedTest
     @CsvSource(value = {
-            "2 3 4;2 3 4;Egalité",
+            "2 3 4;2 3 4;Égalité",
             "2 2 4;2 3 4;La main 1 gagne avec une paire de : 2",
             "2 2 4;2 4 4;La main 2 gagne avec une paire de : 4",
             "2 2 A;2 2 7;La main 1 gagne avec la carte la plus haute : A"
@@ -49,7 +49,7 @@ class GameTest {
 
     @ParameterizedTest
     @CsvSource(value = {
-            "2 3 4 5;2 3 4 5;Egalité",
+            "2 3 4 5;2 3 4 5;Égalité",
             "2 2 4 5;2 3 4 5;La main 1 gagne avec une paire de : 2",
             "2 2 4 6;2 4 4 7;La main 2 gagne avec une paire de : 4",
             "2 2 A 3;2 2 7 K;La main 1 gagne avec la carte la plus haute : A",
@@ -58,7 +58,7 @@ class GameTest {
             "A A 4 4;A A 5 5;La main 2 gagne avec une double paire dont la paire la paire gagnante est paire de : 5",
             "A A A A;2 2 4 5;La main 1 gagne avec un carré de : A",
             "A A A A;K K K K;La main 1 gagne avec un carré de : A",
-            "A A 4 4;A A 4 4;Egalité"
+            "A A 4 4;A A 4 4;Égalité"
     }, delimiter = ';')
     void fourCardGameTest(String firstHand, String secondHand, String output) {
         // Redirect stdin and stdout
