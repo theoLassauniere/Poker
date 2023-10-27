@@ -14,28 +14,15 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Team B
  */
 class HandTest {
-    Hand hand1, hand2, hand3, hand4, hand5, hand6, hand7, hand8, handFourOfAKind;
+    Hand highestAce, highestKing,
+            pairOfEights, secondPairOfEights, pairOfTwos, thirdPairOfEights,
+            threeTwos,
+            doublePairOfTwosAndEights,
+            fourAces;
 
     @BeforeEach
     void setUp() {
-
-        hand1 = new Hand(new Card[]{
-                new Card(Value.EIGHT),
-                new Card(Value.KING),
-                new Card(Value.EIGHT),
-                new Card(Value.TWO),
-                new Card(Value.FIVE)
-        });
-
-        hand2 = new Hand(new Card[]{
-                new Card(Value.EIGHT),
-                new Card(Value.KING),
-                new Card(Value.EIGHT),
-                new Card(Value.TWO),
-                new Card(Value.FIVE)
-        });
-
-        hand3 = new Hand(new Card[]{
+        highestAce = new Hand(new Card[]{
                 new Card(Value.ACE),
                 new Card(Value.KING),
                 new Card(Value.EIGHT),
@@ -43,31 +30,7 @@ class HandTest {
                 new Card(Value.FIVE)
         });
 
-        hand4 = new Hand(new Card[]{
-                new Card(Value.ACE),
-                new Card(Value.TWO),
-                new Card(Value.EIGHT),
-                new Card(Value.TWO),
-                new Card(Value.FIVE)
-        });
-
-        hand5 = new Hand(new Card[]{
-                new Card(Value.TWO),
-                new Card(Value.TWO),
-                new Card(Value.EIGHT),
-                new Card(Value.EIGHT),
-                new Card(Value.FIVE)
-        });
-
-        hand6 = new Hand(new Card[]{
-                new Card(Value.TWO),
-                new Card(Value.TWO),
-                new Card(Value.EIGHT),
-                new Card(Value.TWO),
-                new Card(Value.FIVE)
-        });
-
-        hand7 = new Hand(new Card[]{
+        highestKing = new Hand(new Card[]{
                 new Card(Value.KING),
                 new Card(Value.TWO),
                 new Card(Value.EIGHT),
@@ -75,7 +38,31 @@ class HandTest {
                 new Card(Value.FIVE)
         });
 
-        hand8 = new Hand(new Card[]{
+        pairOfEights = new Hand(new Card[]{
+                new Card(Value.EIGHT),
+                new Card(Value.KING),
+                new Card(Value.EIGHT),
+                new Card(Value.TWO),
+                new Card(Value.FIVE)
+        });
+
+        secondPairOfEights = new Hand(new Card[]{
+                new Card(Value.EIGHT),
+                new Card(Value.KING),
+                new Card(Value.EIGHT),
+                new Card(Value.TWO),
+                new Card(Value.FIVE)
+        });
+
+        pairOfTwos = new Hand(new Card[]{
+                new Card(Value.ACE),
+                new Card(Value.TWO),
+                new Card(Value.EIGHT),
+                new Card(Value.TWO),
+                new Card(Value.FIVE)
+        });
+
+        thirdPairOfEights = new Hand(new Card[]{
                 new Card(Value.EIGHT),
                 new Card(Value.KING),
                 new Card(Value.EIGHT),
@@ -83,28 +70,44 @@ class HandTest {
                 new Card(Value.ACE)
         });
 
-        handFourOfAKind = new Hand(new Card[]{
+        threeTwos = new Hand(new Card[]{
+                new Card(Value.TWO),
+                new Card(Value.TWO),
+                new Card(Value.EIGHT),
+                new Card(Value.TWO),
+                new Card(Value.FIVE)
+        });
+
+        doublePairOfTwosAndEights = new Hand(new Card[]{
+                new Card(Value.TWO),
+                new Card(Value.TWO),
+                new Card(Value.EIGHT),
+                new Card(Value.EIGHT),
+                new Card(Value.FIVE)
+        });
+
+        fourAces = new Hand(new Card[]{
                 new Card(Value.ACE),
                 new Card(Value.ACE),
                 new Card(Value.ACE),
                 new Card(Value.ACE),
                 new Card(Value.KING)
-
         });
 
     }
 
+    /**
+     * Test of the sorting of the cards in the hand
+     */
     @Test
     void sortTest() {
-
         assertArrayEquals(new Card[]{
                 new Card(Value.KING),
                 new Card(Value.EIGHT),
                 new Card(Value.EIGHT),
                 new Card(Value.FIVE),
                 new Card(Value.TWO)
-
-        }, hand1.getCards());
+        }, pairOfEights.getCards());
     }
 
     /**
@@ -112,11 +115,10 @@ class HandTest {
      **/
     @Test
     void compareTo() {
-        assertEquals(1, hand2.compareTo(hand3));
-        assertEquals(-1, hand3.compareTo(hand1));
-        assertEquals(0, hand1.compareTo(hand2));
-        setUp();
-        assertEquals(1, hand2.compareTo(hand4));
+        assertEquals(1, secondPairOfEights.compareTo(highestAce));
+        assertEquals(-1, highestAce.compareTo(pairOfEights));
+        assertEquals(0, pairOfEights.compareTo(secondPairOfEights));
+        assertEquals(1, secondPairOfEights.compareTo(pairOfTwos));
     }
 
     /**
@@ -124,15 +126,11 @@ class HandTest {
      */
     @Test
     void getResultTest() {
-        assertEquals(new HandComparison(0, Patterns.EQUALITY, null), hand1.getResult(hand2));
-        setUp();
-        assertEquals(new HandComparison(1, Patterns.HIGHER, List.of(Value.ACE)), hand3.getResult(hand7));
-        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), hand1.getResult(hand3));
-        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), hand1.getResult(hand4));
-        setUp();
-        hand1.sortHand();
-        hand8.sortHand();
-        assertEquals(new HandComparison(-1, Patterns.HIGHER, List.of(Value.ACE)), hand1.getResult(hand8));
+        assertEquals(new HandComparison(0, Patterns.EQUALITY, null), pairOfEights.getResult(secondPairOfEights));
+        assertEquals(new HandComparison(1, Patterns.HIGHER, List.of(Value.ACE)), highestAce.getResult(highestKing));
+        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), pairOfEights.getResult(highestAce));
+        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), pairOfEights.getResult(pairOfTwos));
+        assertEquals(new HandComparison(-1, Patterns.HIGHER, List.of(Value.ACE)), pairOfEights.getResult(thirdPairOfEights));
     }
 
     /**
@@ -141,15 +139,18 @@ class HandTest {
      */
     @Test
     void testComparePattern() {
-        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), hand2.comparePatterns(hand3));
-        assertEquals(new HandComparison(-1, Patterns.PAIR, List.of(Value.EIGHT)), hand3.comparePatterns(hand1));
-        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), hand2.comparePatterns(hand4));
-        assertEquals(new HandComparison(1, Patterns.THREE_OF_A_KIND, List.of(Value.TWO)), hand6.comparePatterns(hand4));
-        assertEquals(new HandComparison(0, Patterns.EQUALITY, null), hand1.comparePatterns(hand2));
-        assertEquals(new HandComparison(1, Patterns.DOUBLE_PAIR, List.of(Value.EIGHT, Value.TWO)), hand5.comparePatterns(hand7));
-        assertEquals(new HandComparison(1, Patterns.FOUR_OF_A_KIND, List.of(Value.ACE)), handFourOfAKind.comparePatterns(hand1));
+        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), secondPairOfEights.comparePatterns(highestAce));
+        assertEquals(new HandComparison(-1, Patterns.PAIR, List.of(Value.EIGHT)), highestAce.comparePatterns(pairOfEights));
+        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), secondPairOfEights.comparePatterns(pairOfTwos));
+        assertEquals(new HandComparison(1, Patterns.THREE_OF_A_KIND, List.of(Value.TWO)), threeTwos.comparePatterns(pairOfTwos));
+        assertEquals(new HandComparison(0, Patterns.EQUALITY, null), pairOfEights.comparePatterns(secondPairOfEights));
+        assertEquals(new HandComparison(1, Patterns.DOUBLE_PAIR, List.of(Value.EIGHT, Value.TWO)), doublePairOfTwosAndEights.comparePatterns(highestKing));
+        assertEquals(new HandComparison(1, Patterns.FOUR_OF_A_KIND, List.of(Value.ACE)), fourAces.comparePatterns(pairOfEights));
     }
 
+    /**
+     * Test of the number of occurrences of each values in the hand
+     */
     @Test
     void occurrencesTest() {
         assertEquals(Map.of(
@@ -157,7 +158,7 @@ class HandTest {
                 Value.FIVE, 1,
                 Value.EIGHT, 2,
                 Value.KING, 1
-        ), hand1.occurrences());
+        ), pairOfEights.occurrences());
     }
 
     /**
@@ -165,11 +166,11 @@ class HandTest {
      */
     @Test
     void testGetPattern() {
-        assertEquals(Map.of(Patterns.HIGHER, new ArrayList<>(List.of(Value.ACE, Value.KING, Value.EIGHT, Value.FIVE, Value.TWO))), hand3.getPatterns());
-        assertEquals(Map.of(Patterns.PAIR, new ArrayList<>(List.of(Value.EIGHT)), Patterns.HIGHER, new ArrayList<>(List.of(Value.KING, Value.FIVE, Value.TWO))), hand2.getPatterns());
-        assertEquals(Map.of(Patterns.DOUBLE_PAIR, new ArrayList<>(List.of(Value.EIGHT, Value.TWO)), Patterns.HIGHER, new ArrayList<>(List.of(Value.FIVE))), hand5.getPatterns());
-        assertEquals(Map.of(Patterns.THREE_OF_A_KIND, new ArrayList<>(List.of(Value.TWO)), Patterns.HIGHER, new ArrayList<>(List.of(Value.EIGHT, Value.FIVE))), hand6.getPatterns());
-        assertEquals(Map.of(Patterns.FOUR_OF_A_KIND, new ArrayList<>(List.of(Value.ACE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.KING))), handFourOfAKind.getPatterns());
+        assertEquals(Map.of(Patterns.HIGHER, new ArrayList<>(List.of(Value.ACE, Value.KING, Value.EIGHT, Value.FIVE, Value.TWO))), highestAce.getPatterns());
+        assertEquals(Map.of(Patterns.PAIR, new ArrayList<>(List.of(Value.EIGHT)), Patterns.HIGHER, new ArrayList<>(List.of(Value.KING, Value.FIVE, Value.TWO))), secondPairOfEights.getPatterns());
+        assertEquals(Map.of(Patterns.DOUBLE_PAIR, new ArrayList<>(List.of(Value.EIGHT, Value.TWO)), Patterns.HIGHER, new ArrayList<>(List.of(Value.FIVE))), doublePairOfTwosAndEights.getPatterns());
+        assertEquals(Map.of(Patterns.THREE_OF_A_KIND, new ArrayList<>(List.of(Value.TWO)), Patterns.HIGHER, new ArrayList<>(List.of(Value.EIGHT, Value.FIVE))), threeTwos.getPatterns());
+        assertEquals(Map.of(Patterns.FOUR_OF_A_KIND, new ArrayList<>(List.of(Value.ACE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.KING))), fourAces.getPatterns());
     }
 
     /**
@@ -185,6 +186,5 @@ class HandTest {
         assertArrayEquals(new Card[]{new Card(Value.THREE)}, Hand.parse("3", 1).getCards());
         assertArrayEquals(new Card[]{new Card(Value.TEN)}, Hand.parse("10", 1).getCards());
         assertArrayEquals(new Card[]{new Card(Value.KING)}, Hand.parse("K", 1).getCards());
-
     }
 }
