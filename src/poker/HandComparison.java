@@ -1,4 +1,6 @@
 package poker;
 
-public record HandComparison(int compareResult, Patterns pattern, Value value) {
+import java.util.List;
+
+public record HandComparison(int compareResult, Patterns pattern, List<Value> values) {
 }

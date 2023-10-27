@@ -21,6 +21,7 @@ public class Hand implements Comparable<Hand> {
     public Hand(Card[] hand) {
         this.cards = hand;
         isSorted = false;
+        sortHand();
     }
 
     /**
@@ -101,6 +102,7 @@ public class Hand implements Comparable<Hand> {
      * Gets number of occurrences of each Value
      */
     public Map<Value, Integer> occurrences() {
+
         var values = new EnumMap<Value, Integer>(Value.class);
         for (Card card : cards) values.merge(card.getValue(), 1, Integer::sum);
         return values;
@@ -115,12 +117,16 @@ public class Hand implements Comparable<Hand> {
             Patterns p = switch (entry.getValue()) {
                 case 2 -> Patterns.PAIR;
                 case 3 -> Patterns.THREE_OF_A_KIND;
+                case 4 -> Patterns.FOUR_OF_A_KIND;
                 default -> null;
             };
-            if (p != null) {
-                if (result.containsKey(p)) result.get(p).add(0, entry.getKey());
-                else result.put(p, new ArrayList<>(List.of(entry.getKey())));
-            }
+            if (p == null) continue;
+            if (result.containsKey(p)) {
+                if (p == Patterns.PAIR) {
+                    result.put(Patterns.DOUBLE_PAIR, new ArrayList<>(List.of(entry.getKey(), result.get(p).get(0))));
+                    result.remove(p);
+                } else result.get(p).add(0, entry.getKey());
+            } else result.put(p, new ArrayList<>(List.of(entry.getKey())));
         }
         return result;
     }
@@ -154,7 +160,7 @@ public class Hand implements Comparable<Hand> {
                 }
                 int compare = cards[cardIndex].compareTo(otherHand.getCards()[cardIndex2]);
                 if (compare != 0)
-                    return new HandComparison(compare, Patterns.HIGHER, (compare > 0 ? cards : otherHand.getCards())[cardIndex].getValue());
+                    return new HandComparison(compare, Patterns.HIGHER, List.of((compare > 0 ? cards : otherHand.getCards())[cardIndex].getValue()));
                 cardIndex2++;
             }
             cardIndex++;
@@ -186,13 +192,17 @@ public class Hand implements Comparable<Hand> {
 
         for (Patterns p : Patterns.values()) {
             if (handOnePatterns.containsKey(p) && !handTwoPatterns.containsKey(p)) {
-                return new HandComparison(1, p, handOnePatterns.get(p).get(0));
+                return new HandComparison(1, p, handOnePatterns.get(p));
             } else if (!handOnePatterns.containsKey(p) && handTwoPatterns.containsKey(p)) {
-                return new HandComparison(-1, p, handTwoPatterns.get(p).get(0));
+                return new HandComparison(-1, p, handTwoPatterns.get(p));
             } else if (handOnePatterns.containsKey(p) && handTwoPatterns.containsKey(p)) {
-                int res = Math.max(Math.min(handOnePatterns.get(p).get(0).compareTo(handTwoPatterns.get(p).get(0)), 1), -1);
-                if (res != 0)
-                    return new HandComparison(res, p, (res > 0 ? handOnePatterns : handTwoPatterns).get(p).get(0));
+                var handOneList = handOnePatterns.get(p);
+                var handTwoList = handTwoPatterns.get(p);
+                for (int i = 0; (i < handOneList.size() && (i < handTwoList.size())); i++) {
+                    int res = Math.max(Math.min(handOneList.get(i).compareTo(handTwoList.get(i)), 1), -1);
+                    if (res != 0)
+                        return new HandComparison(res, p, (res > 0 ? handOnePatterns : handTwoPatterns).get(p));
+                }
             }
         }
         deleteCardInPattern(handOnePatterns);

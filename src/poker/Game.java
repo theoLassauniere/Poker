@@ -45,11 +45,14 @@ public class Game {
         switch (result.pattern()) {
             case EQUALITY -> System.out.println("Egalité");
             case HIGHER ->
-                    System.out.println("La main " + (result.compareResult() > 0 ? 1 : 2) + " gagne avec la carte la plus haute : " + result.value());
+                    System.out.println("La main " + (result.compareResult() > 0 ? 1 : 2) + " gagne avec la carte la plus haute : " + result.values().get(0));
             case PAIR ->
-                    System.out.println("La main " + (result.compareResult() > 0 ? 1 : 2) + " gagne avec une paire de : " + result.value());
+                    System.out.println("La main " + (result.compareResult() > 0 ? 1 : 2) + " gagne avec une paire de : " + result.values().get(0));
+            case DOUBLE_PAIR ->
+                    System.out.println("La main " + (result.compareResult() > 0 ? 1 : 2) + " gagne avec une double paire de : " + result.values().get(0) + " et de : " + result.values().get(1));
             case THREE_OF_A_KIND ->
-                    System.out.println("La main " + (result.compareResult() > 0 ? 1 : 2) + " gagne avec un brelan de : " + result.value());
+                    System.out.println("La main " + (result.compareResult() > 0 ? 1 : 2) + " gagne avec un brelan de : " + result.values().get(0));
+
         }
     }
 }

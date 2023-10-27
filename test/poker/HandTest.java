@@ -86,14 +86,7 @@ class HandTest {
 
     @Test
     void sortTest() {
-        assertArrayEquals(new Card[]{
-                new Card(Value.EIGHT),
-                new Card(Value.KING),
-                new Card(Value.EIGHT),
-                new Card(Value.TWO),
-                new Card(Value.FIVE)
-        }, hand1.getCards());
-        hand1.sortHand();
+
         assertArrayEquals(new Card[]{
                 new Card(Value.KING),
                 new Card(Value.EIGHT),
@@ -123,26 +116,27 @@ class HandTest {
     void getResultTest() {
         assertEquals(new HandComparison(0, Patterns.EQUALITY, null), hand1.getResult(hand2));
         setUp();
-        assertEquals(new HandComparison(1, Patterns.HIGHER, Value.ACE), hand3.getResult(hand7));
-        assertEquals(new HandComparison(1, Patterns.PAIR, Value.EIGHT), hand1.getResult(hand3));
-        assertEquals(new HandComparison(1, Patterns.PAIR, Value.EIGHT), hand1.getResult(hand4));
+        assertEquals(new HandComparison(1, Patterns.HIGHER, List.of(Value.ACE)), hand3.getResult(hand7));
+        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), hand1.getResult(hand3));
+        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), hand1.getResult(hand4));
         setUp();
         hand1.sortHand();
         hand8.sortHand();
-        assertEquals(new HandComparison(-1, Patterns.HIGHER, Value.ACE), hand1.getResult(hand8));
+        assertEquals(new HandComparison(-1, Patterns.HIGHER, List.of(Value.ACE)), hand1.getResult(hand8));
     }
 
     /**
      * Test for the function comparePatterns and at the same time the function deleteCardInPattern
-     * when we have an equality of patterns like in the comparaison between Hand1 and Hand2
+     * when we have an equality of patterns like in the comparison between Hand1 and Hand2
      */
     @Test
     void testComparePattern() {
-        assertEquals(new HandComparison(1, Patterns.PAIR, Value.EIGHT), hand2.comparePatterns(hand3));
-        assertEquals(new HandComparison(-1, Patterns.PAIR, Value.EIGHT), hand3.comparePatterns(hand1));
-        assertEquals(new HandComparison(1, Patterns.PAIR, Value.EIGHT), hand2.comparePatterns(hand4));
-        assertEquals(new HandComparison(1, Patterns.THREE_OF_A_KIND, Value.TWO), hand6.comparePatterns(hand4));
+        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), hand2.comparePatterns(hand3));
+        assertEquals(new HandComparison(-1, Patterns.PAIR, List.of(Value.EIGHT)), hand3.comparePatterns(hand1));
+        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), hand2.comparePatterns(hand4));
+        assertEquals(new HandComparison(1, Patterns.THREE_OF_A_KIND, List.of(Value.TWO)), hand6.comparePatterns(hand4));
         assertEquals(new HandComparison(0, Patterns.EQUALITY, null), hand1.comparePatterns(hand2));
+        assertEquals(new HandComparison(1, Patterns.DOUBLE_PAIR, List.of(Value.EIGHT, Value.TWO)), hand5.comparePatterns(hand7)); //TODO : modify the return value of comparePatterns
     }
 
     /**
@@ -157,13 +151,6 @@ class HandTest {
 
     @Test
     void occurrencesTest() {
-        assertArrayEquals(new Card[]{
-                new Card(Value.EIGHT),
-                new Card(Value.KING),
-                new Card(Value.EIGHT),
-                new Card(Value.TWO),
-                new Card(Value.FIVE)
-        }, hand1.getCards());
         assertEquals(Map.of(
                 Value.TWO, 1,
                 Value.FIVE, 1,
@@ -179,7 +166,7 @@ class HandTest {
     void testGetPattern() {
         assertEquals(Map.of(), hand3.getPatterns());
         assertEquals(Map.of(Patterns.PAIR, new ArrayList<>(List.of(Value.EIGHT))), hand2.getPatterns());
-        assertEquals(Map.of(Patterns.PAIR, new ArrayList<>(List.of(Value.EIGHT, Value.TWO))), hand5.getPatterns());
+        assertEquals(Map.of(Patterns.DOUBLE_PAIR, new ArrayList<>(List.of(Value.EIGHT, Value.TWO))), hand5.getPatterns());
         assertEquals(Map.of(Patterns.THREE_OF_A_KIND, new ArrayList<>(List.of(Value.TWO))), hand6.getPatterns());
     }
 
