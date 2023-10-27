@@ -30,6 +30,27 @@ class GameTest {
 
     @ParameterizedTest
     @CsvSource(value = {
+            "2;2;Égalité",
+            "A;7;La main 1 gagne avec la carte la plus haute : A"
+    }, delimiter = ';')
+    void oneCardGameTest(String firstHand, String secondHand, String output) {
+        gameTest(oneCardGame, firstHand, secondHand, output);
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "2 3;2 3;Égalité",
+            "2 2;2 A;La main 1 gagne avec une paire de : 2",
+            "2 2;4 4;La main 2 gagne avec une paire de : 4",
+            "2 A;9 7;La main 1 gagne avec la carte la plus haute : A",
+            "2 2;2 2;Égalité"
+    }, delimiter = ';')
+    void twoCardGameTest(String firstHand, String secondHand, String output) {
+        gameTest(twoCardGame, firstHand, secondHand, output);
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
             "2 3 4;2 3 4;Égalité",
             "2 2 4;2 3 4;La main 1 gagne avec une paire de : 2",
             "2 2 4;2 4 4;La main 2 gagne avec une paire de : 4",
@@ -62,7 +83,7 @@ class GameTest {
         System.setIn(new ByteArrayInputStream((firstHand + "\n" + secondHand).getBytes()));
         System.setOut(new PrintStream(outputStream));
 
-        assertDoesNotThrow(() -> fourCardGame.start()); // The game should start without errors
+        assertDoesNotThrow(game::start); // The game should start without errors
 
         String methodOutput = outputStream.toString().trim(); // Reads the output stream
         assertEquals(output, methodOutput.substring("Main 1: Main 2: ".length()));
