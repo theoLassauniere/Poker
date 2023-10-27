@@ -34,10 +34,6 @@ public class Game {
         Hand hand1 = Hand.parse(scanner.nextLine(), handSize);
         System.out.print("Main 2: ");
         Hand hand2 = Hand.parse(scanner.nextLine(), handSize);
-
-        hand1.sortHand();
-        hand2.sortHand();
-
         System.out.println(hand1.getResult(hand2));
     }
 
