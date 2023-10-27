@@ -20,6 +20,7 @@ public record HandComparison(int compareResult, Patterns pattern, List<Value> va
                     .append(" et de : ")
                     .append(values().get(1));
             case THREE_OF_A_KIND -> stringRes.append("un brelan de : ").append(values().get(0));
+            case FOUR_OF_A_KIND -> stringRes.append("un carré de : ").append(values().get(0));
 
         }
         return stringRes.toString();

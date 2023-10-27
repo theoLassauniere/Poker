@@ -56,6 +56,8 @@ class GameTest {
             "2 2 3 3;2 2 7 K;La main 1 gagne avec une double paire de : 3 et de : 2",
             "2 2 3 3;2 2 K K;La main 2 gagne avec une double paire de : K et de : 2",
             "A A 4 4;A A 5 5;La main 2 gagne avec une double paire de : A et de : 5",
+            "A A A A;2 2 4 5;La main 1 gagne avec un carré de : A",
+            "A A A A;K K K K;La main 1 gagne avec un carré de : A",
             "A A 4 4;A A 4 4;Egalité"
     }, delimiter = ';')
     void fourCardGameTest(String firstHand, String secondHand, String output) {

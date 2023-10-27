@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Team B
  */
 class HandTest {
-    Hand hand1, hand2, hand3, hand4, hand5, hand6, hand7, hand8;
+    Hand hand1, hand2, hand3, hand4, hand5, hand6, hand7, hand8, handFourOfAKind;
 
     @BeforeEach
     void setUp() {
@@ -82,6 +82,16 @@ class HandTest {
                 new Card(Value.SEVEN),
                 new Card(Value.ACE)
         });
+
+        handFourOfAKind = new Hand(new Card[]{
+                new Card(Value.ACE),
+                new Card(Value.ACE),
+                new Card(Value.ACE),
+                new Card(Value.ACE),
+                new Card(Value.KING)
+
+        });
+
     }
 
     @Test
@@ -137,6 +147,7 @@ class HandTest {
         assertEquals(new HandComparison(1, Patterns.THREE_OF_A_KIND, List.of(Value.TWO)), hand6.comparePatterns(hand4));
         assertEquals(new HandComparison(0, Patterns.EQUALITY, null), hand1.comparePatterns(hand2));
         assertEquals(new HandComparison(1, Patterns.DOUBLE_PAIR, List.of(Value.EIGHT, Value.TWO)), hand5.comparePatterns(hand7));
+        assertEquals(new HandComparison(1, Patterns.FOUR_OF_A_KIND, List.of(Value.ACE)), handFourOfAKind.comparePatterns(hand1));
     }
 
     @Test
@@ -158,6 +169,7 @@ class HandTest {
         assertEquals(Map.of(Patterns.PAIR, new ArrayList<>(List.of(Value.EIGHT)), Patterns.HIGHER, new ArrayList<>(List.of(Value.KING, Value.FIVE, Value.TWO))), hand2.getPatterns());
         assertEquals(Map.of(Patterns.DOUBLE_PAIR, new ArrayList<>(List.of(Value.EIGHT, Value.TWO)), Patterns.HIGHER, new ArrayList<>(List.of(Value.FIVE))), hand5.getPatterns());
         assertEquals(Map.of(Patterns.THREE_OF_A_KIND, new ArrayList<>(List.of(Value.TWO)), Patterns.HIGHER, new ArrayList<>(List.of(Value.EIGHT, Value.FIVE))), hand6.getPatterns());
+        assertEquals(Map.of(Patterns.FOUR_OF_A_KIND, new ArrayList<>(List.of(Value.ACE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.KING))), handFourOfAKind.getPatterns());
     }
 
     /**
@@ -173,5 +185,6 @@ class HandTest {
         assertArrayEquals(new Card[]{new Card(Value.THREE)}, Hand.parse("3", 1).getCards());
         assertArrayEquals(new Card[]{new Card(Value.TEN)}, Hand.parse("10", 1).getCards());
         assertArrayEquals(new Card[]{new Card(Value.KING)}, Hand.parse("K", 1).getCards());
+
     }
 }
