@@ -146,6 +146,23 @@ public class Hand implements Comparable<Hand> {
         return comparePatterns(otherHand);
     }
 
+
+    /**
+     * @param otherHand the other hand to be compared.
+     * @param pattern   the pattern for which we will inspect the values
+     * @return Compare the two arrays of Values given by pattern parameter from both hands
+     **/
+    public HandComparison comparePatternValues(Patterns pattern, Hand otherHand) {
+        var handOneList = patterns.get(pattern);
+        var handTwoList = otherHand.patterns.get(pattern);
+        for (int i = 0; (i < handOneList.size() && (i < handTwoList.size())); i++) {
+            int res = Math.max(Math.min(handOneList.get(i).compareTo(handTwoList.get(i)), 1), -1);
+            if (res != 0)
+                return new HandComparison(res, pattern, List.of((res > 0 ? patterns : otherHand.patterns).get(pattern).get(i)));
+        }
+        return null;
+    }
+
     /**
      * @param otherHand the other hand to be compared.
      * @return Compare the current hand with otherHand with the patterns
@@ -157,13 +174,8 @@ public class Hand implements Comparable<Hand> {
             } else if (!patterns.containsKey(p) && otherHand.patterns.containsKey(p)) {
                 return new HandComparison(-1, p, otherHand.patterns.get(p));
             } else if (patterns.containsKey(p) && otherHand.patterns.containsKey(p)) {
-                var handOneList = patterns.get(p);
-                var handTwoList = otherHand.patterns.get(p);
-                for (int i = 0; (i < handOneList.size() && (i < handTwoList.size())); i++) {
-                    int res = Math.max(Math.min(handOneList.get(i).compareTo(handTwoList.get(i)), 1), -1);
-                    if (res != 0)
-                        return new HandComparison(res, p, List.of((res > 0 ? patterns : otherHand.patterns).get(p).get(i)));
-                }
+                HandComparison comparisonResult = comparePatternValues(p, otherHand);
+                if (comparisonResult != null) return comparisonResult;
             }
         }
         return new HandComparison(0, Patterns.EQUALITY, null);
