@@ -104,10 +104,7 @@ public class Hand implements Comparable<Hand> {
         if (cards.length < 5) return false;
         if (cards[0].value().ordinal() < 4)
             return false; // if the highest card of the hand is less than a six, there cannot be a straight
-        for (int i = 0; i < cards.length; i++) {
-            if (i == 4 && (cards[i - 1].value().ordinal() - cards[i].value().ordinal() == 1)) {
-                return true;
-            }
+        for (int i = 0; i < cards.length - 1; i++) {
             if (cards[i].value().ordinal() - cards[i + 1].value().ordinal() != 1) {
                 return false;
             }
