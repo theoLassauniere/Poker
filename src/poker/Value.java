@@ -10,21 +10,21 @@ public enum Value {
     SIX("6"), SEVEN("7"), EIGHT("8"), NINE("9"), TEN("10"),
     JACK("J"), QUEEN("Q"), KING("K"), ACE("A");
 
-    private final String symbol;
+    private final String valueSymbol;
 
-    Value(String symbol) {
-        this.symbol = symbol;
+    Value(String valueSymbol) {
+        this.valueSymbol = valueSymbol;
     }
 
     /**
      * Get the representation symbol
      */
-    public String getSymbol() {
-        return this.symbol;
+    public String getValueSymbol() {
+        return this.valueSymbol;
     }
 
     @Override
     public String toString() {
-        return getSymbol();
+        return getValueSymbol();
     }
 }

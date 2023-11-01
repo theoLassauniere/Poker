@@ -28,7 +28,7 @@ public record Card(Value value) implements Comparable<Card> {
 
     @Override
     public String toString() {
-        return value.getSymbol();
+        return value.getValueSymbol();
     }
 
     /**
@@ -40,7 +40,7 @@ public record Card(Value value) implements Comparable<Card> {
     public static Card tryParse(String text) {
         Value cardValue = null;
         for (var value : Value.values()) {
-            if (Objects.equals(text, value.getSymbol())) {
+            if (Objects.equals(text, value.getValueSymbol())) {
                 cardValue = value;
                 break;
             }

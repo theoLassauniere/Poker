@@ -11,7 +11,6 @@ import java.util.*;
 
 public class Hand implements Comparable<Hand> {
     private final Card[] cards;
-    private boolean isSorted;
     private final Map<Patterns, ArrayList<Value>> patterns;
 
     /**
@@ -21,7 +20,6 @@ public class Hand implements Comparable<Hand> {
      */
     public Hand(Card[] hand) {
         this.cards = hand;
-        isSorted = false;
         sortHand();
         patterns = getPatterns();
     }
@@ -80,7 +78,6 @@ public class Hand implements Comparable<Hand> {
      * Sort the hand in descending order
      */
     public void sortHand() {
-        if (isSorted()) return;
         for (int i = 0; i < cards.length; i++) {
             int swapIndex = i;
             for (int j = i + 1; j < cards.length; j++) {
@@ -90,15 +87,8 @@ public class Hand implements Comparable<Hand> {
             }
             swap(i, swapIndex);
         }
-        isSorted = true;
     }
 
-    /**
-     * Are the cards sorted?
-     */
-    public boolean isSorted() {
-        return isSorted;
-    }
 
     /**
      * Gets number of occurrences of each Value
@@ -110,11 +100,31 @@ public class Hand implements Comparable<Hand> {
         return values;
     }
 
+    public boolean isStraight() {
+        if (cards.length < 5) return false;
+        if (cards[0].value().ordinal() < 4)
+            return false; // if the highest card of the hand is less than a six, there cannot be a straight
+        for (int i = 0; i < cards.length; i++) {
+            if (i == 4 && (cards[i - 1].value().ordinal() - cards[i].value().ordinal() == 1)) {
+                return true;
+            }
+            if (cards[i].value().ordinal() - cards[i + 1].value().ordinal() != 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
     /**
      * Gets the patterns and card values that realize them
      **/
     public Map<Patterns, ArrayList<Value>> getPatterns() {
         EnumMap<Patterns, ArrayList<Value>> result = new EnumMap<>(Patterns.class);
+        if (isStraight()) {
+            result.put(Patterns.STRAIGHT, new ArrayList<>(List.of(getCards()[0].value())));
+            return result;
+        }
         for (var entry : occurrences().entrySet()) {
             Patterns p = switch (entry.getValue()) {
                 case 1 -> Patterns.HIGHER;

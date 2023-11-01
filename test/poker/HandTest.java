@@ -18,7 +18,9 @@ class HandTest {
             pairOfEights, secondPairOfEights, pairOfTwos, thirdPairOfEights,
             threeTwos,
             doublePairOfTwosAndEights,
-            fourAces;
+            fourAces,
+            bigStraight, littleStraight, almostStraight;
+
 
     @BeforeEach
     void setUp() {
@@ -94,6 +96,30 @@ class HandTest {
                 new Card(Value.KING)
         });
 
+        bigStraight = new Hand(new Card[]{
+                new Card(Value.ACE),
+                new Card(Value.KING),
+                new Card(Value.QUEEN),
+                new Card(Value.JACK),
+                new Card(Value.TEN)
+        });
+
+        littleStraight = new Hand(new Card[]{
+                new Card(Value.SIX),
+                new Card(Value.FIVE),
+                new Card(Value.FOUR),
+                new Card(Value.THREE),
+                new Card(Value.TWO)
+        });
+
+        almostStraight = new Hand(new Card[]{
+                new Card(Value.ACE),
+                new Card(Value.KING),
+                new Card(Value.QUEEN),
+                new Card(Value.JACK),
+                new Card(Value.TWO)
+        });
+
     }
 
     /**
@@ -108,6 +134,14 @@ class HandTest {
                 new Card(Value.FIVE),
                 new Card(Value.TWO)
         }, pairOfEights.getCards());
+    }
+
+    @Test
+    void isStraightTest() {
+        assertFalse(pairOfTwos.isStraight());
+        assertTrue(bigStraight.isStraight());
+        assertTrue(littleStraight.isStraight());
+        assertFalse(almostStraight.isStraight());
     }
 
     /**
@@ -146,6 +180,8 @@ class HandTest {
         assertEquals(new HandComparison(0, Patterns.EQUALITY, null), pairOfEights.comparePatterns(secondPairOfEights));
         assertEquals(new HandComparison(1, Patterns.DOUBLE_PAIR, List.of(Value.EIGHT, Value.TWO)), doublePairOfTwosAndEights.comparePatterns(highestKing));
         assertEquals(new HandComparison(1, Patterns.FOUR_OF_A_KIND, List.of(Value.ACE)), fourAces.comparePatterns(pairOfEights));
+        assertEquals(new HandComparison(1, Patterns.STRAIGHT, List.of(Value.ACE)), bigStraight.comparePatterns(littleStraight));
+        assertEquals(new HandComparison(1, Patterns.STRAIGHT, List.of(Value.ACE)), bigStraight.comparePatterns(pairOfEights));
     }
 
     /**
@@ -171,6 +207,8 @@ class HandTest {
         assertEquals(Map.of(Patterns.DOUBLE_PAIR, new ArrayList<>(List.of(Value.EIGHT, Value.TWO)), Patterns.HIGHER, new ArrayList<>(List.of(Value.FIVE))), doublePairOfTwosAndEights.getPatterns());
         assertEquals(Map.of(Patterns.THREE_OF_A_KIND, new ArrayList<>(List.of(Value.TWO)), Patterns.HIGHER, new ArrayList<>(List.of(Value.EIGHT, Value.FIVE))), threeTwos.getPatterns());
         assertEquals(Map.of(Patterns.FOUR_OF_A_KIND, new ArrayList<>(List.of(Value.ACE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.KING))), fourAces.getPatterns());
+        assertEquals(Map.of(Patterns.STRAIGHT, new ArrayList<>(List.of(Value.ACE))), bigStraight.getPatterns());
+        assertEquals(Map.of(Patterns.STRAIGHT, new ArrayList<>(List.of(Value.SIX))), littleStraight.getPatterns());
     }
 
     /**
