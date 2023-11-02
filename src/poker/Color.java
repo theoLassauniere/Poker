@@ -8,19 +8,19 @@ package poker;
 public enum Color {
     HEARTS("Co"), DIAMONDS("Ca"), SPADES("Pi"), CLUBS("Tr");
 
-    private final String colorSymbol;
+    private final String symbol;
 
-    Color(String colorSymbol) {
-        this.colorSymbol = colorSymbol;
+    Color(String symbol) {
+        this.symbol = symbol;
     }
 
-    public String getColorSymbol() {
-        return this.colorSymbol;
+    public String getSymbol() {
+        return this.symbol;
     }
 
     @Override
     public String toString() {
-        return getColorSymbol();
+        return getSymbol();
     }
 
 }

@@ -17,18 +17,9 @@ public record Card(Value value) implements Comparable<Card> {
         return Math.max(Math.min(value.ordinal() - other.value.ordinal(), 1), -1);
     }
 
-    /**
-     * Check equality
-     */
-    @Override
-    public boolean equals(Object other) {
-        if (!(other instanceof Card)) return false;
-        return compareTo((Card) other) == 0;
-    }
-
     @Override
     public String toString() {
-        return value.getValueSymbol();
+        return value.getSymbol();
     }
 
     /**
@@ -40,7 +31,7 @@ public record Card(Value value) implements Comparable<Card> {
     public static Card tryParse(String text) {
         Value cardValue = null;
         for (var value : Value.values()) {
-            if (Objects.equals(text, value.getValueSymbol())) {
+            if (Objects.equals(text, value.getSymbol())) {
                 cardValue = value;
                 break;
             }
