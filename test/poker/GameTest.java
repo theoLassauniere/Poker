@@ -31,8 +31,8 @@ class GameTest {
 
     @ParameterizedTest
     @CsvSource(value = {
-            "2;2;Égalité",
-            "A;7;La main 1 gagne avec la carte la plus haute : A"
+            "2Ca;2Co;Égalité",
+            "ACa;7Co;La main 1 gagne avec la carte la plus haute : A"
     }, delimiter = ';')
     void oneCardGameTest(String firstHand, String secondHand, String output) {
         gameTest(oneCardGame, firstHand, secondHand, output);
@@ -40,11 +40,11 @@ class GameTest {
 
     @ParameterizedTest
     @CsvSource(value = {
-            "2 3;2 3;Égalité",
-            "2 2;2 A;La main 1 gagne avec une paire de : 2",
-            "2 2;4 4;La main 2 gagne avec une paire de : 4",
-            "2 A;9 7;La main 1 gagne avec la carte la plus haute : A",
-            "2 2;2 2;Égalité"
+            "2Ca 3Co;2Co 3Ca;Égalité",
+            "2Ca 2Co;2Pi ACa;La main 1 gagne avec une paire de : 2",
+            "2Ca 2Co;4Ca 4Co;La main 2 gagne avec une paire de : 4",
+            "2Ca ACo;9Co 7Ca;La main 1 gagne avec la carte la plus haute : A",
+            "2Ca 2Co;2Pi 2Tr;Égalité"
     }, delimiter = ';')
     void twoCardGameTest(String firstHand, String secondHand, String output) {
         gameTest(twoCardGame, firstHand, secondHand, output);
@@ -52,10 +52,10 @@ class GameTest {
 
     @ParameterizedTest
     @CsvSource(value = {
-            "2 3 4;2 3 4;Égalité",
-            "2 2 4;2 3 4;La main 1 gagne avec une paire de : 2",
-            "2 2 4;2 4 4;La main 2 gagne avec une paire de : 4",
-            "2 2 A;2 2 7;La main 1 gagne avec la carte la plus haute : A"
+            "2Ca 3Co 4Ca;2Co 3Ca 4Co;Égalité",
+            "2Ca 2Co 4Ca;2Tr 3Ca 4Tr;La main 1 gagne avec une paire de : 2",
+            "2Ca 2Co 4Ca;2Tr 4Tr 4Co;La main 2 gagne avec une paire de : 4",
+            "2Ca 2Co ACa;2Tr 2Pi 7Pi;La main 1 gagne avec la carte la plus haute : A"
     }, delimiter = ';')
     void threeCardGameTest(String firstHand, String secondHand, String output) {
         gameTest(threeCardGame, firstHand, secondHand, output);
@@ -63,16 +63,16 @@ class GameTest {
 
     @ParameterizedTest
     @CsvSource(value = {
-            "2 3 4 5;2 3 4 5;Égalité",
-            "2 2 4 5;2 3 4 5;La main 1 gagne avec une paire de : 2",
-            "2 2 4 6;2 4 4 7;La main 2 gagne avec une paire de : 4",
-            "2 2 A 3;2 2 7 K;La main 1 gagne avec la carte la plus haute : A",
-            "2 2 3 3;2 2 7 K;La main 1 gagne avec une double paire dont la paire la paire gagnante est paire de : 3",
-            "2 2 3 3;2 2 K K;La main 2 gagne avec une double paire dont la paire la paire gagnante est paire de : K",
-            "A A 4 4;A A 5 5;La main 2 gagne avec une double paire dont la paire la paire gagnante est paire de : 5",
-            "A A A A;2 2 4 5;La main 1 gagne avec un carré de : A",
-            "A A A A;K K K K;La main 1 gagne avec un carré de : A",
-            "A A 4 4;A A 4 4;Égalité"
+            "2Pi 3Pi 4Tr 5Pi;2Tr 3Tr 4Co 5Tr;Égalité",
+            "2Pi 2Tr 4Pi 5Pi;2Pi 3Tr 4Tr 5Tr;La main 1 gagne avec une paire de : 2",
+            "2Ca 2Co 4Pi 6Tr;2Tr 4Pi 4Co 7Ca;La main 2 gagne avec une paire de : 4",
+            "2Ca 2Co APi 3Tr;2Tr 2Pi 7Co KCa;La main 1 gagne avec la carte la plus haute : A",
+            "2Ca 2Co 3Pi 3Tr;2Tr 2Pi 7Co KCa;La main 1 gagne avec une double paire dont la paire la paire gagnante est paire de : 3",
+            "2Ca 2Co 3Pi 3Tr;2Tr 2Pi KCo KCa;La main 2 gagne avec une double paire dont la paire la paire gagnante est paire de : K",
+            "ACa ACo 4Pi 4Tr;ATr APi 5Co 5Ca;La main 2 gagne avec une double paire dont la paire la paire gagnante est paire de : 5",
+            "ACa ACo APi ATr;2Tr 2Pi 4Co 5Ca;La main 1 gagne avec un carré de : A",
+            "ACa ACo APi ATr;KTr KPi KCo KCa;La main 1 gagne avec un carré de : A",
+            "ACa ACo 4Pi 4Tr;ATr APi 4Co 4Ca;Égalité"
     }, delimiter = ';')
     void fourCardGameTest(String firstHand, String secondHand, String output) {
         gameTest(fourCardGame, firstHand, secondHand, output);
@@ -80,18 +80,18 @@ class GameTest {
 
     @ParameterizedTest
     @CsvSource(value = {
-            "2 3 4 5 6;2 3 4 5 6;Égalité",
-            "2 2 4 5 7;2 3 4 5 7;La main 1 gagne avec une paire de : 2",
-            "2 2 4 6 7;2 4 4 7 8;La main 2 gagne avec une paire de : 4",
-            "2 2 A 3 4;2 2 7 K 8;La main 1 gagne avec la carte la plus haute : A",
-            "2 2 3 3 4;2 2 7 K 4;La main 1 gagne avec une double paire dont la paire la paire gagnante est paire de : 3",
-            "2 2 3 3 4;2 2 K K 4;La main 2 gagne avec une double paire dont la paire la paire gagnante est paire de : K",
-            "A A 4 4 7;A A 5 5 9;La main 2 gagne avec une double paire dont la paire la paire gagnante est paire de : 5",
-            "A A A A 5;2 2 4 5 3;La main 1 gagne avec un carré de : A",
-            "A A A A 8;K K K K 8;La main 1 gagne avec un carré de : A",
-            "A A 4 4 3;A A 4 4 3;Égalité",
-            "A K Q J 10;2 3 4 5 6;La main 1 gagne avec une suite dont la carte la plus haute est : A",
-            "7 8 9 10 J;8 9 10 J Q;La main 2 gagne avec une suite dont la carte la plus haute est : Q"
+            "2Ca 3Co 4Tr 5Pi 6Ca;2Co 3Tr 4Pi 5Ca 6Co;Égalité",
+            "2Ca 2Co 4Pi 5Tr 7Ca;2Co 3Pi 4Tr 5Ca 7Co;La main 1 gagne avec une paire de : 2",
+            "2Ca 2Co 4Pi 6Tr 7Ca;2Pi 4Tr 4Co 7Co 8Tr;La main 2 gagne avec une paire de : 4",
+            "2Ca 2Co ACa 3Ca 4Ca;2Tr 2Pi 7Ca KCa 8Ca;La main 1 gagne avec la carte la plus haute : A",
+            "2Ca 2Co 3Ca 3Co 4Ca;2Tr 2Pi 7Tr KPi 4Pi;La main 1 gagne avec une double paire dont la paire la paire gagnante est paire de : 3",
+            "2Ca 2Co 3Ca 3Co 4Ca;2Tr 2Pi KTr KPi 4Co;La main 2 gagne avec une double paire dont la paire la paire gagnante est paire de : K",
+            "ACa ACo 4Pi 4Tr 7Ca;ACa ACo 5Tr 5Pi 9Pi;La main 2 gagne avec une double paire dont la paire la paire gagnante est paire de : 5",
+            "ACa ACo APi ATr 5Ca;2Ca 2Co 4Ca 5Pi 3Pi;La main 1 gagne avec un carré de : A",
+            "ACa ACo APi ATr 8Ca;KCa KCo KPi KTr 8Pi;La main 1 gagne avec un carré de : A",
+            "ACa ACo 4Pi 4Tr 3Ca;APi ATr 4Ca 4Co 3Co;Égalité",
+            "ACa KCo QCa JCo 10Ca;2Ca 3Co 4Ca 5Co 6Ca;La main 1 gagne avec une suite dont la carte la plus haute est : A",
+            "7Ca 8Co 9Ca 10Co JCa;8Ca 9Co 10Ca JCo QCa;La main 2 gagne avec une suite dont la carte la plus haute est : Q"
     }, delimiter = ';')
     void fiveCardGameTest(String firstHand, String secondHand, String output) {
         gameTest(fiveCardGame, firstHand, secondHand, output);

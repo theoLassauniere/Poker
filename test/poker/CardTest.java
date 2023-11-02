@@ -18,9 +18,9 @@ class CardTest {
      **/
     @BeforeEach
     void setUp() {
-        c1 = new Card(Value.EIGHT);
-        c2 = new Card(Value.KING);
-        c3 = new Card(Value.EIGHT);
+        c1 = new Card(Value.EIGHT, Color.HEARTS);
+        c2 = new Card(Value.KING, Color.DIAMONDS);
+        c3 = new Card(Value.EIGHT, Color.CLUBS);
     }
 
     /**
@@ -39,7 +39,8 @@ class CardTest {
     @Test
     void testEquals() {
         assertNotEquals(c1, c2);
-        assertEquals(c1, c3);
+        assertNotEquals(c1, c3);
+        assertEquals(new Card(Value.EIGHT, Color.CLUBS), c3);
     }
 
     /**
@@ -51,8 +52,17 @@ class CardTest {
         assertTrue(Card.tryParse("1").isEmpty());
         assertTrue(Card.tryParse("26").isEmpty());
         assertTrue(Card.tryParse("W").isEmpty());
-        assertEquals(new Card(Value.THREE), Card.tryParse("3").orElseThrow());
-        assertEquals(new Card(Value.TEN), Card.tryParse("10").orElseThrow());
-        assertEquals(new Card(Value.KING), Card.tryParse("K").orElseThrow());
+        assertTrue(Card.tryParse("3").isEmpty());
+        assertTrue(Card.tryParse("10").isEmpty());
+        assertTrue(Card.tryParse("K").isEmpty());
+        assertTrue(Card.tryParse("Ca").isEmpty());
+        assertTrue(Card.tryParse("Car").isEmpty());
+        assertTrue(Card.tryParse("3Va").isEmpty());
+        assertTrue(Card.tryParse("1Ca").isEmpty());
+        assertTrue(Card.tryParse("WTr").isEmpty());
+        assertEquals(new Card(Value.THREE, Color.DIAMONDS), Card.tryParse("3Ca").orElseThrow());
+        assertEquals(new Card(Value.TEN, Color.SPADES), Card.tryParse("10Pi").orElseThrow());
+        assertEquals(new Card(Value.KING, Color.CLUBS), Card.tryParse("KTr").orElseThrow());
+        assertEquals(new Card(Value.KING, Color.HEARTS), Card.tryParse("KCo").orElseThrow());
     }
 }
