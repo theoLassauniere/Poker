@@ -1,6 +1,7 @@
 package poker;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Card
@@ -28,7 +29,7 @@ public record Card(Value value) implements Comparable<Card> {
      * @param text Text to be parsed
      * @return The parsed card or null if the parsing failed
      */
-    public static Card tryParse(String text) {
+    public static Optional<Card> tryParse(String text) {
         Value cardValue = null;
         for (var value : Value.values()) {
             if (Objects.equals(text, value.getSymbol())) {
@@ -36,7 +37,7 @@ public record Card(Value value) implements Comparable<Card> {
                 break;
             }
         }
-        if (cardValue == null) return null;
-        return new Card(cardValue);
+        if (cardValue == null) return Optional.empty();
+        return Optional.of(new Card(cardValue));
     }
 }

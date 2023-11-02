@@ -57,9 +57,10 @@ public class Hand implements Comparable<Hand> {
             throw new IllegalArgumentException("Hand must contain exactly " + handSize + " cards");
 
         for (int i = 0; i < handSize; i++) {
-            cards[i] = Card.tryParse(cardsUnparsed[i]);
-            if (cards[i] == null)
+            var parsedCard = Card.tryParse(cardsUnparsed[i]);
+            if (parsedCard.isEmpty())
                 throw new ParseException("Couldn't parse card (" + cardsUnparsed[i] + ")", i);
+            cards[i] = parsedCard.get();
         }
         return new Hand(cards);
     }

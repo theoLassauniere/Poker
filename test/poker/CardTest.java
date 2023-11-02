@@ -47,12 +47,12 @@ class CardTest {
      **/
     @Test
     void testParsing() {
-        assertNull(Card.tryParse(""));
-        assertNull(Card.tryParse("1"));
-        assertNull(Card.tryParse("26"));
-        assertNull(Card.tryParse("W"));
-        assertEquals(new Card(Value.THREE), Card.tryParse("3"));
-        assertEquals(new Card(Value.TEN), Card.tryParse("10"));
-        assertEquals(new Card(Value.KING), Card.tryParse("K"));
+        assertTrue(Card.tryParse("").isEmpty());
+        assertTrue(Card.tryParse("1").isEmpty());
+        assertTrue(Card.tryParse("26").isEmpty());
+        assertTrue(Card.tryParse("W").isEmpty());
+        assertEquals(new Card(Value.THREE), Card.tryParse("3").orElseThrow());
+        assertEquals(new Card(Value.TEN), Card.tryParse("10").orElseThrow());
+        assertEquals(new Card(Value.KING), Card.tryParse("K").orElseThrow());
     }
 }
