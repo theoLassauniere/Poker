@@ -20,7 +20,8 @@ class HandTest {
             doublePairOfTwosAndEights,
             fourAces,
             bigStraight, littleStraight, almostStraight,
-            aceDiamonds, nineDiamonds;
+            aceDiamonds, nineDiamonds,
+            bigStraightFlush, littleStraightFlush;
 
 
     @BeforeEach
@@ -138,6 +139,21 @@ class HandTest {
                 new Card(Value.TWO, Color.DIAMONDS)
         });
 
+        bigStraightFlush = new Hand(new Card[]{
+                new Card(Value.ACE, Color.HEARTS),
+                new Card(Value.KING, Color.HEARTS),
+                new Card(Value.QUEEN, Color.HEARTS),
+                new Card(Value.JACK, Color.HEARTS),
+                new Card(Value.TEN, Color.HEARTS)
+        });
+
+        littleStraightFlush = new Hand(new Card[]{
+                new Card(Value.SIX, Color.HEARTS),
+                new Card(Value.FIVE, Color.HEARTS),
+                new Card(Value.FOUR, Color.HEARTS),
+                new Card(Value.THREE, Color.HEARTS),
+                new Card(Value.TWO, Color.HEARTS)
+        });
     }
 
     /**
@@ -160,6 +176,8 @@ class HandTest {
         assertTrue(bigStraight.isStraight());
         assertTrue(littleStraight.isStraight());
         assertFalse(almostStraight.isStraight());
+        assertTrue(bigStraightFlush.isStraight());
+        assertTrue(littleStraightFlush.isStraight());
     }
 
     /**
@@ -231,6 +249,9 @@ class HandTest {
         assertEquals(Map.of(Patterns.STRAIGHT, new ArrayList<>(List.of(Value.SIX))), littleStraight.getPatterns());
         assertEquals(Map.of(Patterns.COLOR, new ArrayList<>(List.of(Value.ACE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.ACE, Value.KING, Value.QUEEN, Value.JACK, Value.TWO))), aceDiamonds.getPatterns());
         assertEquals(Map.of(Patterns.COLOR, new ArrayList<>(List.of(Value.NINE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.NINE, Value.FIVE, Value.FOUR, Value.THREE, Value.TWO))), nineDiamonds.getPatterns());
+        assertEquals(Map.of(Patterns.STRAIGHTFLUSH, new ArrayList<>(List.of(Value.ACE))), bigStraightFlush.getPatterns());
+        assertEquals(Map.of(Patterns.STRAIGHTFLUSH, new ArrayList<>(List.of(Value.SIX))), littleStraightFlush.getPatterns());
+
     }
 
     /**
@@ -264,8 +285,10 @@ class HandTest {
         assertTrue(aceDiamonds.isSameColor());
         assertTrue(nineDiamonds.isSameColor());
         assertFalse(bigStraight.isSameColor());
+        assertTrue(bigStraightFlush.isSameColor());
         assertFalse(almostStraight.isSameColor());
         assertFalse(littleStraight.isSameColor());
+        assertTrue(littleStraightFlush.isSameColor());
         assertFalse(pairOfEights.isSameColor());
         assertFalse(secondPairOfEights.isSameColor());
         assertFalse(thirdPairOfEights.isSameColor());

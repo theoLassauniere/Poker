@@ -143,8 +143,14 @@ public class Hand implements Comparable<Hand> {
             result.put(Patterns.COLOR, new ArrayList<>(List.of(getCards()[0].value())));
         }
         if (isStraight()) {
-            result.put(Patterns.STRAIGHT, new ArrayList<>(List.of(getCards()[0].value())));
-            return result;
+            if (result.containsKey(Patterns.COLOR)) {
+                result.remove(Patterns.COLOR);
+                result.put(Patterns.STRAIGHTFLUSH, new ArrayList<>(List.of(getCards()[0].value())));
+                return result;
+            } else {
+                result.put(Patterns.STRAIGHT, new ArrayList<>(List.of(getCards()[0].value())));
+                return result;
+            }
         }
         for (var entry : occurrences().entrySet()) {
             Patterns p = switch (entry.getValue()) {

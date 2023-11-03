@@ -7,6 +7,10 @@ package poker;
  */
 public enum Patterns {
     /**
+     * 5 cards in a row with the same color
+     */
+    STRAIGHTFLUSH,
+    /**
      * Four cards of the same value
      */
     FOUR_OF_A_KIND,
