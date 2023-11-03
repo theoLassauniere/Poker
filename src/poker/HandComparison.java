@@ -27,6 +27,7 @@ public record HandComparison(int compareResult, Patterns pattern, List<Value> va
             case THREE_OF_A_KIND -> stringRes.append("un brelan de : ").append(values().get(0));
             case FOUR_OF_A_KIND -> stringRes.append("un carré de : ").append(values().get(0));
             case STRAIGHT -> stringRes.append("une suite dont la carte la plus haute est : ").append(values().get(0));
+            case COLOR -> stringRes.append("une couleur dont la carte la plus haute est : ").append(values().get(0));
             default -> stringRes.append(pattern);
         }
         return stringRes.toString();

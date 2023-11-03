@@ -19,7 +19,8 @@ class HandTest {
             threeTwos,
             doublePairOfTwosAndEights,
             fourAces,
-            bigStraight, littleStraight, almostStraight;
+            bigStraight, littleStraight, almostStraight,
+            aceDiamonds, nineDiamonds;
 
 
     @BeforeEach
@@ -120,6 +121,23 @@ class HandTest {
                 new Card(Value.TWO, Color.HEARTS)
         });
 
+        aceDiamonds = new Hand(new Card[]{
+                new Card(Value.ACE, Color.DIAMONDS),
+                new Card(Value.KING, Color.DIAMONDS),
+                new Card(Value.QUEEN, Color.DIAMONDS),
+                new Card(Value.JACK, Color.DIAMONDS),
+                new Card(Value.TWO, Color.DIAMONDS)
+        });
+
+
+        nineDiamonds = new Hand(new Card[]{
+                new Card(Value.NINE, Color.DIAMONDS),
+                new Card(Value.FIVE, Color.DIAMONDS),
+                new Card(Value.THREE, Color.DIAMONDS),
+                new Card(Value.FOUR, Color.DIAMONDS),
+                new Card(Value.TWO, Color.DIAMONDS)
+        });
+
     }
 
     /**
@@ -168,7 +186,7 @@ class HandTest {
     }
 
     /**
-     * Test for the function comparePatterns and at the same time the function deleteCardInPattern
+     * Test for the function comparePatterns
      * when we have an equality of patterns like in the comparison between Hand1 and Hand2
      */
     @Test
@@ -182,6 +200,8 @@ class HandTest {
         assertEquals(new HandComparison(1, Patterns.FOUR_OF_A_KIND, List.of(Value.ACE)), fourAces.comparePatterns(pairOfEights));
         assertEquals(new HandComparison(1, Patterns.STRAIGHT, List.of(Value.ACE)), bigStraight.comparePatterns(littleStraight));
         assertEquals(new HandComparison(1, Patterns.STRAIGHT, List.of(Value.ACE)), bigStraight.comparePatterns(pairOfEights));
+        assertEquals(new HandComparison(1, Patterns.COLOR, List.of(Value.ACE)), aceDiamonds.comparePatterns(nineDiamonds));
+        assertEquals(new HandComparison(-1, Patterns.FOUR_OF_A_KIND, List.of(Value.ACE)), aceDiamonds.comparePatterns(fourAces));
     }
 
     /**
@@ -209,6 +229,8 @@ class HandTest {
         assertEquals(Map.of(Patterns.FOUR_OF_A_KIND, new ArrayList<>(List.of(Value.ACE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.KING))), fourAces.getPatterns());
         assertEquals(Map.of(Patterns.STRAIGHT, new ArrayList<>(List.of(Value.ACE))), bigStraight.getPatterns());
         assertEquals(Map.of(Patterns.STRAIGHT, new ArrayList<>(List.of(Value.SIX))), littleStraight.getPatterns());
+        assertEquals(Map.of(Patterns.COLOR, new ArrayList<>(List.of(Value.ACE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.ACE, Value.KING, Value.QUEEN, Value.JACK, Value.TWO))), aceDiamonds.getPatterns());
+        assertEquals(Map.of(Patterns.COLOR, new ArrayList<>(List.of(Value.NINE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.NINE, Value.FIVE, Value.FOUR, Value.THREE, Value.TWO))), nineDiamonds.getPatterns());
     }
 
     /**
@@ -232,5 +254,24 @@ class HandTest {
         assertArrayEquals(new Card[]{new Card(Value.KING, Color.CLUBS)}, Hand.parse("KTr", 1).getCards());
         assertArrayEquals(new Card[]{new Card(Value.KING, Color.HEARTS)}, Hand.parse("KCo", 1).getCards());
         assertArrayEquals(new Card[]{new Card(Value.KING, Color.CLUBS), new Card(Value.KING, Color.HEARTS)}, Hand.parse("KTr KCo", 2).getCards());
+    }
+
+    /**
+     * Test of isSameColor method
+     */
+    @Test
+    void testSameColor() {
+        assertTrue(aceDiamonds.isSameColor());
+        assertTrue(nineDiamonds.isSameColor());
+        assertFalse(bigStraight.isSameColor());
+        assertFalse(almostStraight.isSameColor());
+        assertFalse(littleStraight.isSameColor());
+        assertFalse(pairOfEights.isSameColor());
+        assertFalse(secondPairOfEights.isSameColor());
+        assertFalse(thirdPairOfEights.isSameColor());
+        assertFalse(pairOfTwos.isSameColor());
+        assertFalse(threeTwos.isSameColor());
+        assertFalse(doublePairOfTwosAndEights.isSameColor());
+        assertFalse(fourAces.isSameColor());
     }
 }

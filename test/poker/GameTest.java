@@ -91,7 +91,11 @@ class GameTest {
             "ACa ACo APi ATr 8Ca;KCa KCo KPi KTr 8Pi;La main 1 gagne avec un carré de : A",
             "ACa ACo 4Pi 4Tr 3Ca;APi ATr 4Ca 4Co 3Co;Égalité",
             "ACa KCo QCa JCo 10Ca;2Ca 3Co 4Ca 5Co 6Ca;La main 1 gagne avec une suite dont la carte la plus haute est : A",
-            "7Ca 8Co 9Ca 10Co JCa;8Ca 9Co 10Ca JCo QCa;La main 2 gagne avec une suite dont la carte la plus haute est : Q"
+            "7Ca 8Co 9Ca 10Co JCa;8Ca 9Co 10Ca JCo QCa;La main 2 gagne avec une suite dont la carte la plus haute est : Q",
+            "7Ca 8Ca 9Ca KCa ACa;8Ca 9Co 10Ca JCo QCa;La main 1 gagne avec une couleur dont la carte la plus haute est : A",
+            "7Ca 8Ca 9Ca KCa ACa;5Ca 4Co 10Ca JCa QCa;La main 1 gagne avec une couleur dont la carte la plus haute est : A",
+            "7Ca 8Ca 9Ca JCa ACa;8Ca 9Ca 10Ca JCa ACa;La main 2 gagne avec la carte la plus haute : 10",
+            "7Ca 8Ca 9Ca JCa ACa;8Co 9Co 10Co JCo ACo;La main 2 gagne avec la carte la plus haute : 10",
     }, delimiter = ';')
     void fiveCardGameTest(String firstHand, String secondHand, String output) {
         gameTest(fiveCardGame, firstHand, secondHand, output);

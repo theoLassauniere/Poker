@@ -12,6 +12,11 @@ public enum Patterns {
     FOUR_OF_A_KIND,
 
     /**
+     * All the cards have the same color
+     */
+    COLOR,
+
+    /**
      * 5 cards in a row
      */
     STRAIGHT,

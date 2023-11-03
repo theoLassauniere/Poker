@@ -101,6 +101,11 @@ public class Hand implements Comparable<Hand> {
         return values;
     }
 
+    /**
+     * Return if there is a straight in the hand
+     *
+     * @return boolean
+     */
     public boolean isStraight() {
         if (cards.length < 5) return false;
         if (cards[0].value().ordinal() < 4)
@@ -113,12 +118,30 @@ public class Hand implements Comparable<Hand> {
         return true;
     }
 
+    /**
+     * Return if all the cards have the same color
+     *
+     * @return boolean
+     */
+    public boolean isSameColor() {
+        if (cards.length < 5) return false;
+        var color = cards[1].color();
+        var i = 1;
+        while (i < 5 && cards[i].color() == color) {
+            i++;
+        }
+        return cards.length == i;
+    }
+
 
     /**
      * Gets the patterns and card values that realize them
      **/
     public Map<Patterns, ArrayList<Value>> getPatterns() {
         EnumMap<Patterns, ArrayList<Value>> result = new EnumMap<>(Patterns.class);
+        if (isSameColor()) {
+            result.put(Patterns.COLOR, new ArrayList<>(List.of(getCards()[0].value())));
+        }
         if (isStraight()) {
             result.put(Patterns.STRAIGHT, new ArrayList<>(List.of(getCards()[0].value())));
             return result;
