@@ -18,10 +18,13 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        try {
-            new Game(DEFAULT_HAND_SIZE).start();
-        } catch (Exception e) {
-            System.err.println("ERROR: " + e); // TODO
+        while (true) {
+            try {
+                new Game(DEFAULT_HAND_SIZE).start();
+                break;
+            } catch (IllegalArgumentException | ParseException e) {
+                System.out.println("ERROR: " + e.getMessage() + "\n");
+            }
         }
     }
 
