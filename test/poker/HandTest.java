@@ -78,7 +78,7 @@ class HandTest {
                 new Card(Value.TWO, Color.DIAMONDS),
                 new Card(Value.TWO, Color.HEARTS),
                 new Card(Value.EIGHT, Color.DIAMONDS),
-                new Card(Value.TWO, Color.HEARTS),
+                new Card(Value.TWO, Color.SPADES),
                 new Card(Value.FIVE, Color.SPADES)
         });
 
@@ -170,6 +170,21 @@ class HandTest {
         }, pairOfEights.getCards());
     }
 
+    /**
+     * Tests if the hands are correctly detected as valid/invalid (no duplicated cards)
+     */
+    @Test
+    void testHandValidity() {
+        assertDoesNotThrow(() -> new Hand(new Card[]{new Card(Value.THREE, Color.HEARTS), new Card(Value.THREE, Color.DIAMONDS), new Card(Value.THREE, Color.SPADES), new Card(Value.THREE, Color.CLUBS)}));
+        assertDoesNotThrow(() -> new Hand(new Card[]{new Card(Value.THREE, Color.HEARTS), new Card(Value.FOUR, Color.HEARTS), new Card(Value.FIVE, Color.HEARTS), new Card(Value.SIX, Color.HEARTS)}));
+        assertDoesNotThrow(() -> new Hand(new Card[]{new Card(Value.KING, Color.DIAMONDS), new Card(Value.KING, Color.SPADES), new Card(Value.QUEEN, Color.SPADES)}));
+        assertThrowsExactly(IllegalArgumentException.class, () -> new Hand(new Card[]{new Card(Value.THREE, Color.HEARTS), new Card(Value.THREE, Color.HEARTS)}));
+        assertThrowsExactly(IllegalArgumentException.class, () -> new Hand(new Card[]{new Card(Value.KING, Color.DIAMONDS), new Card(Value.KING, Color.DIAMONDS)}));
+    }
+
+    /**
+     * Tests the straight hand detection
+     */
     @Test
     void isStraightTest() {
         assertFalse(pairOfTwos.isStraight());

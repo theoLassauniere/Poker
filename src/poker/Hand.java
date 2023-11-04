@@ -70,6 +70,7 @@ public class Hand implements Comparable<Hand> {
      * Swap method used in the sort method ; swap two cards based on their indexes
      */
     private void swap(int indexCard1, int indexCard2) {
+        if (indexCard1 == indexCard2) return;
         Card carteTest = this.cards[indexCard1];
         this.cards[indexCard1] = this.cards[indexCard2];
         this.cards[indexCard2] = carteTest;
@@ -78,12 +79,14 @@ public class Hand implements Comparable<Hand> {
     /**
      * Sort the hand in descending order
      */
-    public void sortHand() {
+    private void sortHand() {
         for (int i = 0; i < cards.length; i++) {
             int swapIndex = i;
             for (int j = i + 1; j < cards.length; j++) {
                 if (cards[swapIndex].compareTo(cards[j]) < 0) {
                     swapIndex = j;
+                } else if (cards[swapIndex].equals(cards[j])) {
+                    throw new IllegalArgumentException("Duplicated card in hand");
                 }
             }
             swap(i, swapIndex);
