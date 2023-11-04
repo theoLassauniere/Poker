@@ -1,5 +1,6 @@
 package poker;
 
+import java.io.PrintStream;
 import java.text.ParseException;
 import java.util.Scanner;
 
@@ -11,6 +12,8 @@ import java.util.Scanner;
 public class Game {
     public static final int DEFAULT_HAND_SIZE = 5;
 
+    @java.lang.SuppressWarnings("java:S106")
+    protected static PrintStream outputStream = System.out;
     public final int handSize;
 
     public Game(int handSize) {
@@ -23,7 +26,7 @@ public class Game {
                 new Game(DEFAULT_HAND_SIZE).start();
                 break;
             } catch (IllegalArgumentException | ParseException e) {
-                System.out.println("ERROR: " + e.getMessage() + "\n");
+                outputStream.println("ERROR: " + e.getMessage() + "\n");
             }
         }
     }
@@ -33,10 +36,10 @@ public class Game {
      */
     public void start() throws IllegalArgumentException, ParseException {
         Scanner scanner = new Scanner(System.in);
-        System.out.print("Main 1: ");
+        outputStream.print("Main 1: ");
         Hand hand1 = Hand.parse(scanner.nextLine(), handSize);
-        System.out.print("Main 2: ");
+        outputStream.print("Main 2: ");
         Hand hand2 = Hand.parse(scanner.nextLine(), handSize);
-        System.out.println(hand1.comparePatterns(hand2));
+        outputStream.println(hand1.comparePatterns(hand2));
     }
 }

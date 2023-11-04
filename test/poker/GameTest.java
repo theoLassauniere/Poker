@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @author Team B
  */
 class GameTest {
+    ByteArrayOutputStream outputStream;
     Game oneCardGame, twoCardGame, threeCardGame, fourCardGame, fiveCardGame;
 
     /**
@@ -22,6 +23,8 @@ class GameTest {
      **/
     @BeforeEach
     void setUp() {
+        outputStream = new ByteArrayOutputStream();
+        Game.outputStream = new PrintStream(outputStream);
         oneCardGame = new Game(1);
         twoCardGame = new Game(2);
         threeCardGame = new Game(3);
@@ -105,11 +108,7 @@ class GameTest {
     }
 
     private void gameTest(Game game, String firstHand, String secondHand, String output) {
-        // Redirect stdin and stdout
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        System.setIn(new ByteArrayInputStream((firstHand + "\n" + secondHand).getBytes()));
-        System.setOut(new PrintStream(outputStream));
-
+        System.setIn(new ByteArrayInputStream((firstHand + "\n" + secondHand).getBytes())); // Redirect stdin
         assertDoesNotThrow(game::start); // The game should start without errors
 
         String methodOutput = outputStream.toString().trim(); // Reads the output stream
