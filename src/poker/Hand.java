@@ -102,9 +102,7 @@ public class Hand implements Comparable<Hand> {
     }
 
     /**
-     * Return if there is a straight in the hand
-     *
-     * @return boolean
+     * Is there a straight in the hand?
      */
     public boolean isStraight() {
         if (cards.length < 5) return false;
@@ -119,9 +117,7 @@ public class Hand implements Comparable<Hand> {
     }
 
     /**
-     * Return if all the cards have the same color
-     *
-     * @return boolean
+     * Are all the cards the same color?
      */
     public boolean isSameColor() {
         if (cards.length < 5) return false;
@@ -176,13 +172,8 @@ public class Hand implements Comparable<Hand> {
      * @return Compare patterns and values of cards between the two hands
      */
     public int compareTo(Hand otherHand) {
-        return getResult(otherHand).compareResult();
+        return comparePatterns(otherHand).compareResult();
     }
-
-    public HandComparison getResult(Hand otherHand) {
-        return comparePatterns(otherHand);
-    }
-
 
     /**
      * @param otherHand the other hand to be compared.

@@ -34,8 +34,6 @@ public class Game {
         Hand hand1 = Hand.parse(scanner.nextLine(), handSize);
         System.out.print("Main 2: ");
         Hand hand2 = Hand.parse(scanner.nextLine(), handSize);
-        System.out.println(hand1.getResult(hand2));
+        System.out.println(hand1.comparePatterns(hand2));
     }
-
-
 }

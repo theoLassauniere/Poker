@@ -192,18 +192,6 @@ class HandTest {
     }
 
     /**
-     * Test for the getResult method with all cases
-     */
-    @Test
-    void getResultTest() {
-        assertEquals(new HandComparison(0, Patterns.EQUALITY, null), pairOfEights.getResult(secondPairOfEights));
-        assertEquals(new HandComparison(1, Patterns.HIGHER, List.of(Value.ACE)), highestAce.getResult(highestKing));
-        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), pairOfEights.getResult(highestAce));
-        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), pairOfEights.getResult(pairOfTwos));
-        assertEquals(new HandComparison(-1, Patterns.HIGHER, List.of(Value.ACE)), pairOfEights.getResult(thirdPairOfEights));
-    }
-
-    /**
      * Test for the function comparePatterns
      * when we have an equality of patterns like in the comparison between Hand1 and Hand2
      */
@@ -214,6 +202,10 @@ class HandTest {
         assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), secondPairOfEights.comparePatterns(pairOfTwos));
         assertEquals(new HandComparison(1, Patterns.THREE_OF_A_KIND, List.of(Value.TWO)), threeTwos.comparePatterns(pairOfTwos));
         assertEquals(new HandComparison(0, Patterns.EQUALITY, null), pairOfEights.comparePatterns(secondPairOfEights));
+        assertEquals(new HandComparison(1, Patterns.HIGHER, List.of(Value.ACE)), highestAce.comparePatterns(highestKing));
+        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), pairOfEights.comparePatterns(highestAce));
+        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), pairOfEights.comparePatterns(pairOfTwos));
+        assertEquals(new HandComparison(-1, Patterns.HIGHER, List.of(Value.ACE)), pairOfEights.comparePatterns(thirdPairOfEights));
         assertEquals(new HandComparison(1, Patterns.DOUBLE_PAIR, List.of(Value.EIGHT, Value.TWO)), doublePairOfTwosAndEights.comparePatterns(highestKing));
         assertEquals(new HandComparison(1, Patterns.FOUR_OF_A_KIND, List.of(Value.ACE)), fourAces.comparePatterns(pairOfEights));
         assertEquals(new HandComparison(1, Patterns.STRAIGHT, List.of(Value.ACE)), bigStraight.comparePatterns(littleStraight));

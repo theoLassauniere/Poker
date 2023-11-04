@@ -27,7 +27,7 @@ public record Card(Value value, Color color) implements Comparable<Card> {
      * Try parsing a card
      *
      * @param text Text to be parsed
-     * @return The parsed card or null if the parsing failed
+     * @return The parsed card or empty if the parsing failed
      */
     public static Optional<Card> tryParse(String text) {
         Value cardValue = null;
