@@ -212,7 +212,7 @@ public class Hand implements Comparable<Hand> {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Hand hand && compareTo(hand) == 0;
+        return obj instanceof Hand hand && Arrays.equals(getCards(), hand.getCards());
     }
 
     @Override
