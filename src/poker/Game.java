@@ -40,6 +40,12 @@ public class Game {
         Hand hand1 = Hand.parse(scanner.nextLine(), handSize);
         outputStream.print("Main 2: ");
         Hand hand2 = Hand.parse(scanner.nextLine(), handSize);
+        try {
+            hand1.cardDuplicationDetection(hand2);
+        } catch (IllegalArgumentException e) {
+            outputStream.println("ERROR: " + e.getMessage() + "\n");
+            return;
+        }
         outputStream.println(hand1.comparePatterns(hand2));
     }
 }
