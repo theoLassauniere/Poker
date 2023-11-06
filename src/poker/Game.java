@@ -11,19 +11,32 @@ import java.util.Scanner;
  */
 public class Game {
     public static final int DEFAULT_HAND_SIZE = 5;
+    public static final int DEFAULT_NUMBER_OF_PLAYERS = 2;
 
     @java.lang.SuppressWarnings("java:S106")
     protected static PrintStream outputStream = System.out;
-    public final int handSize;
+    private final Hand[] hands;
+    private final int handSize;
+
+    public Game() {
+        this(DEFAULT_HAND_SIZE);
+    }
 
     public Game(int handSize) {
+        this(handSize, DEFAULT_NUMBER_OF_PLAYERS);
+    }
+
+    public Game(int handSize, int numberOfPlayers) {
+        if (numberOfPlayers < 2)
+            throw new IllegalArgumentException("There must be at least two players");
         this.handSize = handSize;
+        hands = new Hand[numberOfPlayers];
     }
 
     public static void main(String[] args) {
         while (true) {
             try {
-                new Game(DEFAULT_HAND_SIZE).start();
+                new Game().start();
                 break;
             } catch (IllegalArgumentException | ParseException e) {
                 outputStream.println("ERROR: " + e.getMessage() + "\n");
@@ -36,16 +49,11 @@ public class Game {
      */
     public void start() throws IllegalArgumentException, ParseException {
         Scanner scanner = new Scanner(System.in);
-        outputStream.print("Main 1: ");
-        Hand hand1 = Hand.parse(scanner.nextLine(), handSize);
-        outputStream.print("Main 2: ");
-        Hand hand2 = Hand.parse(scanner.nextLine(), handSize);
-        try {
-            hand1.cardDuplicationDetection(hand2);
-        } catch (IllegalArgumentException e) {
-            outputStream.println("ERROR: " + e.getMessage() + "\n");
-            return;
+        for (int i = 0; i < hands.length; i++) {
+            outputStream.print("Main " + (i + 1) + ": ");
+            hands[i] = Hand.parse(scanner.nextLine(), handSize);
         }
-        outputStream.println(hand1.comparePatterns(hand2));
+        hands[0].cardDuplicationDetection(hands[1]);
+        outputStream.println(hands[0].comparePatterns(hands[1]));
     }
 }
