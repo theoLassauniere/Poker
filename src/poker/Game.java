@@ -31,6 +31,7 @@ public class Game {
     public Game(int handSize, int numberOfPlayers) {
         if (numberOfPlayers < 2)
             throw new IllegalArgumentException("There must be at least two players");
+        if (numberOfPlayers != 2) throw new UnsupportedOperationException("Only two players are supported");
         this.handSize = handSize;
         deck = Card.getDeck();
         hands = new Hand[numberOfPlayers];
