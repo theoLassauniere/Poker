@@ -31,6 +31,17 @@ public class Hand implements Comparable<Hand> {
         return cards;
     }
 
+    /**
+     * Gets a specific card
+     *
+     * @param index Index of the card in the hand
+     */
+    public Optional<Card> getCard(int index) {
+        if (index < 0 || index >= cards.length) return Optional.empty();
+        return Optional.of(cards[index]);
+    }
+
+
     @Override
     public String toString() {
         StringBuilder string = new StringBuilder();
@@ -92,29 +103,6 @@ public class Hand implements Comparable<Hand> {
             swap(i, swapIndex);
         }
     }
-
-    /*
-    Test if there are multiple cards of the same value and color
-
-     */
-    public void cardDuplicationDetection(Hand other) {
-        var tabBothHands = new HashMap<Card, Integer>();
-        for (Card card : cards) {
-            if (tabBothHands.containsKey(card)) {
-                throw new IllegalArgumentException("Duplicated card in input");
-            } else {
-                tabBothHands.put(card, 1);
-            }
-        }
-        for (Card card : other.cards) {
-            if (tabBothHands.containsKey(card)) {
-                throw new IllegalArgumentException("Duplicated card in input");
-            } else {
-                tabBothHands.put(card, 1);
-            }
-        }
-    }
-
 
     /**
      * Gets number of occurrences of each Value

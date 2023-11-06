@@ -3,6 +3,7 @@ package poker;
 import java.io.PrintStream;
 import java.text.ParseException;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  * A game
@@ -15,6 +16,7 @@ public class Game {
 
     @java.lang.SuppressWarnings("java:S106")
     protected static PrintStream outputStream = System.out;
+    private final Set<Card> deck;
     private final Hand[] hands;
     private final int handSize;
 
@@ -30,7 +32,27 @@ public class Game {
         if (numberOfPlayers < 2)
             throw new IllegalArgumentException("There must be at least two players");
         this.handSize = handSize;
+        deck = Card.getDeck();
         hands = new Hand[numberOfPlayers];
+    }
+
+    /**
+     * Start the game, create the hands with the entries
+     */
+    public void start() throws IllegalArgumentException, ParseException {
+        Scanner scanner = new Scanner(System.in);
+        for (int i = 0; i < hands.length; i++) {
+            outputStream.print("Main " + (i + 1) + ": ");
+            hands[i] = Hand.parse(scanner.nextLine(), handSize);
+
+            for (int j = 0; j < handSize; j++) {
+                var card = hands[i].getCard(j);
+                if (card.isEmpty()) continue;
+                if (deck.contains(card.get())) deck.remove(card.get());
+                else throw new IllegalArgumentException("The same card can't be in two different hands");
+            }
+        }
+        outputStream.println(hands[0].comparePatterns(hands[1]));
     }
 
     public static void main(String[] args) {
@@ -42,18 +64,5 @@ public class Game {
                 outputStream.println("ERROR: " + e.getMessage() + "\n");
             }
         }
-    }
-
-    /**
-     * Start the game, create the hands with the entries
-     */
-    public void start() throws IllegalArgumentException, ParseException {
-        Scanner scanner = new Scanner(System.in);
-        for (int i = 0; i < hands.length; i++) {
-            outputStream.print("Main " + (i + 1) + ": ");
-            hands[i] = Hand.parse(scanner.nextLine(), handSize);
-        }
-        hands[0].cardDuplicationDetection(hands[1]);
-        outputStream.println(hands[0].comparePatterns(hands[1]));
     }
 }

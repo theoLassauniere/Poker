@@ -1,7 +1,9 @@
 package poker;
 
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Card
@@ -43,5 +45,13 @@ public record Card(Value value, Color color) implements Comparable<Card> {
         }
         if (cardValue == null) return Optional.empty();
         return Optional.of(new Card(cardValue, cardColor));
+    }
+
+    public static Set<Card> getDeck() {
+        var deck = new HashSet<Card>();
+        for (Color color : Color.values())
+            for (Value value : Value.values())
+                deck.add(new Card(value, color));
+        return deck;
     }
 }
