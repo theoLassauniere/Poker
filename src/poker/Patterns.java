@@ -14,7 +14,10 @@ public enum Patterns {
      * Four cards of the same value
      */
     FOUR_OF_A_KIND,
-
+    /**
+     * Three card of the same value and two cards of the same value
+     */
+    FULL,
     /**
      * All the cards have the same color
      */

@@ -132,25 +132,49 @@ public class Hand implements Comparable<Hand> {
         return cards.length == i;
     }
 
+    /**
+     * Add the Color pattern if it exists
+     */
+    public void colorPatternDetection(Map<Patterns, ArrayList<Value>> result) {
+        if (isSameColor()) result.put(Patterns.COLOR, new ArrayList<>(List.of(getCards()[0].value())));
+    }
+
+    /**
+     * Detect the Straight pattern
+     */
+    public boolean straightPatternDetection(Map<Patterns, ArrayList<Value>> result) {
+        if (isStraight()) {
+            if (result.containsKey(Patterns.COLOR)) {
+                result.remove(Patterns.COLOR);
+                result.put(Patterns.STRAIGHTFLUSH, new ArrayList<>(List.of(getCards()[0].value())));
+            } else {
+                result.put(Patterns.STRAIGHT, new ArrayList<>(List.of(getCards()[0].value())));
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Detect Full pattern
+     */
+    public void fullPatternDetection(Map<Patterns, ArrayList<Value>> result) {
+        if (result.containsKey(Patterns.PAIR) && result.containsKey(Patterns.THREE_OF_A_KIND)) {
+            result.put(Patterns.FULL, result.get(Patterns.THREE_OF_A_KIND));
+            result.remove(Patterns.PAIR);
+            result.remove(Patterns.THREE_OF_A_KIND);
+        }
+    }
 
     /**
      * Gets the patterns and card values that realize them
      **/
     public Map<Patterns, ArrayList<Value>> getPatterns() {
         EnumMap<Patterns, ArrayList<Value>> result = new EnumMap<>(Patterns.class);
-        if (isSameColor()) {
-            result.put(Patterns.COLOR, new ArrayList<>(List.of(getCards()[0].value())));
-        }
-        if (isStraight()) {
-            if (result.containsKey(Patterns.COLOR)) {
-                result.remove(Patterns.COLOR);
-                result.put(Patterns.STRAIGHTFLUSH, new ArrayList<>(List.of(getCards()[0].value())));
-                return result;
-            } else {
-                result.put(Patterns.STRAIGHT, new ArrayList<>(List.of(getCards()[0].value())));
-                return result;
-            }
-        }
+
+        colorPatternDetection(result);
+        if (straightPatternDetection(result)) return result;
+
         for (var entry : occurrences().entrySet()) {
             Patterns p = switch (entry.getValue()) {
                 case 1 -> Patterns.HIGHER;
@@ -159,7 +183,6 @@ public class Hand implements Comparable<Hand> {
                 case 4 -> Patterns.FOUR_OF_A_KIND;
                 default -> null;
             };
-            if (p == null) continue;
             if (result.containsKey(p)) {
                 if (p == Patterns.PAIR) {
                     result.put(Patterns.DOUBLE_PAIR, new ArrayList<>(List.of(entry.getKey(), result.get(p).get(0))));
@@ -167,6 +190,9 @@ public class Hand implements Comparable<Hand> {
                 } else result.get(p).add(0, entry.getKey());
             } else result.put(p, new ArrayList<>(List.of(entry.getKey())));
         }
+
+        fullPatternDetection(result);
+
         return result;
     }
 
