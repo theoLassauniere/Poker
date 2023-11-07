@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Team B
  */
 class HandTest {
-    Hand highestAce, highestKing,
+    Hand highestAce1, highestAce2, highestKing,
             pairOfEights, secondPairOfEights, pairOfTwos, thirdPairOfEights,
             threeTwos,
             doublePairOfTwosAndEights,
@@ -27,7 +27,15 @@ class HandTest {
 
     @BeforeEach
     void setUp() {
-        highestAce = new Hand(new Card[]{
+        highestAce1 = new Hand(new Card[]{
+                new Card(Value.ACE, Color.DIAMONDS),
+                new Card(Value.KING, Color.HEARTS),
+                new Card(Value.EIGHT, Color.DIAMONDS),
+                new Card(Value.TWO, Color.CLUBS),
+                new Card(Value.FIVE, Color.SPADES)
+        });
+
+        highestAce2 = new Hand(new Card[]{
                 new Card(Value.ACE, Color.DIAMONDS),
                 new Card(Value.KING, Color.HEARTS),
                 new Card(Value.EIGHT, Color.DIAMONDS),
@@ -189,6 +197,25 @@ class HandTest {
         });
     }
 
+    @Test
+    void equalsTest() {
+        assertEquals(highestAce1, highestAce2);
+        assertNotEquals(highestAce1, highestKing);
+    }
+
+    @Test
+    void hashCodeTest() {
+        assertEquals(highestAce1.hashCode(), highestAce2.hashCode());
+        assertNotEquals(highestAce1.hashCode(), highestKing.hashCode());
+    }
+
+    @Test
+    void toStringTest() {
+        assertEquals("ACa APi ACo 2Ca 2Co", fullThreeAce.toString());
+        assertEquals("6Ca 6Pi 6Co 2Ca 2Co", fullThreeSix.toString());
+
+    }
+
     /**
      * Test of the sorting of the cards in the hand
      */
@@ -236,8 +263,8 @@ class HandTest {
      **/
     @Test
     void compareTo() {
-        assertEquals(1, secondPairOfEights.compareTo(highestAce));
-        assertEquals(-1, highestAce.compareTo(pairOfEights));
+        assertEquals(1, secondPairOfEights.compareTo(highestAce1));
+        assertEquals(-1, highestAce1.compareTo(pairOfEights));
         assertEquals(0, pairOfEights.compareTo(secondPairOfEights));
         assertEquals(1, secondPairOfEights.compareTo(pairOfTwos));
     }
@@ -248,13 +275,13 @@ class HandTest {
      */
     @Test
     void testComparePattern() {
-        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), secondPairOfEights.comparePatterns(highestAce));
-        assertEquals(new HandComparison(-1, Patterns.PAIR, List.of(Value.EIGHT)), highestAce.comparePatterns(pairOfEights));
+        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), secondPairOfEights.comparePatterns(highestAce1));
+        assertEquals(new HandComparison(-1, Patterns.PAIR, List.of(Value.EIGHT)), highestAce1.comparePatterns(pairOfEights));
         assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), secondPairOfEights.comparePatterns(pairOfTwos));
         assertEquals(new HandComparison(1, Patterns.THREE_OF_A_KIND, List.of(Value.TWO)), threeTwos.comparePatterns(pairOfTwos));
         assertEquals(new HandComparison(0, Patterns.EQUALITY, null), pairOfEights.comparePatterns(secondPairOfEights));
-        assertEquals(new HandComparison(1, Patterns.HIGHER, List.of(Value.ACE)), highestAce.comparePatterns(highestKing));
-        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), pairOfEights.comparePatterns(highestAce));
+        assertEquals(new HandComparison(1, Patterns.HIGHER, List.of(Value.ACE)), highestAce1.comparePatterns(highestKing));
+        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), pairOfEights.comparePatterns(highestAce1));
         assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), pairOfEights.comparePatterns(pairOfTwos));
         assertEquals(new HandComparison(-1, Patterns.HIGHER, List.of(Value.ACE)), pairOfEights.comparePatterns(thirdPairOfEights));
         assertEquals(new HandComparison(1, Patterns.DOUBLE_PAIR, List.of(Value.EIGHT, Value.TWO)), doublePairOfTwosAndEights.comparePatterns(highestKing));
@@ -285,7 +312,7 @@ class HandTest {
      */
     @Test
     void testGetPattern() {
-        assertEquals(Map.of(Patterns.HIGHER, new ArrayList<>(List.of(Value.ACE, Value.KING, Value.EIGHT, Value.FIVE, Value.TWO))), highestAce.getPatterns());
+        assertEquals(Map.of(Patterns.HIGHER, new ArrayList<>(List.of(Value.ACE, Value.KING, Value.EIGHT, Value.FIVE, Value.TWO))), highestAce1.getPatterns());
         assertEquals(Map.of(Patterns.PAIR, new ArrayList<>(List.of(Value.EIGHT)), Patterns.HIGHER, new ArrayList<>(List.of(Value.KING, Value.FIVE, Value.TWO))), secondPairOfEights.getPatterns());
         assertEquals(Map.of(Patterns.DOUBLE_PAIR, new ArrayList<>(List.of(Value.EIGHT, Value.TWO)), Patterns.HIGHER, new ArrayList<>(List.of(Value.FIVE))), doublePairOfTwosAndEights.getPatterns());
         assertEquals(Map.of(Patterns.THREE_OF_A_KIND, new ArrayList<>(List.of(Value.TWO)), Patterns.HIGHER, new ArrayList<>(List.of(Value.EIGHT, Value.FIVE))), threeTwos.getPatterns());
