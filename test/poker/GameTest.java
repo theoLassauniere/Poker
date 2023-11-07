@@ -95,6 +95,7 @@ class GameTest {
             "ACa ACo APi ATr 5Ca;2Ca 2Co 4Ca 5Pi 3Pi;La main 1 gagne avec un carré de : A",
             "ACa ACo APi ATr 8Ca;KCa KCo KPi KTr 8Pi;La main 1 gagne avec un carré de : A",
             "ACa ACo 4Pi 4Tr 3Ca;APi ATr 4Ca 4Co 3Co;Égalité",
+            "ACa KCo QCa JCo 10Ca;2Ca KCa 7Ca 10Co 6Ca;La main 1 gagne avec une suite dont la carte la plus haute est A",
             "ACa KCo QCa JCo 10Ca;2Ca 3Co 4Ca 5Co 6Ca;La main 1 gagne avec une suite dont la carte la plus haute est A",
             "7Ca 8Co 9Ca 10Co JCa;8Ca 9Co 10Ca JCo QCa;La main 2 gagne avec une suite dont la carte la plus haute est Q",
             "7Ca 8Ca 9Ca KCa ACa;8Co 9Co 10Ca JCo QCa;La main 1 gagne avec une couleur dont la carte décisive est A",
