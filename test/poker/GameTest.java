@@ -105,8 +105,8 @@ class GameTest {
             "ACa KCa QCa JCa 10Ca;2Co 3Co 4Co 5Co 6Co;La main 1 gagne avec une quinte flush dont la carte la plus haute est A",
             "7Pi 8Pi 9Pi 10Pi JPi;8Ca 9Ca 10Ca JCa QCa;La main 2 gagne avec une quinte flush dont la carte la plus haute est Q",
             "KCo KCa KPi 7Ca 7Co;ACa ACo APi 6Ca 6Co;La main 2 gagne avec un full contenant un brelan de : A",
-            "JCa JCo JPi 2Ca 2Co;8Co 8Ca 8Pi ACa APi;La main 1 gagne avec un full contenant un brelan de : J",
-
+            "2Ca 2Co 2Pi 3Co 3Ca;7Ca 8Ca 9Ca KCa ACa;La main 1 gagne avec un full contenant un brelan de : 2",
+            "2Ca 2Co 2Pi 3Co 3Ca;7Ca 7Co 7Pi KCa ACa;La main 1 gagne avec un full contenant un brelan de : 2"
     }, delimiter = ';')
     void fiveCardGameTest(String firstHand, String secondHand, String output) {
         gameTest(fiveCardGame, firstHand, secondHand, output);
