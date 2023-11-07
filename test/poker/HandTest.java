@@ -83,14 +83,6 @@ class HandTest {
                 new Card(Value.ACE, Color.SPADES)
         });
 
-        threeTwos = new Hand(new Card[]{
-                new Card(Value.TWO, Color.DIAMONDS),
-                new Card(Value.TWO, Color.HEARTS),
-                new Card(Value.EIGHT, Color.DIAMONDS),
-                new Card(Value.TWO, Color.SPADES),
-                new Card(Value.FIVE, Color.SPADES)
-        });
-
         doublePairOfTwosAndEights = new Hand(new Card[]{
                 new Card(Value.TWO, Color.SPADES),
                 new Card(Value.TWO, Color.CLUBS),
@@ -99,12 +91,12 @@ class HandTest {
                 new Card(Value.FIVE, Color.SPADES)
         });
 
-        fourAces = new Hand(new Card[]{
-                new Card(Value.ACE, Color.DIAMONDS),
-                new Card(Value.ACE, Color.CLUBS),
-                new Card(Value.ACE, Color.SPADES),
-                new Card(Value.ACE, Color.HEARTS),
-                new Card(Value.KING, Color.SPADES)
+        threeTwos = new Hand(new Card[]{
+                new Card(Value.TWO, Color.DIAMONDS),
+                new Card(Value.TWO, Color.HEARTS),
+                new Card(Value.EIGHT, Color.DIAMONDS),
+                new Card(Value.TWO, Color.SPADES),
+                new Card(Value.FIVE, Color.SPADES)
         });
 
         bigStraight = new Hand(new Card[]{
@@ -139,7 +131,6 @@ class HandTest {
                 new Card(Value.TWO, Color.DIAMONDS)
         });
 
-
         nineDiamonds = new Hand(new Card[]{
                 new Card(Value.NINE, Color.DIAMONDS),
                 new Card(Value.FIVE, Color.DIAMONDS),
@@ -154,6 +145,30 @@ class HandTest {
                 new Card(Value.THREE, Color.DIAMONDS),
                 new Card(Value.FOUR, Color.DIAMONDS),
                 new Card(Value.TWO, Color.HEARTS)
+        });
+
+        fullThreeSix = new Hand(new Card[]{
+                new Card(Value.SIX, Color.DIAMONDS),
+                new Card(Value.SIX, Color.SPADES),
+                new Card(Value.SIX, Color.HEARTS),
+                new Card(Value.TWO, Color.DIAMONDS),
+                new Card(Value.TWO, Color.HEARTS)
+        });
+
+        fullThreeAce = new Hand(new Card[]{
+                new Card(Value.ACE, Color.DIAMONDS),
+                new Card(Value.ACE, Color.SPADES),
+                new Card(Value.ACE, Color.HEARTS),
+                new Card(Value.TWO, Color.DIAMONDS),
+                new Card(Value.TWO, Color.HEARTS)
+        });
+
+        fourAces = new Hand(new Card[]{
+                new Card(Value.ACE, Color.DIAMONDS),
+                new Card(Value.ACE, Color.CLUBS),
+                new Card(Value.ACE, Color.SPADES),
+                new Card(Value.ACE, Color.HEARTS),
+                new Card(Value.KING, Color.SPADES)
         });
 
         bigStraightFlush = new Hand(new Card[]{
@@ -178,22 +193,6 @@ class HandTest {
                 new Card(Value.FOUR, Color.HEARTS),
                 new Card(Value.THREE, Color.HEARTS),
                 new Card(Value.TWO, Color.SPADES)
-        });
-
-        fullThreeSix = new Hand(new Card[]{
-                new Card(Value.SIX, Color.DIAMONDS),
-                new Card(Value.SIX, Color.SPADES),
-                new Card(Value.SIX, Color.HEARTS),
-                new Card(Value.TWO, Color.DIAMONDS),
-                new Card(Value.TWO, Color.HEARTS)
-        });
-
-        fullThreeAce = new Hand(new Card[]{
-                new Card(Value.ACE, Color.DIAMONDS),
-                new Card(Value.ACE, Color.SPADES),
-                new Card(Value.ACE, Color.HEARTS),
-                new Card(Value.TWO, Color.DIAMONDS),
-                new Card(Value.TWO, Color.HEARTS)
         });
     }
 
@@ -275,23 +274,23 @@ class HandTest {
      */
     @Test
     void testComparePattern() {
-        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), secondPairOfEights.comparePatterns(highestAce1));
-        assertEquals(new HandComparison(-1, Patterns.PAIR, List.of(Value.EIGHT)), highestAce1.comparePatterns(pairOfEights));
-        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), secondPairOfEights.comparePatterns(pairOfTwos));
-        assertEquals(new HandComparison(1, Patterns.THREE_OF_A_KIND, List.of(Value.TWO)), threeTwos.comparePatterns(pairOfTwos));
+        assertEquals(new HandComparison(1, Patterns.PAIR, Value.EIGHT), secondPairOfEights.comparePatterns(highestAce1));
+        assertEquals(new HandComparison(-1, Patterns.PAIR, Value.EIGHT), highestAce1.comparePatterns(pairOfEights));
+        assertEquals(new HandComparison(1, Patterns.PAIR, Value.EIGHT), secondPairOfEights.comparePatterns(pairOfTwos));
+        assertEquals(new HandComparison(1, Patterns.THREE_OF_A_KIND, Value.TWO), threeTwos.comparePatterns(pairOfTwos));
         assertEquals(new HandComparison(0, Patterns.EQUALITY, null), pairOfEights.comparePatterns(secondPairOfEights));
-        assertEquals(new HandComparison(1, Patterns.HIGHER, List.of(Value.ACE)), highestAce1.comparePatterns(highestKing));
-        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), pairOfEights.comparePatterns(highestAce1));
-        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), pairOfEights.comparePatterns(pairOfTwos));
-        assertEquals(new HandComparison(-1, Patterns.HIGHER, List.of(Value.ACE)), pairOfEights.comparePatterns(thirdPairOfEights));
-        assertEquals(new HandComparison(1, Patterns.DOUBLE_PAIR, List.of(Value.EIGHT, Value.TWO)), doublePairOfTwosAndEights.comparePatterns(highestKing));
-        assertEquals(new HandComparison(1, Patterns.FOUR_OF_A_KIND, List.of(Value.ACE)), fourAces.comparePatterns(pairOfEights));
-        assertEquals(new HandComparison(1, Patterns.STRAIGHT, List.of(Value.ACE)), bigStraight.comparePatterns(littleStraight));
-        assertEquals(new HandComparison(1, Patterns.STRAIGHT, List.of(Value.ACE)), bigStraight.comparePatterns(pairOfEights));
-        assertEquals(new HandComparison(1, Patterns.COLOR, List.of(Value.ACE)), aceDiamonds.comparePatterns(nineDiamonds));
-        assertEquals(new HandComparison(-1, Patterns.FOUR_OF_A_KIND, List.of(Value.ACE)), aceDiamonds.comparePatterns(fourAces));
-        assertEquals(new HandComparison(1, Patterns.FULL, List.of(Value.SIX)), fullThreeSix.comparePatterns(aceDiamonds));
-        assertEquals(new HandComparison(-1, Patterns.FULL, List.of(Value.ACE)), fullThreeSix.comparePatterns(fullThreeAce));
+        assertEquals(new HandComparison(1, Patterns.HIGHER, Value.ACE), highestAce1.comparePatterns(highestKing));
+        assertEquals(new HandComparison(1, Patterns.PAIR, Value.EIGHT), pairOfEights.comparePatterns(highestAce1));
+        assertEquals(new HandComparison(1, Patterns.PAIR, Value.EIGHT), pairOfEights.comparePatterns(pairOfTwos));
+        assertEquals(new HandComparison(-1, Patterns.HIGHER, Value.ACE), pairOfEights.comparePatterns(thirdPairOfEights));
+        assertEquals(new HandComparison(1, Patterns.DOUBLE_PAIR, Value.EIGHT), doublePairOfTwosAndEights.comparePatterns(highestKing));
+        assertEquals(new HandComparison(1, Patterns.FOUR_OF_A_KIND, Value.ACE), fourAces.comparePatterns(pairOfEights));
+        assertEquals(new HandComparison(1, Patterns.STRAIGHT, Value.ACE), bigStraight.comparePatterns(littleStraight));
+        assertEquals(new HandComparison(1, Patterns.STRAIGHT, Value.ACE), bigStraight.comparePatterns(pairOfEights));
+        assertEquals(new HandComparison(1, Patterns.COLOR, Value.ACE), aceDiamonds.comparePatterns(nineDiamonds));
+        assertEquals(new HandComparison(-1, Patterns.FOUR_OF_A_KIND, Value.ACE), aceDiamonds.comparePatterns(fourAces));
+        assertEquals(new HandComparison(1, Patterns.FULL, Value.SIX), fullThreeSix.comparePatterns(aceDiamonds));
+        assertEquals(new HandComparison(-1, Patterns.FULL, Value.ACE), fullThreeSix.comparePatterns(fullThreeAce));
     }
 
     /**
@@ -316,15 +315,16 @@ class HandTest {
         assertEquals(Map.of(Patterns.PAIR, new ArrayList<>(List.of(Value.EIGHT)), Patterns.HIGHER, new ArrayList<>(List.of(Value.KING, Value.FIVE, Value.TWO))), secondPairOfEights.getPatterns());
         assertEquals(Map.of(Patterns.DOUBLE_PAIR, new ArrayList<>(List.of(Value.EIGHT, Value.TWO)), Patterns.HIGHER, new ArrayList<>(List.of(Value.FIVE))), doublePairOfTwosAndEights.getPatterns());
         assertEquals(Map.of(Patterns.THREE_OF_A_KIND, new ArrayList<>(List.of(Value.TWO)), Patterns.HIGHER, new ArrayList<>(List.of(Value.EIGHT, Value.FIVE))), threeTwos.getPatterns());
-        assertEquals(Map.of(Patterns.FOUR_OF_A_KIND, new ArrayList<>(List.of(Value.ACE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.KING))), fourAces.getPatterns());
         assertEquals(Map.of(Patterns.STRAIGHT, new ArrayList<>(List.of(Value.ACE))), bigStraight.getPatterns());
         assertEquals(Map.of(Patterns.STRAIGHT, new ArrayList<>(List.of(Value.SIX))), littleStraight.getPatterns());
+        assertEquals(Map.of(Patterns.STRAIGHT, new ArrayList<>(List.of(Value.SIX))), almostStraightFlush.getPatterns());
         assertEquals(Map.of(Patterns.COLOR, new ArrayList<>(List.of(Value.ACE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.ACE, Value.KING, Value.QUEEN, Value.JACK, Value.TWO))), aceDiamonds.getPatterns());
         assertEquals(Map.of(Patterns.COLOR, new ArrayList<>(List.of(Value.NINE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.NINE, Value.FIVE, Value.FOUR, Value.THREE, Value.TWO))), nineDiamonds.getPatterns());
+        assertEquals(Map.of(Patterns.FULL, new ArrayList<>(List.of(Value.SIX))), fullThreeSix.getPatterns());
+        assertEquals(Map.of(Patterns.FULL, new ArrayList<>(List.of(Value.ACE))), fullThreeAce.getPatterns());
+        assertEquals(Map.of(Patterns.FOUR_OF_A_KIND, new ArrayList<>(List.of(Value.ACE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.KING))), fourAces.getPatterns());
         assertEquals(Map.of(Patterns.STRAIGHTFLUSH, new ArrayList<>(List.of(Value.ACE))), bigStraightFlush.getPatterns());
         assertEquals(Map.of(Patterns.STRAIGHTFLUSH, new ArrayList<>(List.of(Value.SIX))), littleStraightFlush.getPatterns());
-        assertEquals(Map.of(Patterns.STRAIGHT, new ArrayList<>(List.of(Value.SIX))), almostStraightFlush.getPatterns());
-        assertEquals(Map.of(Patterns.FULL, new ArrayList<>(List.of(Value.SIX))), fullThreeSix.getPatterns());
     }
 
     /**
