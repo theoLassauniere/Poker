@@ -8,8 +8,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Team B
@@ -116,5 +115,18 @@ class GameTest {
 
         String methodOutput = outputStream.toString().trim(); // Reads the output stream
         assertEquals(output, methodOutput.substring("Main 1: Main 2: ".length()));
+    }
+
+    @ParameterizedTest
+    @CsvSource(value = {
+            "APi KPi QPi JPi 10Pi;APi KCa QCa JCa 10Ca",
+            "APi APi QPi JPi 10Pi;ACa KCa QCa JCa 10Ca",
+            "APi KPi QPi JPi 10Pi;ACa ACa QCa JCa 10Ca",
+            "APi APi APi APi APi;APi APi QCa JCa 10Ca"
+
+    }, delimiter = ';')
+    void duplicationTest(String firstHand, String secondHand) {
+        System.setIn(new ByteArrayInputStream((firstHand + "\n" + secondHand).getBytes())); // Redirect stdin
+        assertThrowsExactly(IllegalArgumentException.class, fiveCardGame::start); // The game should start with errors
     }
 }
