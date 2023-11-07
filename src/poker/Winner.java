@@ -3,19 +3,18 @@ package poker;
 /**
  * Result of the comparison of two hands
  *
- * @param compareResult -1 if weaker, 0 if equals or 1 if stronger
- * @param pattern       How was the victory achieved
- * @param value         Value of the decisive card
+ * @param winningHand The hand that is winning (null if equality)
+ * @param pattern     How was the victory achieved
+ * @param value       Value of the decisive card
  * @author Team B
  */
-public record HandComparison(int compareResult, Patterns pattern, Value value) {
+public record Winner(Hand winningHand, Patterns pattern, Value value) {
     @Override
     public String toString() {
-        if (compareResult == 0) return "Égalité";
+        if (winningHand == null) return "Égalité";
 
         StringBuilder stringRes = new StringBuilder()
-                .append("La main ")
-                .append(compareResult() > 0 ? 1 : 2)
+                .append(winningHand())
                 .append(" gagne avec ");
         switch (pattern()) {
             case HIGHER -> stringRes.append("la carte la plus haute : ");

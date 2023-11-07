@@ -225,7 +225,10 @@ public class Hand implements Comparable<Hand> {
      * @return Compare patterns and values of cards between the two hands
      */
     public int compareTo(Hand otherHand) {
-        return comparePatterns(otherHand).compareResult();
+        var winningHand = comparePatterns(otherHand).winningHand();
+        if (winningHand == this) return 1;
+        if (winningHand == otherHand) return -1;
+        return 0;
     }
 
     /**
@@ -233,13 +236,13 @@ public class Hand implements Comparable<Hand> {
      * @param pattern   the pattern for which we will inspect the values
      * @return Compare the two arrays of Values given by pattern parameter from both hands
      **/
-    public HandComparison comparePatternValues(Patterns pattern, Hand otherHand) {
+    public Winner comparePatternValues(Patterns pattern, Hand otherHand) {
         var handOneList = patterns.get(pattern);
         var handTwoList = otherHand.patterns.get(pattern);
         for (int i = 0; (i < handOneList.size() && (i < handTwoList.size())); i++) {
             int res = Math.max(Math.min(handOneList.get(i).compareTo(handTwoList.get(i)), 1), -1);
             if (res != 0)
-                return new HandComparison(res, pattern, (res > 0 ? patterns : otherHand.patterns).get(pattern).get(i));
+                return new Winner(res > 0 ? this : otherHand, pattern, (res > 0 ? patterns : otherHand.patterns).get(pattern).get(i));
         }
         return null;
     }
@@ -248,18 +251,18 @@ public class Hand implements Comparable<Hand> {
      * @param otherHand the other hand to be compared.
      * @return Compare the current hand with otherHand with the patterns
      **/
-    public HandComparison comparePatterns(Hand otherHand) {
+    public Winner comparePatterns(Hand otherHand) {
         for (Patterns p : Patterns.values()) {
             if (patterns.containsKey(p) && !otherHand.patterns.containsKey(p)) // Only this hand has the pattern
-                return new HandComparison(1, p, patterns.get(p).get(0));
+                return new Winner(this, p, patterns.get(p).get(0));
             else if (!patterns.containsKey(p) && otherHand.patterns.containsKey(p)) // Only the other hand has the pattern
-                return new HandComparison(-1, p, otherHand.patterns.get(p).get(0));
+                return new Winner(otherHand, p, otherHand.patterns.get(p).get(0));
             else if (patterns.containsKey(p) && otherHand.patterns.containsKey(p)) { // Both hands have the pattern
-                HandComparison comparisonResult = comparePatternValues(p, otherHand);
+                Winner comparisonResult = comparePatternValues(p, otherHand);
                 if (comparisonResult != null) return comparisonResult;
             }
         }
-        return new HandComparison(0, Patterns.EQUALITY, null);
+        return new Winner(null, Patterns.EQUALITY, null);
     }
 
     @Override
