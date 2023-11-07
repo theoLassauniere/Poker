@@ -158,7 +158,7 @@ public class Hand implements Comparable<Hand> {
      * Add the Color pattern if it exists
      */
     public void colorPatternDetection(Map<Patterns, ArrayList<Value>> result) {
-        if (isSameColor()) result.put(Patterns.COLOR, new ArrayList<>(List.of(getCards()[0].value())));
+        if (isSameColor()) result.put(Patterns.FLUSH, new ArrayList<>(List.of(getCards()[0].value())));
     }
 
     /**
@@ -166,9 +166,9 @@ public class Hand implements Comparable<Hand> {
      */
     public boolean straightPatternDetection(Map<Patterns, ArrayList<Value>> result) {
         if (isStraight()) {
-            if (result.containsKey(Patterns.COLOR)) {
-                result.remove(Patterns.COLOR);
-                result.put(Patterns.STRAIGHTFLUSH, new ArrayList<>(List.of(getCards()[0].value())));
+            if (result.containsKey(Patterns.FLUSH)) {
+                result.remove(Patterns.FLUSH);
+                result.put(Patterns.STRAIGHT_FLUSH, new ArrayList<>(List.of(getCards()[0].value())));
             } else {
                 result.put(Patterns.STRAIGHT, new ArrayList<>(List.of(getCards()[0].value())));
             }

@@ -9,7 +9,7 @@ public enum Patterns {
     /**
      * 5 cards in a row with the same color
      */
-    STRAIGHTFLUSH,
+    STRAIGHT_FLUSH,
     /**
      * Four cards of the same value
      */
@@ -21,7 +21,7 @@ public enum Patterns {
     /**
      * All the cards have the same color
      */
-    COLOR,
+    FLUSH,
 
     /**
      * 5 cards in a row

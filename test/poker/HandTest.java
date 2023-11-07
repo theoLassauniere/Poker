@@ -297,7 +297,7 @@ class HandTest {
         assertEquals(new Winner(fourAces, Patterns.FOUR_OF_A_KIND, Value.ACE), fourAces.comparePatterns(pairOfEights));
         assertEquals(new Winner(bigStraight, Patterns.STRAIGHT, Value.ACE), bigStraight.comparePatterns(littleStraight));
         assertEquals(new Winner(bigStraight, Patterns.STRAIGHT, Value.ACE), bigStraight.comparePatterns(pairOfEights));
-        assertEquals(new Winner(aceDiamonds, Patterns.COLOR, Value.ACE), aceDiamonds.comparePatterns(nineDiamonds));
+        assertEquals(new Winner(aceDiamonds, Patterns.FLUSH, Value.ACE), aceDiamonds.comparePatterns(nineDiamonds));
         assertEquals(new Winner(fourAces, Patterns.FOUR_OF_A_KIND, Value.ACE), aceDiamonds.comparePatterns(fourAces));
         assertEquals(new Winner(fullThreeEight, Patterns.FULL, Value.EIGHT), fullThreeEight.comparePatterns(aceDiamonds));
         assertEquals(new Winner(fullThreeAce, Patterns.FULL, Value.ACE), fullThreeEight.comparePatterns(fullThreeAce));
@@ -329,13 +329,13 @@ class HandTest {
         assertEquals(Map.of(Patterns.STRAIGHT, new ArrayList<>(List.of(Value.ACE))), bigStraight.getPatterns());
         assertEquals(Map.of(Patterns.STRAIGHT, new ArrayList<>(List.of(Value.SIX))), littleStraight.getPatterns());
         assertEquals(Map.of(Patterns.STRAIGHT, new ArrayList<>(List.of(Value.SIX))), almostStraightFlush.getPatterns());
-        assertEquals(Map.of(Patterns.COLOR, new ArrayList<>(List.of(Value.ACE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.ACE, Value.KING, Value.QUEEN, Value.JACK, Value.TWO))), aceDiamonds.getPatterns());
-        assertEquals(Map.of(Patterns.COLOR, new ArrayList<>(List.of(Value.NINE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.NINE, Value.FIVE, Value.FOUR, Value.THREE, Value.TWO))), nineDiamonds.getPatterns());
+        assertEquals(Map.of(Patterns.FLUSH, new ArrayList<>(List.of(Value.ACE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.ACE, Value.KING, Value.QUEEN, Value.JACK, Value.TWO))), aceDiamonds.getPatterns());
+        assertEquals(Map.of(Patterns.FLUSH, new ArrayList<>(List.of(Value.NINE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.NINE, Value.FIVE, Value.FOUR, Value.THREE, Value.TWO))), nineDiamonds.getPatterns());
         assertEquals(Map.of(Patterns.FULL, new ArrayList<>(List.of(Value.EIGHT))), fullThreeEight.getPatterns());
         assertEquals(Map.of(Patterns.FULL, new ArrayList<>(List.of(Value.ACE))), fullThreeAce.getPatterns());
         assertEquals(Map.of(Patterns.FOUR_OF_A_KIND, new ArrayList<>(List.of(Value.ACE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.KING))), fourAces.getPatterns());
-        assertEquals(Map.of(Patterns.STRAIGHTFLUSH, new ArrayList<>(List.of(Value.ACE))), bigStraightFlush.getPatterns());
-        assertEquals(Map.of(Patterns.STRAIGHTFLUSH, new ArrayList<>(List.of(Value.SIX))), littleStraightFlush.getPatterns());
+        assertEquals(Map.of(Patterns.STRAIGHT_FLUSH, new ArrayList<>(List.of(Value.ACE))), bigStraightFlush.getPatterns());
+        assertEquals(Map.of(Patterns.STRAIGHT_FLUSH, new ArrayList<>(List.of(Value.SIX))), littleStraightFlush.getPatterns());
     }
 
     /**
