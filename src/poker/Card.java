@@ -22,7 +22,7 @@ public record Card(Value value, Color color) implements Comparable<Card> {
 
     @Override
     public String toString() {
-        return value().getSymbol() + color().getSymbol();
+        return value().toString() + color();
     }
 
     /**
