@@ -1,6 +1,6 @@
 # Projet Poker - Team B
 
-**[Lassauniere Théo](https://github.com/theoLassauniere), [Galli Evan](),[Lubrat Jilian](https://github.com/LubratJilian)****
+**[Lassauniere Théo](https://github.com/theoLassauniere), [Galli Evan](),[Lubrat Jilian](https://github.com/LubratJilian)**
 
 ------------------------
 
