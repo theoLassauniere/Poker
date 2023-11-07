@@ -1,16 +1,14 @@
 package poker;
 
-import java.util.List;
-
 /**
  * Result of the comparison of two hands
  *
  * @param compareResult -1 if weaker, 0 if equals or 1 if stronger
  * @param pattern       How was the victory achieved
- * @param values        Values of the victorious card combinaison
+ * @param value         Value of the decisive card
  * @author Team B
  */
-public record HandComparison(int compareResult, Patterns pattern, List<Value> values) {
+public record HandComparison(int compareResult, Patterns pattern, Value value) {
     @Override
     public String toString() {
         if (compareResult == 0) return "Égalité";
@@ -31,6 +29,6 @@ public record HandComparison(int compareResult, Patterns pattern, List<Value> va
             case FULL -> stringRes.append("un full contenant un brelan de : ");
             default -> stringRes.append(pattern);
         }
-        return stringRes.append(values().get(0)).toString();
+        return stringRes.append(value()).toString();
     }
 }

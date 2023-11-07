@@ -229,23 +229,23 @@ class HandTest {
      */
     @Test
     void testComparePattern() {
-        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), secondPairOfEights.comparePatterns(highestAce));
-        assertEquals(new HandComparison(-1, Patterns.PAIR, List.of(Value.EIGHT)), highestAce.comparePatterns(pairOfEights));
-        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), secondPairOfEights.comparePatterns(pairOfTwos));
-        assertEquals(new HandComparison(1, Patterns.THREE_OF_A_KIND, List.of(Value.TWO)), threeTwos.comparePatterns(pairOfTwos));
+        assertEquals(new HandComparison(1, Patterns.PAIR, Value.EIGHT), secondPairOfEights.comparePatterns(highestAce));
+        assertEquals(new HandComparison(-1, Patterns.PAIR, Value.EIGHT), highestAce.comparePatterns(pairOfEights));
+        assertEquals(new HandComparison(1, Patterns.PAIR, Value.EIGHT), secondPairOfEights.comparePatterns(pairOfTwos));
+        assertEquals(new HandComparison(1, Patterns.THREE_OF_A_KIND, Value.TWO), threeTwos.comparePatterns(pairOfTwos));
         assertEquals(new HandComparison(0, Patterns.EQUALITY, null), pairOfEights.comparePatterns(secondPairOfEights));
-        assertEquals(new HandComparison(1, Patterns.HIGHER, List.of(Value.ACE)), highestAce.comparePatterns(highestKing));
-        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), pairOfEights.comparePatterns(highestAce));
-        assertEquals(new HandComparison(1, Patterns.PAIR, List.of(Value.EIGHT)), pairOfEights.comparePatterns(pairOfTwos));
-        assertEquals(new HandComparison(-1, Patterns.HIGHER, List.of(Value.ACE)), pairOfEights.comparePatterns(thirdPairOfEights));
-        assertEquals(new HandComparison(1, Patterns.DOUBLE_PAIR, List.of(Value.EIGHT, Value.TWO)), doublePairOfTwosAndEights.comparePatterns(highestKing));
-        assertEquals(new HandComparison(1, Patterns.FOUR_OF_A_KIND, List.of(Value.ACE)), fourAces.comparePatterns(pairOfEights));
-        assertEquals(new HandComparison(1, Patterns.STRAIGHT, List.of(Value.ACE)), bigStraight.comparePatterns(littleStraight));
-        assertEquals(new HandComparison(1, Patterns.STRAIGHT, List.of(Value.ACE)), bigStraight.comparePatterns(pairOfEights));
-        assertEquals(new HandComparison(1, Patterns.COLOR, List.of(Value.ACE)), aceDiamonds.comparePatterns(nineDiamonds));
-        assertEquals(new HandComparison(-1, Patterns.FOUR_OF_A_KIND, List.of(Value.ACE)), aceDiamonds.comparePatterns(fourAces));
-        assertEquals(new HandComparison(1, Patterns.FULL, List.of(Value.SIX)), fullThreeSix.comparePatterns(aceDiamonds));
-        assertEquals(new HandComparison(-1, Patterns.FULL, List.of(Value.ACE)), fullThreeSix.comparePatterns(fullThreeAce));
+        assertEquals(new HandComparison(1, Patterns.HIGHER, Value.ACE), highestAce.comparePatterns(highestKing));
+        assertEquals(new HandComparison(1, Patterns.PAIR, Value.EIGHT), pairOfEights.comparePatterns(highestAce));
+        assertEquals(new HandComparison(1, Patterns.PAIR, Value.EIGHT), pairOfEights.comparePatterns(pairOfTwos));
+        assertEquals(new HandComparison(-1, Patterns.HIGHER, Value.ACE), pairOfEights.comparePatterns(thirdPairOfEights));
+        assertEquals(new HandComparison(1, Patterns.DOUBLE_PAIR, Value.EIGHT), doublePairOfTwosAndEights.comparePatterns(highestKing));
+        assertEquals(new HandComparison(1, Patterns.FOUR_OF_A_KIND, Value.ACE), fourAces.comparePatterns(pairOfEights));
+        assertEquals(new HandComparison(1, Patterns.STRAIGHT, Value.ACE), bigStraight.comparePatterns(littleStraight));
+        assertEquals(new HandComparison(1, Patterns.STRAIGHT, Value.ACE), bigStraight.comparePatterns(pairOfEights));
+        assertEquals(new HandComparison(1, Patterns.COLOR, Value.ACE), aceDiamonds.comparePatterns(nineDiamonds));
+        assertEquals(new HandComparison(-1, Patterns.FOUR_OF_A_KIND, Value.ACE), aceDiamonds.comparePatterns(fourAces));
+        assertEquals(new HandComparison(1, Patterns.FULL, Value.SIX), fullThreeSix.comparePatterns(aceDiamonds));
+        assertEquals(new HandComparison(-1, Patterns.FULL, Value.ACE), fullThreeSix.comparePatterns(fullThreeAce));
     }
 
     /**

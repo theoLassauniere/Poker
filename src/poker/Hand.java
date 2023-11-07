@@ -225,7 +225,7 @@ public class Hand implements Comparable<Hand> {
         for (int i = 0; (i < handOneList.size() && (i < handTwoList.size())); i++) {
             int res = Math.max(Math.min(handOneList.get(i).compareTo(handTwoList.get(i)), 1), -1);
             if (res != 0)
-                return new HandComparison(res, pattern, List.of((res > 0 ? patterns : otherHand.patterns).get(pattern).get(i)));
+                return new HandComparison(res, pattern, (res > 0 ? patterns : otherHand.patterns).get(pattern).get(i));
         }
         return null;
     }
@@ -236,11 +236,11 @@ public class Hand implements Comparable<Hand> {
      **/
     public HandComparison comparePatterns(Hand otherHand) {
         for (Patterns p : Patterns.values()) {
-            if (patterns.containsKey(p) && !otherHand.patterns.containsKey(p)) {
-                return new HandComparison(1, p, patterns.get(p));
-            } else if (!patterns.containsKey(p) && otherHand.patterns.containsKey(p)) {
-                return new HandComparison(-1, p, otherHand.patterns.get(p));
-            } else if (patterns.containsKey(p) && otherHand.patterns.containsKey(p)) {
+            if (patterns.containsKey(p) && !otherHand.patterns.containsKey(p)) // Only this hand has the pattern
+                return new HandComparison(1, p, patterns.get(p).get(0));
+            else if (!patterns.containsKey(p) && otherHand.patterns.containsKey(p)) // Only the other hand has the pattern
+                return new HandComparison(-1, p, otherHand.patterns.get(p).get(0));
+            else if (patterns.containsKey(p) && otherHand.patterns.containsKey(p)) { // Both hands have the pattern
                 HandComparison comparisonResult = comparePatternValues(p, otherHand);
                 if (comparisonResult != null) return comparisonResult;
             }
