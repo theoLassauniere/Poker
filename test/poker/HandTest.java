@@ -204,6 +204,8 @@ class HandTest {
      */
     @Test
     void isStraightTest() {
+        Hand littleHand = new Hand(new Card[]{new Card(Value.ACE, Color.HEARTS)});
+        assertFalse(littleHand.isStraight());
         assertFalse(pairOfTwos.isStraight());
         assertTrue(bigStraight.isStraight());
         assertTrue(littleStraight.isStraight());
