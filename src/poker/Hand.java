@@ -134,7 +134,7 @@ public class Hand implements Comparable<Hand> {
      */
     public boolean isSameColor() {
         if (cards.length < 5) return false;
-        var color = cards[1].color();
+        var color = cards[0].color();
         var i = 1;
         while (i < 5 && cards[i].color() == color) {
             i++;
