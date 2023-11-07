@@ -12,6 +12,7 @@ import java.util.*;
 public class Hand implements Comparable<Hand> {
     private final Card[] cards;
     private final Map<Patterns, ArrayList<Value>> patterns;
+    private String name;
 
     /**
      * Hand constructor
@@ -19,9 +20,22 @@ public class Hand implements Comparable<Hand> {
      * @param hand a tab of cards
      */
     public Hand(Card[] hand) {
+        this("Main", hand);
+    }
+
+    public Hand(String name, Card[] hand) {
+        this.name = name;
         this.cards = hand;
         sortHand();
         patterns = getPatterns();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
@@ -44,12 +58,11 @@ public class Hand implements Comparable<Hand> {
 
     @Override
     public String toString() {
-        StringBuilder string = new StringBuilder();
-        for (Card card : cards) {
+        StringBuilder string = new StringBuilder().append(getName()).append(" (");
+        for (Card card : getCards())
             string.append(card.toString()).append(" ");
-        }
         string.setLength(string.length() - 1);
-        return string.toString();
+        return string.append(')').toString();
     }
 
     /**
@@ -248,7 +261,6 @@ public class Hand implements Comparable<Hand> {
         }
         return new HandComparison(0, Patterns.EQUALITY, null);
     }
-
 
     @Override
     public boolean equals(Object obj) {

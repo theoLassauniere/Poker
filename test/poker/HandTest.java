@@ -210,9 +210,10 @@ class HandTest {
 
     @Test
     void toStringTest() {
-        assertEquals("ACa APi ACo 2Ca 2Co", fullThreeAce.toString());
-        assertEquals("8Ca 8Pi 8Co 2Ca 2Co", fullThreeEight.toString());
-
+        assertEquals("Main (ACa APi ACo 2Ca 2Co)", fullThreeAce.toString());
+        assertEquals("Main (8Ca 8Pi 8Co 2Ca 2Co)", fullThreeEight.toString());
+        fullThreeEight.setName("1st Player");
+        assertEquals("1st Player (8Ca 8Pi 8Co 2Ca 2Co)", fullThreeEight.toString());
     }
 
     /**

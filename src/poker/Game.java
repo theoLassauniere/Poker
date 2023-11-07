@@ -43,8 +43,10 @@ public class Game {
     public void start() throws IllegalArgumentException, ParseException {
         Scanner scanner = new Scanner(System.in);
         for (int i = 0; i < hands.length; i++) {
-            outputStream.print("Main " + (i + 1) + ": ");
+            var name = "Main " + (i + 1);
+            outputStream.print(name + ": ");
             hands[i] = Hand.parse(scanner.nextLine(), handSize);
+            hands[i].setName(name);
 
             for (int j = 0; j < handSize; j++) {
                 var card = hands[i].getCard(j);
