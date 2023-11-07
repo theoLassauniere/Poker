@@ -196,18 +196,27 @@ class HandTest {
         });
     }
 
+    /**
+     * Test the hand equals method
+     */
     @Test
     void equalsTest() {
         assertEquals(highestAce1, highestAce2);
         assertNotEquals(highestAce1, highestKing);
     }
 
+    /**
+     * Test the hand hashCode method
+     */
     @Test
     void hashCodeTest() {
         assertEquals(highestAce1.hashCode(), highestAce2.hashCode());
         assertNotEquals(highestAce1.hashCode(), highestKing.hashCode());
     }
 
+    /**
+     * Test the hand toStringMethod
+     */
     @Test
     void toStringTest() {
         assertEquals("Main (ACa APi ACo 2Ca 2Co)", fullThreeAce.toString());

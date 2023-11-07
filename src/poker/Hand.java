@@ -121,7 +121,6 @@ public class Hand implements Comparable<Hand> {
      * Gets number of occurrences of each Value
      */
     public Map<Value, Integer> occurrences() {
-
         var values = new EnumMap<Value, Integer>(Value.class);
         for (Card card : cards) values.merge(card.value(), 1, Integer::sum);
         return values;
