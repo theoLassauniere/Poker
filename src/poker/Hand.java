@@ -180,6 +180,7 @@ public class Hand implements Comparable<Hand> {
      * Gets the patterns and card values that realize them
      **/
     public Map<Patterns, ArrayList<Value>> getPatterns() {
+        if (patterns != null) return patterns;
         EnumMap<Patterns, ArrayList<Value>> result = new EnumMap<>(Patterns.class);
 
         colorPatternDetection(result);
