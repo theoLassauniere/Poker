@@ -21,8 +21,8 @@ class HandTest {
             fourAces,
             fullThreeSix, fullThreeAce,
             bigStraight, littleStraight, almostStraight,
-            aceDiamonds, nineDiamonds,
-            bigStraightFlush, littleStraightFlush;
+            aceDiamonds, nineDiamonds, almostDiamonds,
+            bigStraightFlush, littleStraightFlush, almostStraightFlush;
 
 
     @BeforeEach
@@ -140,6 +140,14 @@ class HandTest {
                 new Card(Value.TWO, Color.DIAMONDS)
         });
 
+        almostDiamonds = new Hand(new Card[]{
+                new Card(Value.NINE, Color.DIAMONDS),
+                new Card(Value.FIVE, Color.DIAMONDS),
+                new Card(Value.THREE, Color.DIAMONDS),
+                new Card(Value.FOUR, Color.DIAMONDS),
+                new Card(Value.TWO, Color.HEARTS)
+        });
+
         bigStraightFlush = new Hand(new Card[]{
                 new Card(Value.ACE, Color.HEARTS),
                 new Card(Value.KING, Color.HEARTS),
@@ -154,6 +162,14 @@ class HandTest {
                 new Card(Value.FOUR, Color.HEARTS),
                 new Card(Value.THREE, Color.HEARTS),
                 new Card(Value.TWO, Color.HEARTS)
+        });
+
+        almostStraightFlush = new Hand(new Card[]{
+                new Card(Value.SIX, Color.HEARTS),
+                new Card(Value.FIVE, Color.HEARTS),
+                new Card(Value.FOUR, Color.HEARTS),
+                new Card(Value.THREE, Color.HEARTS),
+                new Card(Value.TWO, Color.SPADES)
         });
 
         fullThreeSix = new Hand(new Card[]{
@@ -204,12 +220,15 @@ class HandTest {
      */
     @Test
     void isStraightTest() {
+        Hand littleHand = new Hand(new Card[]{new Card(Value.ACE, Color.HEARTS)});
+        assertFalse(littleHand.isStraight());
         assertFalse(pairOfTwos.isStraight());
         assertTrue(bigStraight.isStraight());
         assertTrue(littleStraight.isStraight());
         assertFalse(almostStraight.isStraight());
         assertTrue(bigStraightFlush.isStraight());
         assertTrue(littleStraightFlush.isStraight());
+        assertTrue(almostStraightFlush.isStraight());
     }
 
     /**
@@ -277,6 +296,7 @@ class HandTest {
         assertEquals(Map.of(Patterns.COLOR, new ArrayList<>(List.of(Value.NINE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.NINE, Value.FIVE, Value.FOUR, Value.THREE, Value.TWO))), nineDiamonds.getPatterns());
         assertEquals(Map.of(Patterns.STRAIGHTFLUSH, new ArrayList<>(List.of(Value.ACE))), bigStraightFlush.getPatterns());
         assertEquals(Map.of(Patterns.STRAIGHTFLUSH, new ArrayList<>(List.of(Value.SIX))), littleStraightFlush.getPatterns());
+        assertEquals(Map.of(Patterns.STRAIGHT, new ArrayList<>(List.of(Value.SIX))), almostStraightFlush.getPatterns());
         assertEquals(Map.of(Patterns.FULL, new ArrayList<>(List.of(Value.SIX))), fullThreeSix.getPatterns());
     }
 
@@ -310,9 +330,11 @@ class HandTest {
     void testSameColor() {
         assertTrue(aceDiamonds.isSameColor());
         assertTrue(nineDiamonds.isSameColor());
+        assertFalse(almostDiamonds.isSameColor());
         assertFalse(bigStraight.isSameColor());
         assertTrue(bigStraightFlush.isSameColor());
         assertFalse(almostStraight.isSameColor());
+        assertFalse(almostStraightFlush.isSameColor());
         assertFalse(littleStraight.isSameColor());
         assertTrue(littleStraightFlush.isSameColor());
         assertFalse(pairOfEights.isSameColor());
