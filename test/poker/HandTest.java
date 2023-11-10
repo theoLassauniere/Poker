@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -286,13 +287,13 @@ class HandTest {
      */
     @Test
     void sortTest() {
-        assertEquals(new ArrayList<>(List.of(
+        assertEquals(Stream.of(
                 new Card(Value.KING, Color.HEARTS),
                 new Card(Value.EIGHT, Color.HEARTS),
                 new Card(Value.EIGHT, Color.DIAMONDS),
                 new Card(Value.FIVE, Color.SPADES),
                 new Card(Value.TWO, Color.CLUBS)
-        )), pairOfEights.getCards());
+        ).toList(), pairOfEights.getCards());
     }
 
     /**
