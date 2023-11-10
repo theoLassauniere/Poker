@@ -183,6 +183,11 @@ public class Hand implements Comparable<Hand> {
             result.putIfAbsent(Patterns.FLUSH, new ArrayList<>());
             result.get(Patterns.FLUSH).add(flush);
         }
+        var straight = findStraight();
+        if (!straight.isEmpty()) {
+            result.putIfAbsent(Patterns.STRAIGHT, new ArrayList<>());
+            result.get(Patterns.STRAIGHT).add(straight);
+        }
 
         var entries = groupCardsByValue();
         for (Value value : Arrays.stream(Value.values()).sorted((v1, v2) -> v2.ordinal() - v1.ordinal()).toList()) {
