@@ -100,7 +100,7 @@ class GameTest {
             "7Ca 8Co 9Ca 10Co JCa;8Ca 9Co 10Ca JCo QCa;Main 2 (QCa JCo 10Ca 9Co 8Ca) gagne avec une suite dont la carte la plus haute est Q",
             "7Ca 8Ca 9Ca KCa ACa;8Co 9Co 10Ca JCo QCa;Main 1 (ACa KCa 9Ca 8Ca 7Ca) gagne avec une couleur dont la carte décisive est A",
             "7Ca 8Ca 9Ca KCa ACa;5Ca 4Co 10Ca JCa QCa;Main 1 (ACa KCa 9Ca 8Ca 7Ca) gagne avec une couleur dont la carte décisive est A",
-            "7Ca 8Ca 9Ca JCa ACa;8Co 9Co 10Co JCo ACo;Main 2 (ACo JCo 10Co 9Co 8Co) gagne avec la carte la plus haute : 10",
+            "7Ca 8Ca 9Ca JCa ACa;8Co 9Co 10Co JCo ACo;Main 2 (ACo JCo 10Co 9Co 8Co) gagne avec une couleur dont la carte décisive est 10",
             "ACa KCa QCa JCa 10Ca;2Co 8Pi 10Co 10Tr 10Pi;Main 1 (ACa KCa QCa JCa 10Ca) gagne avec une quinte flush dont la carte la plus haute est A",
             "ACa KCa QCa JCa 10Ca;2Co 3Co 4Co 5Co 6Co;Main 1 (ACa KCa QCa JCa 10Ca) gagne avec une quinte flush dont la carte la plus haute est A",
             "7Pi 8Pi 9Pi 10Pi JPi;8Ca 9Ca 10Ca JCa QCa;Main 2 (QCa JCa 10Ca 9Ca 8Ca) gagne avec une quinte flush dont la carte la plus haute est Q",

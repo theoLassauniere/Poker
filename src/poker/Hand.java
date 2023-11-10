@@ -241,9 +241,13 @@ public class Hand implements Comparable<Hand> {
         var handOneList = getPatterns().get(pattern);
         var handTwoList = otherHand.getPatterns().get(pattern);
         for (int i = 0; (i < handOneList.size() && i < handTwoList.size()); i++) {
-            int res = Math.max(Math.min(handOneList.get(i).get(0).value().compareTo(handTwoList.get(i).get(0).value()), 1), -1);
-            if (res != 0)
-                return new Winner(res > 0 ? this : otherHand, pattern, (res > 0 ? handOneList : handTwoList).get(i).get(0).value()); //TODO: .get(0) ?
+            var firstHandCards = handOneList.get(i);
+            var secondHandCards = handTwoList.get(i);
+            for (int cardIndex = 0; cardIndex < firstHandCards.size() && i < secondHandCards.size(); cardIndex++) {
+                int res = Math.max(Math.min(firstHandCards.get(cardIndex).value().compareTo(secondHandCards.get(cardIndex).value()), 1), -1);
+                if (res != 0)
+                    return new Winner(res > 0 ? this : otherHand, pattern, (res > 0 ? handOneList : handTwoList).get(i).get(cardIndex).value());
+            }
         }
         return null;
     }
