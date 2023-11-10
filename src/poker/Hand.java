@@ -131,7 +131,7 @@ public class Hand implements Comparable<Hand> {
     }
 
     /**
-     * Is there a straight in the hand?
+     * Find the best straight in hand and return an array of this straight
      */
     public List<Card> findStraight() {
         if (cards.size() < 5) return Collections.emptyList();
@@ -143,13 +143,14 @@ public class Hand implements Comparable<Hand> {
 
         for (int i = 0; i < cards.size() - 1; i++) {
             int currentCardsCompare = cards.get(i).value().ordinal() - cards.get(i + 1).value().ordinal();
-            if ((currentCardsCompare != 1) && (currentCardsCompare != 0)) {
-                if ((cards.size() - 1 - i) < 5) {
+            //Current compare between the current card and the next one
+            if ((currentCardsCompare != 1) && (currentCardsCompare != 0)) { // if the two cards don't follow each other
+                if ((cards.size() - 1 - i) < 5) { //if we cannot build a straight based on the Cards size
                     return Collections.emptyList();
                 }
                 result.clear();
             } else {
-                result.add(cards.get(i));
+                result.add(cards.get(i)); //We add the card to result
                 if ((result.get(0).value().ordinal() - result.get(result.size() - 1).value().ordinal()) >= 3) { // This statement add the 5th card of the straight
                     result.add(cards.get(i + 1));
                     return result;
