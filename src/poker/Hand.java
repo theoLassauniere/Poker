@@ -12,6 +12,7 @@ import java.util.*;
 public class Hand implements Comparable<Hand> {
     private final List<Card> cards;
     private final Map<Patterns, ArrayList<Value>> patterns;
+    private String name;
 
     /**
      * Hand constructor
@@ -19,9 +20,22 @@ public class Hand implements Comparable<Hand> {
      * @param hand a tab of cards
      */
     public Hand(List<Card> hand) {
+        this("Main", hand);
+    }
+
+    public Hand(String name, List<Card> hand) {
+        this.name = name;
         this.cards = hand;
         sortHand();
         patterns = getPatterns();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
@@ -44,12 +58,11 @@ public class Hand implements Comparable<Hand> {
 
     @Override
     public String toString() {
-        StringBuilder string = new StringBuilder();
-        for (Card card : cards) {
+        StringBuilder string = new StringBuilder().append(getName()).append(" (");
+        for (Card card : getCards())
             string.append(card.toString()).append(" ");
-        }
         string.setLength(string.length() - 1);
-        return string.toString();
+        return string.append(')').toString();
     }
 
     /**
@@ -108,9 +121,17 @@ public class Hand implements Comparable<Hand> {
      * Gets number of occurrences of each Value
      */
     public Map<Value, Integer> occurrences() {
-
         var values = new EnumMap<Value, Integer>(Value.class);
         for (Card card : cards) values.merge(card.value(), 1, Integer::sum);
+        return values;
+    }
+
+    /**
+     * Gets number of occurrences of each Color
+     */
+    public Map<Color, Integer> colorOccurrences() {
+        var values = new EnumMap<Color, Integer>(Color.class);
+        for (Card card : cards) values.merge(card.color(), 1, Integer::sum);
         return values;
     }
 
@@ -130,23 +151,20 @@ public class Hand implements Comparable<Hand> {
     }
 
     /**
-     * Are all the cards the same color?
+     * Is there a flush in the hand?
      */
-    public boolean isSameColor() {
+    public boolean isFlush() {
         if (cards.size() < 5) return false;
-        var color = cards.get(1).color();
-        var i = 1;
-        while (i < 5 && cards.get(i).color() == color) {
-            i++;
-        }
-        return cards.size() == i;
+        for (var entry : colorOccurrences().entrySet())
+            if (entry.getValue() >= 5) return true;
+        return false;
     }
 
     /**
      * Add the Color pattern if it exists
      */
     public void colorPatternDetection(Map<Patterns, ArrayList<Value>> result) {
-        if (isSameColor()) result.put(Patterns.COLOR, new ArrayList<>(List.of(getCards().get(0).value())));
+        if (isFlush()) result.put(Patterns.FLUSH, new ArrayList<>(List.of(getCards()[0].value())));
     }
 
     /**
@@ -154,9 +172,9 @@ public class Hand implements Comparable<Hand> {
      */
     public boolean straightPatternDetection(Map<Patterns, ArrayList<Value>> result) {
         if (isStraight()) {
-            if (result.containsKey(Patterns.COLOR)) {
-                result.remove(Patterns.COLOR);
-                result.put(Patterns.STRAIGHTFLUSH, new ArrayList<>(List.of(getCards().get(0).value())));
+            if (result.containsKey(Patterns.FLUSH)) {
+                result.remove(Patterns.FLUSH);
+                result.put(Patterns.STRAIGHT_FLUSH, new ArrayList<>(List.of(getCards().get(0).value())));
             } else {
                 result.put(Patterns.STRAIGHT, new ArrayList<>(List.of(getCards().get(0).value())));
             }
@@ -212,7 +230,10 @@ public class Hand implements Comparable<Hand> {
      * @return Compare patterns and values of cards between the two hands
      */
     public int compareTo(Hand otherHand) {
-        return comparePatterns(otherHand).compareResult();
+        var winningHand = comparePatterns(otherHand).winningHand();
+        if (winningHand == this) return 1;
+        if (winningHand == otherHand) return -1;
+        return 0;
     }
 
     /**
@@ -220,13 +241,13 @@ public class Hand implements Comparable<Hand> {
      * @param pattern   the pattern for which we will inspect the values
      * @return Compare the two arrays of Values given by pattern parameter from both hands
      **/
-    public HandComparison comparePatternValues(Patterns pattern, Hand otherHand) {
+    public Winner comparePatternValues(Patterns pattern, Hand otherHand) {
         var handOneList = patterns.get(pattern);
         var handTwoList = otherHand.patterns.get(pattern);
         for (int i = 0; (i < handOneList.size() && (i < handTwoList.size())); i++) {
             int res = Math.max(Math.min(handOneList.get(i).compareTo(handTwoList.get(i)), 1), -1);
             if (res != 0)
-                return new HandComparison(res, pattern, (res > 0 ? patterns : otherHand.patterns).get(pattern).get(i));
+                return new Winner(res > 0 ? this : otherHand, pattern, (res > 0 ? patterns : otherHand.patterns).get(pattern).get(i));
         }
         return null;
     }
@@ -235,20 +256,19 @@ public class Hand implements Comparable<Hand> {
      * @param otherHand the other hand to be compared.
      * @return Compare the current hand with otherHand with the patterns
      **/
-    public HandComparison comparePatterns(Hand otherHand) {
+    public Winner comparePatterns(Hand otherHand) {
         for (Patterns p : Patterns.values()) {
             if (patterns.containsKey(p) && !otherHand.patterns.containsKey(p)) // Only this hand has the pattern
-                return new HandComparison(1, p, patterns.get(p).get(0));
+                return new Winner(this, p, patterns.get(p).get(0));
             else if (!patterns.containsKey(p) && otherHand.patterns.containsKey(p)) // Only the other hand has the pattern
-                return new HandComparison(-1, p, otherHand.patterns.get(p).get(0));
+                return new Winner(otherHand, p, otherHand.patterns.get(p).get(0));
             else if (patterns.containsKey(p) && otherHand.patterns.containsKey(p)) { // Both hands have the pattern
-                HandComparison comparisonResult = comparePatternValues(p, otherHand);
+                Winner comparisonResult = comparePatternValues(p, otherHand);
                 if (comparisonResult != null) return comparisonResult;
             }
         }
-        return new HandComparison(0, Patterns.EQUALITY, null);
+        return new Winner(null, Patterns.EQUALITY, null);
     }
-
 
     @Override
     public boolean equals(Object obj) {

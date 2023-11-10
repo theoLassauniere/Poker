@@ -196,23 +196,33 @@ class HandTest {
         )));
     }
 
+    /**
+     * Test the hand equals method
+     */
     @Test
     void equalsTest() {
         assertEquals(highestAce1, highestAce2);
         assertNotEquals(highestAce1, highestKing);
     }
 
+    /**
+     * Test the hand hashCode method
+     */
     @Test
     void hashCodeTest() {
         assertEquals(highestAce1.hashCode(), highestAce2.hashCode());
         assertNotEquals(highestAce1.hashCode(), highestKing.hashCode());
     }
 
+    /**
+     * Test the hand toStringMethod
+     */
     @Test
     void toStringTest() {
-        assertEquals("ACa APi ACo 2Ca 2Co", fullThreeAce.toString());
-        assertEquals("8Ca 8Pi 8Co 2Ca 2Co", fullThreeEight.toString());
-
+        assertEquals("Main (ACa APi ACo 2Ca 2Co)", fullThreeAce.toString());
+        assertEquals("Main (8Ca 8Pi 8Co 2Ca 2Co)", fullThreeEight.toString());
+        fullThreeEight.setName("1st Player");
+        assertEquals("1st Player (8Ca 8Pi 8Co 2Ca 2Co)", fullThreeEight.toString());
     }
 
     /**
@@ -274,24 +284,24 @@ class HandTest {
      */
     @Test
     void testComparePattern() {
-        assertEquals(new HandComparison(1, Patterns.PAIR, Value.EIGHT), secondPairOfEights.comparePatterns(highestAce1));
-        assertEquals(new HandComparison(-1, Patterns.PAIR, Value.EIGHT), highestAce1.comparePatterns(pairOfEights));
-        assertEquals(new HandComparison(1, Patterns.PAIR, Value.EIGHT), secondPairOfEights.comparePatterns(pairOfTwos));
-        assertEquals(new HandComparison(1, Patterns.THREE_OF_A_KIND, Value.TWO), threeTwos.comparePatterns(pairOfTwos));
-        assertEquals(new HandComparison(0, Patterns.EQUALITY, null), pairOfEights.comparePatterns(secondPairOfEights));
-        assertEquals(new HandComparison(1, Patterns.HIGHER, Value.ACE), highestAce1.comparePatterns(highestKing));
-        assertEquals(new HandComparison(1, Patterns.PAIR, Value.EIGHT), pairOfEights.comparePatterns(highestAce1));
-        assertEquals(new HandComparison(1, Patterns.PAIR, Value.EIGHT), pairOfEights.comparePatterns(pairOfTwos));
-        assertEquals(new HandComparison(-1, Patterns.HIGHER, Value.ACE), pairOfEights.comparePatterns(thirdPairOfEights));
-        assertEquals(new HandComparison(1, Patterns.DOUBLE_PAIR, Value.EIGHT), doublePairOfTwosAndEights.comparePatterns(highestKing));
-        assertEquals(new HandComparison(1, Patterns.FOUR_OF_A_KIND, Value.ACE), fourAces.comparePatterns(pairOfEights));
-        assertEquals(new HandComparison(1, Patterns.STRAIGHT, Value.ACE), bigStraight.comparePatterns(littleStraight));
-        assertEquals(new HandComparison(1, Patterns.STRAIGHT, Value.ACE), bigStraight.comparePatterns(pairOfEights));
-        assertEquals(new HandComparison(1, Patterns.COLOR, Value.ACE), aceDiamonds.comparePatterns(nineDiamonds));
-        assertEquals(new HandComparison(-1, Patterns.FOUR_OF_A_KIND, Value.ACE), aceDiamonds.comparePatterns(fourAces));
-        assertEquals(new HandComparison(1, Patterns.FULL, Value.EIGHT), fullThreeEight.comparePatterns(aceDiamonds));
-        assertEquals(new HandComparison(-1, Patterns.FULL, Value.ACE), fullThreeEight.comparePatterns(fullThreeAce));
-        assertEquals(new HandComparison(1, Patterns.FULL, Value.ACE), fullThreeAce.comparePatterns(thirdPairOfEights));
+        assertEquals(new Winner(secondPairOfEights, Patterns.PAIR, Value.EIGHT), secondPairOfEights.comparePatterns(highestAce1));
+        assertEquals(new Winner(pairOfEights, Patterns.PAIR, Value.EIGHT), highestAce1.comparePatterns(pairOfEights));
+        assertEquals(new Winner(secondPairOfEights, Patterns.PAIR, Value.EIGHT), secondPairOfEights.comparePatterns(pairOfTwos));
+        assertEquals(new Winner(threeTwos, Patterns.THREE_OF_A_KIND, Value.TWO), threeTwos.comparePatterns(pairOfTwos));
+        assertEquals(new Winner(null, Patterns.EQUALITY, null), pairOfEights.comparePatterns(secondPairOfEights));
+        assertEquals(new Winner(highestAce1, Patterns.HIGHER, Value.ACE), highestAce1.comparePatterns(highestKing));
+        assertEquals(new Winner(pairOfEights, Patterns.PAIR, Value.EIGHT), pairOfEights.comparePatterns(highestAce1));
+        assertEquals(new Winner(pairOfEights, Patterns.PAIR, Value.EIGHT), pairOfEights.comparePatterns(pairOfTwos));
+        assertEquals(new Winner(thirdPairOfEights, Patterns.HIGHER, Value.ACE), pairOfEights.comparePatterns(thirdPairOfEights));
+        assertEquals(new Winner(doublePairOfTwosAndEights, Patterns.DOUBLE_PAIR, Value.EIGHT), doublePairOfTwosAndEights.comparePatterns(highestKing));
+        assertEquals(new Winner(fourAces, Patterns.FOUR_OF_A_KIND, Value.ACE), fourAces.comparePatterns(pairOfEights));
+        assertEquals(new Winner(bigStraight, Patterns.STRAIGHT, Value.ACE), bigStraight.comparePatterns(littleStraight));
+        assertEquals(new Winner(bigStraight, Patterns.STRAIGHT, Value.ACE), bigStraight.comparePatterns(pairOfEights));
+        assertEquals(new Winner(aceDiamonds, Patterns.FLUSH, Value.ACE), aceDiamonds.comparePatterns(nineDiamonds));
+        assertEquals(new Winner(fourAces, Patterns.FOUR_OF_A_KIND, Value.ACE), aceDiamonds.comparePatterns(fourAces));
+        assertEquals(new Winner(fullThreeEight, Patterns.FULL, Value.EIGHT), fullThreeEight.comparePatterns(aceDiamonds));
+        assertEquals(new Winner(fullThreeAce, Patterns.FULL, Value.ACE), fullThreeEight.comparePatterns(fullThreeAce));
+        assertEquals(new Winner(fullThreeAce, Patterns.FULL, Value.ACE), fullThreeAce.comparePatterns(thirdPairOfEights));
     }
 
     /**
@@ -319,13 +329,13 @@ class HandTest {
         assertEquals(Map.of(Patterns.STRAIGHT, new ArrayList<>(List.of(Value.ACE))), bigStraight.getPatterns());
         assertEquals(Map.of(Patterns.STRAIGHT, new ArrayList<>(List.of(Value.SIX))), littleStraight.getPatterns());
         assertEquals(Map.of(Patterns.STRAIGHT, new ArrayList<>(List.of(Value.SIX))), almostStraightFlush.getPatterns());
-        assertEquals(Map.of(Patterns.COLOR, new ArrayList<>(List.of(Value.ACE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.ACE, Value.KING, Value.QUEEN, Value.JACK, Value.TWO))), aceDiamonds.getPatterns());
-        assertEquals(Map.of(Patterns.COLOR, new ArrayList<>(List.of(Value.NINE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.NINE, Value.FIVE, Value.FOUR, Value.THREE, Value.TWO))), nineDiamonds.getPatterns());
+        assertEquals(Map.of(Patterns.FLUSH, new ArrayList<>(List.of(Value.ACE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.ACE, Value.KING, Value.QUEEN, Value.JACK, Value.TWO))), aceDiamonds.getPatterns());
+        assertEquals(Map.of(Patterns.FLUSH, new ArrayList<>(List.of(Value.NINE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.NINE, Value.FIVE, Value.FOUR, Value.THREE, Value.TWO))), nineDiamonds.getPatterns());
         assertEquals(Map.of(Patterns.FULL, new ArrayList<>(List.of(Value.EIGHT))), fullThreeEight.getPatterns());
         assertEquals(Map.of(Patterns.FULL, new ArrayList<>(List.of(Value.ACE))), fullThreeAce.getPatterns());
         assertEquals(Map.of(Patterns.FOUR_OF_A_KIND, new ArrayList<>(List.of(Value.ACE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.KING))), fourAces.getPatterns());
-        assertEquals(Map.of(Patterns.STRAIGHTFLUSH, new ArrayList<>(List.of(Value.ACE))), bigStraightFlush.getPatterns());
-        assertEquals(Map.of(Patterns.STRAIGHTFLUSH, new ArrayList<>(List.of(Value.SIX))), littleStraightFlush.getPatterns());
+        assertEquals(Map.of(Patterns.STRAIGHT_FLUSH, new ArrayList<>(List.of(Value.ACE))), bigStraightFlush.getPatterns());
+        assertEquals(Map.of(Patterns.STRAIGHT_FLUSH, new ArrayList<>(List.of(Value.SIX))), littleStraightFlush.getPatterns());
     }
 
     /**
@@ -352,25 +362,25 @@ class HandTest {
     }
 
     /**
-     * Test of isSameColor method
+     * Test detection of the flush pattern
      */
     @Test
-    void testSameColor() {
-        assertTrue(aceDiamonds.isSameColor());
-        assertTrue(nineDiamonds.isSameColor());
-        assertFalse(almostDiamonds.isSameColor());
-        assertFalse(bigStraight.isSameColor());
-        assertTrue(bigStraightFlush.isSameColor());
-        assertFalse(almostStraight.isSameColor());
-        assertFalse(almostStraightFlush.isSameColor());
-        assertFalse(littleStraight.isSameColor());
-        assertTrue(littleStraightFlush.isSameColor());
-        assertFalse(pairOfEights.isSameColor());
-        assertFalse(secondPairOfEights.isSameColor());
-        assertFalse(thirdPairOfEights.isSameColor());
-        assertFalse(pairOfTwos.isSameColor());
-        assertFalse(threeTwos.isSameColor());
-        assertFalse(doublePairOfTwosAndEights.isSameColor());
-        assertFalse(fourAces.isSameColor());
+    void testFlush() {
+        assertTrue(aceDiamonds.isFlush());
+        assertTrue(nineDiamonds.isFlush());
+        assertFalse(almostDiamonds.isFlush());
+        assertFalse(bigStraight.isFlush());
+        assertTrue(bigStraightFlush.isFlush());
+        assertFalse(almostStraight.isFlush());
+        assertFalse(almostStraightFlush.isFlush());
+        assertFalse(littleStraight.isFlush());
+        assertTrue(littleStraightFlush.isFlush());
+        assertFalse(pairOfEights.isFlush());
+        assertFalse(secondPairOfEights.isFlush());
+        assertFalse(thirdPairOfEights.isFlush());
+        assertFalse(pairOfTwos.isFlush());
+        assertFalse(threeTwos.isFlush());
+        assertFalse(doublePairOfTwosAndEights.isFlush());
+        assertFalse(fourAces.isFlush());
     }
 }
