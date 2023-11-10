@@ -27,173 +27,173 @@ class HandTest {
 
     @BeforeEach
     void setUp() {
-        highestAce1 = new Hand(new Card[]{
+        highestAce1 = new Hand(new ArrayList<>(List.of(
                 new Card(Value.ACE, Color.DIAMONDS),
                 new Card(Value.KING, Color.HEARTS),
                 new Card(Value.EIGHT, Color.DIAMONDS),
                 new Card(Value.TWO, Color.CLUBS),
                 new Card(Value.FIVE, Color.SPADES)
-        });
+        )));
 
-        highestAce2 = new Hand(new Card[]{
+        highestAce2 = new Hand(new ArrayList<>(List.of(
                 new Card(Value.ACE, Color.DIAMONDS),
                 new Card(Value.KING, Color.HEARTS),
                 new Card(Value.EIGHT, Color.DIAMONDS),
                 new Card(Value.TWO, Color.CLUBS),
                 new Card(Value.FIVE, Color.SPADES)
-        });
+        )));
 
-        highestKing = new Hand(new Card[]{
+        highestKing = new Hand(new ArrayList<>(List.of(
                 new Card(Value.KING, Color.DIAMONDS),
                 new Card(Value.TWO, Color.CLUBS),
                 new Card(Value.EIGHT, Color.SPADES),
                 new Card(Value.SEVEN, Color.HEARTS),
                 new Card(Value.FIVE, Color.HEARTS)
-        });
+        )));
 
-        pairOfEights = new Hand(new Card[]{
+        pairOfEights = new Hand(new ArrayList<>(List.of(
                 new Card(Value.EIGHT, Color.HEARTS),
                 new Card(Value.KING, Color.HEARTS),
                 new Card(Value.EIGHT, Color.DIAMONDS),
                 new Card(Value.TWO, Color.CLUBS),
                 new Card(Value.FIVE, Color.SPADES)
-        });
+        )));
 
-        secondPairOfEights = new Hand(new Card[]{
+        secondPairOfEights = new Hand(new ArrayList<>(List.of(
                 new Card(Value.EIGHT, Color.HEARTS),
                 new Card(Value.KING, Color.SPADES),
                 new Card(Value.EIGHT, Color.DIAMONDS),
                 new Card(Value.TWO, Color.HEARTS),
                 new Card(Value.FIVE, Color.SPADES)
-        });
+        )));
 
-        pairOfTwos = new Hand(new Card[]{
+        pairOfTwos = new Hand(new ArrayList<>(List.of(
                 new Card(Value.ACE, Color.DIAMONDS),
                 new Card(Value.TWO, Color.HEARTS),
                 new Card(Value.EIGHT, Color.DIAMONDS),
                 new Card(Value.TWO, Color.DIAMONDS),
                 new Card(Value.FIVE, Color.HEARTS)
-        });
+        )));
 
-        thirdPairOfEights = new Hand(new Card[]{
+        thirdPairOfEights = new Hand(new ArrayList<>(List.of(
                 new Card(Value.EIGHT, Color.SPADES),
                 new Card(Value.KING, Color.DIAMONDS),
                 new Card(Value.EIGHT, Color.DIAMONDS),
                 new Card(Value.SEVEN, Color.SPADES),
                 new Card(Value.ACE, Color.SPADES)
-        });
+        )));
 
-        doublePairOfTwosAndEights = new Hand(new Card[]{
+        doublePairOfTwosAndEights = new Hand(new ArrayList<>(List.of(
                 new Card(Value.TWO, Color.SPADES),
                 new Card(Value.TWO, Color.CLUBS),
                 new Card(Value.EIGHT, Color.DIAMONDS),
                 new Card(Value.EIGHT, Color.HEARTS),
                 new Card(Value.FIVE, Color.SPADES)
-        });
+        )));
 
-        threeTwos = new Hand(new Card[]{
+        threeTwos = new Hand(new ArrayList<>(List.of(
                 new Card(Value.TWO, Color.DIAMONDS),
                 new Card(Value.TWO, Color.HEARTS),
                 new Card(Value.EIGHT, Color.DIAMONDS),
                 new Card(Value.TWO, Color.SPADES),
                 new Card(Value.FIVE, Color.SPADES)
-        });
+        )));
 
-        bigStraight = new Hand(new Card[]{
+        bigStraight = new Hand(new ArrayList<>(List.of(
                 new Card(Value.ACE, Color.HEARTS),
                 new Card(Value.KING, Color.HEARTS),
                 new Card(Value.QUEEN, Color.HEARTS),
                 new Card(Value.JACK, Color.DIAMONDS),
                 new Card(Value.TEN, Color.HEARTS)
-        });
+        )));
 
-        littleStraight = new Hand(new Card[]{
+        littleStraight = new Hand(new ArrayList<>(List.of(
                 new Card(Value.SIX, Color.HEARTS),
                 new Card(Value.FIVE, Color.HEARTS),
                 new Card(Value.FOUR, Color.DIAMONDS),
                 new Card(Value.THREE, Color.HEARTS),
                 new Card(Value.TWO, Color.HEARTS)
-        });
+        )));
 
-        almostStraight = new Hand(new Card[]{
+        almostStraight = new Hand(new ArrayList<>(List.of(
                 new Card(Value.ACE, Color.HEARTS),
                 new Card(Value.KING, Color.HEARTS),
                 new Card(Value.QUEEN, Color.HEARTS),
                 new Card(Value.JACK, Color.DIAMONDS),
                 new Card(Value.TWO, Color.HEARTS)
-        });
+        )));
 
-        aceDiamonds = new Hand(new Card[]{
+        aceDiamonds = new Hand(new ArrayList<>(List.of(
                 new Card(Value.ACE, Color.DIAMONDS),
                 new Card(Value.KING, Color.DIAMONDS),
                 new Card(Value.QUEEN, Color.DIAMONDS),
                 new Card(Value.JACK, Color.DIAMONDS),
                 new Card(Value.TWO, Color.DIAMONDS)
-        });
+        )));
 
-        nineDiamonds = new Hand(new Card[]{
+        nineDiamonds = new Hand(new ArrayList<>(List.of(
                 new Card(Value.NINE, Color.DIAMONDS),
                 new Card(Value.FIVE, Color.DIAMONDS),
                 new Card(Value.THREE, Color.DIAMONDS),
                 new Card(Value.FOUR, Color.DIAMONDS),
                 new Card(Value.TWO, Color.DIAMONDS)
-        });
+        )));
 
-        almostDiamonds = new Hand(new Card[]{
+        almostDiamonds = new Hand(new ArrayList<>(List.of(
                 new Card(Value.NINE, Color.DIAMONDS),
                 new Card(Value.FIVE, Color.DIAMONDS),
                 new Card(Value.THREE, Color.DIAMONDS),
                 new Card(Value.FOUR, Color.DIAMONDS),
                 new Card(Value.TWO, Color.HEARTS)
-        });
+        )));
 
-        fullThreeEight = new Hand(new Card[]{
+        fullThreeEight = new Hand(new ArrayList<>(List.of(
                 new Card(Value.EIGHT, Color.DIAMONDS),
                 new Card(Value.EIGHT, Color.SPADES),
                 new Card(Value.EIGHT, Color.HEARTS),
                 new Card(Value.TWO, Color.DIAMONDS),
                 new Card(Value.TWO, Color.HEARTS)
-        });
+        )));
 
-        fullThreeAce = new Hand(new Card[]{
+        fullThreeAce = new Hand(new ArrayList<>(List.of(
                 new Card(Value.ACE, Color.DIAMONDS),
                 new Card(Value.ACE, Color.SPADES),
                 new Card(Value.ACE, Color.HEARTS),
                 new Card(Value.TWO, Color.DIAMONDS),
                 new Card(Value.TWO, Color.HEARTS)
-        });
+        )));
 
-        fourAces = new Hand(new Card[]{
+        fourAces = new Hand(new ArrayList<>(List.of(
                 new Card(Value.ACE, Color.DIAMONDS),
                 new Card(Value.ACE, Color.CLUBS),
                 new Card(Value.ACE, Color.SPADES),
                 new Card(Value.ACE, Color.HEARTS),
                 new Card(Value.KING, Color.SPADES)
-        });
+        )));
 
-        bigStraightFlush = new Hand(new Card[]{
+        bigStraightFlush = new Hand(new ArrayList<>(List.of(
                 new Card(Value.ACE, Color.HEARTS),
                 new Card(Value.KING, Color.HEARTS),
                 new Card(Value.QUEEN, Color.HEARTS),
                 new Card(Value.JACK, Color.HEARTS),
                 new Card(Value.TEN, Color.HEARTS)
-        });
+        )));
 
-        littleStraightFlush = new Hand(new Card[]{
+        littleStraightFlush = new Hand(new ArrayList<>(List.of(
                 new Card(Value.SIX, Color.HEARTS),
                 new Card(Value.FIVE, Color.HEARTS),
                 new Card(Value.FOUR, Color.HEARTS),
                 new Card(Value.THREE, Color.HEARTS),
                 new Card(Value.TWO, Color.HEARTS)
-        });
+        )));
 
-        almostStraightFlush = new Hand(new Card[]{
+        almostStraightFlush = new Hand(new ArrayList<>(List.of(
                 new Card(Value.SIX, Color.HEARTS),
                 new Card(Value.FIVE, Color.HEARTS),
                 new Card(Value.FOUR, Color.HEARTS),
                 new Card(Value.THREE, Color.HEARTS),
                 new Card(Value.TWO, Color.SPADES)
-        });
+        )));
     }
 
     @Test
@@ -220,13 +220,13 @@ class HandTest {
      */
     @Test
     void sortTest() {
-        assertArrayEquals(new Card[]{
+        assertEquals(new ArrayList<>(List.of(
                 new Card(Value.KING, Color.HEARTS),
                 new Card(Value.EIGHT, Color.HEARTS),
                 new Card(Value.EIGHT, Color.DIAMONDS),
                 new Card(Value.FIVE, Color.SPADES),
                 new Card(Value.TWO, Color.CLUBS)
-        }, pairOfEights.getCards());
+        )), pairOfEights.getCards());
     }
 
     /**
@@ -234,11 +234,11 @@ class HandTest {
      */
     @Test
     void testHandValidity() {
-        assertDoesNotThrow(() -> new Hand(new Card[]{new Card(Value.THREE, Color.HEARTS), new Card(Value.THREE, Color.DIAMONDS), new Card(Value.THREE, Color.SPADES), new Card(Value.THREE, Color.CLUBS)}));
-        assertDoesNotThrow(() -> new Hand(new Card[]{new Card(Value.THREE, Color.HEARTS), new Card(Value.FOUR, Color.HEARTS), new Card(Value.FIVE, Color.HEARTS), new Card(Value.SIX, Color.HEARTS)}));
-        assertDoesNotThrow(() -> new Hand(new Card[]{new Card(Value.KING, Color.DIAMONDS), new Card(Value.KING, Color.SPADES), new Card(Value.QUEEN, Color.SPADES)}));
-        assertThrowsExactly(IllegalArgumentException.class, () -> new Hand(new Card[]{new Card(Value.THREE, Color.HEARTS), new Card(Value.THREE, Color.HEARTS)}));
-        assertThrowsExactly(IllegalArgumentException.class, () -> new Hand(new Card[]{new Card(Value.KING, Color.DIAMONDS), new Card(Value.KING, Color.DIAMONDS)}));
+        assertDoesNotThrow(() -> new Hand(new ArrayList<>(List.of(new Card(Value.THREE, Color.HEARTS), new Card(Value.THREE, Color.DIAMONDS), new Card(Value.THREE, Color.SPADES), new Card(Value.THREE, Color.CLUBS)))));
+        assertDoesNotThrow(() -> new Hand(new ArrayList<>(List.of(new Card(Value.THREE, Color.HEARTS), new Card(Value.FOUR, Color.HEARTS), new Card(Value.FIVE, Color.HEARTS), new Card(Value.SIX, Color.HEARTS)))));
+        assertDoesNotThrow(() -> new Hand(new ArrayList<>(List.of(new Card(Value.KING, Color.DIAMONDS), new Card(Value.KING, Color.SPADES), new Card(Value.QUEEN, Color.SPADES)))));
+        assertThrowsExactly(IllegalArgumentException.class, () -> new Hand(new ArrayList<>(List.of(new Card(Value.THREE, Color.HEARTS), new Card(Value.THREE, Color.HEARTS)))));
+        assertThrowsExactly(IllegalArgumentException.class, () -> new Hand(new ArrayList<>(List.of(new Card(Value.KING, Color.DIAMONDS), new Card(Value.KING, Color.DIAMONDS)))));
     }
 
     /**
@@ -246,7 +246,7 @@ class HandTest {
      */
     @Test
     void isStraightTest() {
-        Hand littleHand = new Hand(new Card[]{new Card(Value.ACE, Color.HEARTS)});
+        Hand littleHand = new Hand(new ArrayList<>(List.of(new Card(Value.ACE, Color.HEARTS))));
         assertFalse(littleHand.isStraight());
         assertFalse(pairOfTwos.isStraight());
         assertTrue(bigStraight.isStraight());
@@ -344,11 +344,11 @@ class HandTest {
         assertThrowsExactly(ParseException.class, () -> Hand.parse("WTr", 1));
         assertThrowsExactly(IllegalArgumentException.class, () -> Hand.parse("3 5", 1));
         assertThrowsExactly(IllegalArgumentException.class, () -> Hand.parse("3Ca 5Ca", 1));
-        assertArrayEquals(new Card[]{new Card(Value.THREE, Color.DIAMONDS)}, Hand.parse("3Ca", 1).getCards());
-        assertArrayEquals(new Card[]{new Card(Value.TEN, Color.SPADES)}, Hand.parse("10Pi", 1).getCards());
-        assertArrayEquals(new Card[]{new Card(Value.KING, Color.CLUBS)}, Hand.parse("KTr", 1).getCards());
-        assertArrayEquals(new Card[]{new Card(Value.KING, Color.HEARTS)}, Hand.parse("KCo", 1).getCards());
-        assertArrayEquals(new Card[]{new Card(Value.KING, Color.CLUBS), new Card(Value.KING, Color.HEARTS)}, Hand.parse("KTr KCo", 2).getCards());
+        assertEquals(List.of(new Card(Value.THREE, Color.DIAMONDS)), Hand.parse("3Ca", 1).getCards());
+        assertEquals(List.of(new Card(Value.TEN, Color.SPADES)), Hand.parse("10Pi", 1).getCards());
+        assertEquals(List.of(new Card(Value.KING, Color.CLUBS)), Hand.parse("KTr", 1).getCards());
+        assertEquals(List.of(new Card(Value.KING, Color.HEARTS)), Hand.parse("KCo", 1).getCards());
+        assertEquals(List.of(new Card(Value.KING, Color.CLUBS), new Card(Value.KING, Color.HEARTS)), Hand.parse("KTr KCo", 2).getCards());
     }
 
     /**

@@ -10,7 +10,7 @@ import java.util.*;
  */
 
 public class Hand implements Comparable<Hand> {
-    private final Card[] cards;
+    private final List<Card> cards;
     private final Map<Patterns, ArrayList<Value>> patterns;
 
     /**
@@ -18,7 +18,7 @@ public class Hand implements Comparable<Hand> {
      *
      * @param hand a tab of cards
      */
-    public Hand(Card[] hand) {
+    public Hand(List<Card> hand) {
         this.cards = hand;
         sortHand();
         patterns = getPatterns();
@@ -27,7 +27,7 @@ public class Hand implements Comparable<Hand> {
     /**
      * Gets cards
      */
-    protected Card[] getCards() {
+    protected List<Card> getCards() {
         return cards;
     }
 
@@ -37,8 +37,8 @@ public class Hand implements Comparable<Hand> {
      * @param index Index of the card in the hand
      */
     public Optional<Card> getCard(int index) {
-        if (index < 0 || index >= cards.length) return Optional.empty();
-        return Optional.of(cards[index]);
+        if (index < 0 || index >= cards.size()) return Optional.empty();
+        return Optional.of(cards.get(index));
     }
 
 
@@ -61,7 +61,7 @@ public class Hand implements Comparable<Hand> {
      * @throws ParseException           The input contains an invalid card
      */
     public static Hand parse(String text, int handSize) throws IllegalArgumentException, ParseException {
-        var cards = new Card[handSize];
+        ArrayList<Card> cards = new ArrayList<>();
         var cardsUnparsed = text.split(" ");
 
         if (cardsUnparsed.length != handSize)
@@ -71,7 +71,7 @@ public class Hand implements Comparable<Hand> {
             var parsedCard = Card.tryParse(cardsUnparsed[i]);
             if (parsedCard.isEmpty())
                 throw new ParseException("Couldn't parse card (" + cardsUnparsed[i] + ")", i);
-            cards[i] = parsedCard.get();
+            cards.add(parsedCard.get());
         }
         return new Hand(cards);
     }
@@ -82,21 +82,21 @@ public class Hand implements Comparable<Hand> {
      */
     private void swap(int indexCard1, int indexCard2) {
         if (indexCard1 == indexCard2) return;
-        Card carteTest = this.cards[indexCard1];
-        this.cards[indexCard1] = this.cards[indexCard2];
-        this.cards[indexCard2] = carteTest;
+        Card carteTest = cards.get(indexCard1);
+        cards.set(indexCard1, cards.get(indexCard2));
+        cards.set(indexCard2, carteTest);
     }
 
     /**
      * Sort the hand in descending order
      */
     private void sortHand() {
-        for (int i = 0; i < cards.length; i++) {
+        for (int i = 0; i < cards.size(); i++) {
             int swapIndex = i;
-            for (int j = i + 1; j < cards.length; j++) {
-                if (cards[swapIndex].compareTo(cards[j]) < 0) {
+            for (int j = i + 1; j < cards.size(); j++) {
+                if (cards.get(swapIndex).compareTo(cards.get(j)) < 0) {
                     swapIndex = j;
-                } else if (cards[swapIndex].equals(cards[j])) {
+                } else if (cards.get(swapIndex).equals(cards.get(j))) {
                     throw new IllegalArgumentException("Duplicated card in hand");
                 }
             }
@@ -118,11 +118,11 @@ public class Hand implements Comparable<Hand> {
      * Is there a straight in the hand?
      */
     public boolean isStraight() {
-        if (cards.length < 5) return false;
-        if (cards[0].value().ordinal() < 4)
+        if (cards.size() < 5) return false;
+        if (cards.get(0).value().ordinal() < 4)
             return false; // if the highest card of the hand is less than a six, there cannot be a straight
-        for (int i = 0; i < cards.length - 1; i++) {
-            if (cards[i].value().ordinal() - cards[i + 1].value().ordinal() != 1) {
+        for (int i = 0; i < cards.size() - 1; i++) {
+            if (cards.get(i).value().ordinal() - cards.get(i + 1).value().ordinal() != 1) {
                 return false;
             }
         }
@@ -133,20 +133,20 @@ public class Hand implements Comparable<Hand> {
      * Are all the cards the same color?
      */
     public boolean isSameColor() {
-        if (cards.length < 5) return false;
-        var color = cards[1].color();
+        if (cards.size() < 5) return false;
+        var color = cards.get(1).color();
         var i = 1;
-        while (i < 5 && cards[i].color() == color) {
+        while (i < 5 && cards.get(i).color() == color) {
             i++;
         }
-        return cards.length == i;
+        return cards.size() == i;
     }
 
     /**
      * Add the Color pattern if it exists
      */
     public void colorPatternDetection(Map<Patterns, ArrayList<Value>> result) {
-        if (isSameColor()) result.put(Patterns.COLOR, new ArrayList<>(List.of(getCards()[0].value())));
+        if (isSameColor()) result.put(Patterns.COLOR, new ArrayList<>(List.of(getCards().get(0).value())));
     }
 
     /**
@@ -156,9 +156,9 @@ public class Hand implements Comparable<Hand> {
         if (isStraight()) {
             if (result.containsKey(Patterns.COLOR)) {
                 result.remove(Patterns.COLOR);
-                result.put(Patterns.STRAIGHTFLUSH, new ArrayList<>(List.of(getCards()[0].value())));
+                result.put(Patterns.STRAIGHTFLUSH, new ArrayList<>(List.of(getCards().get(0).value())));
             } else {
-                result.put(Patterns.STRAIGHT, new ArrayList<>(List.of(getCards()[0].value())));
+                result.put(Patterns.STRAIGHT, new ArrayList<>(List.of(getCards().get(0).value())));
             }
             return true;
         }
@@ -252,11 +252,11 @@ public class Hand implements Comparable<Hand> {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Hand hand && Arrays.equals(getCards(), hand.getCards());
+        return obj instanceof Hand hand && getCards().equals(hand.getCards());
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(cards);
+        return cards.hashCode();
     }
 }
