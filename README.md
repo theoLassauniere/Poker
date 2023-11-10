@@ -16,7 +16,7 @@ Toute les types de mains de poker sont implémenter :
 -	Full
 -	Carré
 -	Quinte flush
-  
+
 Ainsi chacun de ces type de mains peuvent être et  sont ensuite classé suivant la force ou suivant la règle de la carte la plus haute dans le cas d’une égalité au niveau du type.
 
 
