@@ -5,8 +5,10 @@ import org.junit.jupiter.api.Test;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,7 +24,12 @@ class HandTest {
             fullThreeEight, fullThreeAce,
             bigStraight, littleStraight, almostStraight,
             aceDiamonds, nineDiamonds, almostDiamonds,
-            bigStraightFlush, littleStraightFlush, almostStraightFlush;
+            bigStraightFlush, littleStraightFlush, almostStraightFlush,
+    // 7 cards hands :
+    sevenCardHandStraightEnd, sevenCardHandStraightBeginning, sevenCardHandStraightDuplicate,
+            sevenCardHandStraightTriplicate, sevenCardHandAlmostStraight;
+
+
 
 
     @BeforeEach
@@ -194,6 +201,56 @@ class HandTest {
                 new Card(Value.THREE, Color.HEARTS),
                 new Card(Value.TWO, Color.SPADES)
         )));
+
+        sevenCardHandStraightEnd = new Hand(new ArrayList<>(List.of(
+                new Card(Value.ACE, Color.HEARTS),
+                new Card(Value.KING, Color.HEARTS),
+                new Card(Value.SIX, Color.SPADES),
+                new Card(Value.FIVE, Color.DIAMONDS),
+                new Card(Value.FOUR, Color.DIAMONDS),
+                new Card(Value.THREE, Color.HEARTS),
+                new Card(Value.TWO, Color.SPADES)
+        )));
+
+        sevenCardHandStraightBeginning = new Hand(new ArrayList<>(List.of(
+                new Card(Value.ACE, Color.HEARTS),
+                new Card(Value.KING, Color.HEARTS),
+                new Card(Value.QUEEN, Color.SPADES),
+                new Card(Value.JACK, Color.DIAMONDS),
+                new Card(Value.TEN, Color.DIAMONDS),
+                new Card(Value.THREE, Color.HEARTS),
+                new Card(Value.TWO, Color.SPADES)
+        )));
+
+        sevenCardHandStraightDuplicate = new Hand(new ArrayList<>(List.of(
+                new Card(Value.ACE, Color.HEARTS),
+                new Card(Value.KING, Color.HEARTS),
+                new Card(Value.QUEEN, Color.SPADES),
+                new Card(Value.QUEEN, Color.DIAMONDS),
+                new Card(Value.JACK, Color.DIAMONDS),
+                new Card(Value.TEN, Color.HEARTS),
+                new Card(Value.TWO, Color.SPADES)
+        )));
+
+        sevenCardHandStraightTriplicate = new Hand(new ArrayList<>(List.of(
+                new Card(Value.ACE, Color.HEARTS),
+                new Card(Value.KING, Color.HEARTS),
+                new Card(Value.QUEEN, Color.SPADES),
+                new Card(Value.QUEEN, Color.DIAMONDS),
+                new Card(Value.QUEEN, Color.CLUBS),
+                new Card(Value.JACK, Color.HEARTS),
+                new Card(Value.TEN, Color.SPADES)
+        )));
+
+        sevenCardHandAlmostStraight = new Hand(new ArrayList<>(List.of(
+                new Card(Value.ACE, Color.HEARTS),
+                new Card(Value.KING, Color.HEARTS),
+                new Card(Value.QUEEN, Color.SPADES),
+                new Card(Value.QUEEN, Color.DIAMONDS),
+                new Card(Value.QUEEN, Color.CLUBS),
+                new Card(Value.JACK, Color.HEARTS),
+                new Card(Value.TWO, Color.SPADES)
+        )));
     }
 
     /**
@@ -230,13 +287,13 @@ class HandTest {
      */
     @Test
     void sortTest() {
-        assertEquals(new ArrayList<>(List.of(
+        assertEquals(Stream.of(
                 new Card(Value.KING, Color.HEARTS),
                 new Card(Value.EIGHT, Color.HEARTS),
                 new Card(Value.EIGHT, Color.DIAMONDS),
                 new Card(Value.FIVE, Color.SPADES),
                 new Card(Value.TWO, Color.CLUBS)
-        )), pairOfEights.getCards());
+        ).toList(), pairOfEights.getCards());
     }
 
     /**
@@ -257,14 +314,68 @@ class HandTest {
     @Test
     void isStraightTest() {
         Hand littleHand = new Hand(new ArrayList<>(List.of(new Card(Value.ACE, Color.HEARTS))));
-        assertFalse(littleHand.isStraight());
-        assertFalse(pairOfTwos.isStraight());
-        assertTrue(bigStraight.isStraight());
-        assertTrue(littleStraight.isStraight());
-        assertFalse(almostStraight.isStraight());
-        assertTrue(bigStraightFlush.isStraight());
-        assertTrue(littleStraightFlush.isStraight());
-        assertTrue(almostStraightFlush.isStraight());
+        assertEquals(Collections.emptyList(), littleHand.findStraight());
+        assertEquals(Collections.emptyList(), pairOfTwos.findStraight());
+        assertEquals(Collections.emptyList(), almostStraight.findStraight());
+        assertEquals(Collections.emptyList(), sevenCardHandAlmostStraight.findStraight());
+        assertEquals(List.of(
+                new Card(Value.SIX, Color.HEARTS),
+                new Card(Value.FIVE, Color.HEARTS),
+                new Card(Value.FOUR, Color.HEARTS),
+                new Card(Value.THREE, Color.HEARTS),
+                new Card(Value.TWO, Color.SPADES)), almostStraightFlush.findStraight()); // almost Straight Flush is a straight
+        assertEquals(List.of(
+                new Card(Value.ACE, Color.HEARTS),
+                new Card(Value.KING, Color.HEARTS),
+                new Card(Value.QUEEN, Color.HEARTS),
+                new Card(Value.JACK, Color.DIAMONDS),
+                new Card(Value.TEN, Color.HEARTS)), bigStraight.findStraight());
+        assertEquals(List.of(
+                new Card(Value.SIX, Color.HEARTS),
+                new Card(Value.FIVE, Color.HEARTS),
+                new Card(Value.FOUR, Color.DIAMONDS),
+                new Card(Value.THREE, Color.HEARTS),
+                new Card(Value.TWO, Color.HEARTS)), littleStraight.findStraight());
+        assertEquals(List.of(
+                new Card(Value.ACE, Color.HEARTS),
+                new Card(Value.KING, Color.HEARTS),
+                new Card(Value.QUEEN, Color.HEARTS),
+                new Card(Value.JACK, Color.HEARTS),
+                new Card(Value.TEN, Color.HEARTS)), bigStraightFlush.findStraight());
+        assertEquals(List.of(
+                new Card(Value.SIX, Color.HEARTS),
+                new Card(Value.FIVE, Color.HEARTS),
+                new Card(Value.FOUR, Color.HEARTS),
+                new Card(Value.THREE, Color.HEARTS),
+                new Card(Value.TWO, Color.HEARTS)), littleStraightFlush.findStraight());
+        assertEquals(List.of(
+                new Card(Value.SIX, Color.SPADES),
+                new Card(Value.FIVE, Color.DIAMONDS),
+                new Card(Value.FOUR, Color.DIAMONDS),
+                new Card(Value.THREE, Color.HEARTS),
+                new Card(Value.TWO, Color.SPADES)), sevenCardHandStraightEnd.findStraight());
+        assertEquals(List.of(
+                new Card(Value.ACE, Color.HEARTS),
+                new Card(Value.KING, Color.HEARTS),
+                new Card(Value.QUEEN, Color.SPADES),
+                new Card(Value.JACK, Color.DIAMONDS),
+                new Card(Value.TEN, Color.DIAMONDS)), sevenCardHandStraightBeginning.findStraight());
+        assertEquals(List.of(
+                new Card(Value.ACE, Color.HEARTS),
+                new Card(Value.KING, Color.HEARTS),
+                new Card(Value.QUEEN, Color.SPADES),
+                new Card(Value.QUEEN, Color.DIAMONDS),
+                new Card(Value.JACK, Color.DIAMONDS),
+                new Card(Value.TEN, Color.HEARTS)), sevenCardHandStraightDuplicate.findStraight());
+        assertEquals(List.of(
+                new Card(Value.ACE, Color.HEARTS),
+                new Card(Value.KING, Color.HEARTS),
+                new Card(Value.QUEEN, Color.SPADES),
+                new Card(Value.QUEEN, Color.DIAMONDS),
+                new Card(Value.QUEEN, Color.CLUBS),
+                new Card(Value.JACK, Color.HEARTS),
+                new Card(Value.TEN, Color.SPADES)), sevenCardHandStraightTriplicate.findStraight());
+
     }
 
     /**
