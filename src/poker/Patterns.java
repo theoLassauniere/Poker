@@ -7,7 +7,7 @@ package poker;
  */
 public enum Patterns {
     /**
-     * 5 cards in a row with the same color
+     * Five cards in a row with the same color
      */
     STRAIGHT_FLUSH,
     /**
@@ -19,12 +19,12 @@ public enum Patterns {
      */
     FULL,
     /**
-     * All the cards have the same color
+     * Five cards have the same color
      */
     FLUSH,
 
     /**
-     * 5 cards in a row
+     * Five cards in a row
      */
     STRAIGHT,
 
