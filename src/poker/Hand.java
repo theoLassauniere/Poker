@@ -127,6 +127,15 @@ public class Hand implements Comparable<Hand> {
     }
 
     /**
+     * Gets number of occurrences of each Color
+     */
+    public Map<Color, Integer> colorOccurrences() {
+        var values = new EnumMap<Color, Integer>(Color.class);
+        for (Card card : cards) values.merge(card.color(), 1, Integer::sum);
+        return values;
+    }
+
+    /**
      * Is there a straight in the hand?
      */
     public boolean isStraight() {
@@ -142,23 +151,20 @@ public class Hand implements Comparable<Hand> {
     }
 
     /**
-     * Are all the cards the same color?
+     * Is there a flush in the hand?
      */
-    public boolean isSameColor() {
+    public boolean isFlush() {
         if (cards.length < 5) return false;
-        var color = cards[0].color();
-        var i = 1;
-        while (i < 5 && cards[i].color() == color) {
-            i++;
-        }
-        return cards.length == i;
+        for (var entry : colorOccurrences().entrySet())
+            if (entry.getValue() >= 5) return true;
+        return false;
     }
 
     /**
      * Add the Color pattern if it exists
      */
     public void colorPatternDetection(Map<Patterns, ArrayList<Value>> result) {
-        if (isSameColor()) result.put(Patterns.FLUSH, new ArrayList<>(List.of(getCards()[0].value())));
+        if (isFlush()) result.put(Patterns.FLUSH, new ArrayList<>(List.of(getCards()[0].value())));
     }
 
     /**

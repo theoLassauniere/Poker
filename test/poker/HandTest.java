@@ -362,25 +362,25 @@ class HandTest {
     }
 
     /**
-     * Test of isSameColor method
+     * Test detection of the flush pattern
      */
     @Test
-    void testSameColor() {
-        assertTrue(aceDiamonds.isSameColor());
-        assertTrue(nineDiamonds.isSameColor());
-        assertFalse(almostDiamonds.isSameColor());
-        assertFalse(bigStraight.isSameColor());
-        assertTrue(bigStraightFlush.isSameColor());
-        assertFalse(almostStraight.isSameColor());
-        assertFalse(almostStraightFlush.isSameColor());
-        assertFalse(littleStraight.isSameColor());
-        assertTrue(littleStraightFlush.isSameColor());
-        assertFalse(pairOfEights.isSameColor());
-        assertFalse(secondPairOfEights.isSameColor());
-        assertFalse(thirdPairOfEights.isSameColor());
-        assertFalse(pairOfTwos.isSameColor());
-        assertFalse(threeTwos.isSameColor());
-        assertFalse(doublePairOfTwosAndEights.isSameColor());
-        assertFalse(fourAces.isSameColor());
+    void testFlush() {
+        assertTrue(aceDiamonds.isFlush());
+        assertTrue(nineDiamonds.isFlush());
+        assertFalse(almostDiamonds.isFlush());
+        assertFalse(bigStraight.isFlush());
+        assertTrue(bigStraightFlush.isFlush());
+        assertFalse(almostStraight.isFlush());
+        assertFalse(almostStraightFlush.isFlush());
+        assertFalse(littleStraight.isFlush());
+        assertTrue(littleStraightFlush.isFlush());
+        assertFalse(pairOfEights.isFlush());
+        assertFalse(secondPairOfEights.isFlush());
+        assertFalse(thirdPairOfEights.isFlush());
+        assertFalse(pairOfTwos.isFlush());
+        assertFalse(threeTwos.isFlush());
+        assertFalse(doublePairOfTwosAndEights.isFlush());
+        assertFalse(fourAces.isFlush());
     }
 }
