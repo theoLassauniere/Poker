@@ -2,6 +2,7 @@ package poker;
 
 import java.text.ParseException;
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * Hand
@@ -11,7 +12,7 @@ import java.util.*;
 
 public class Hand implements Comparable<Hand> {
     private final List<Card> cards;
-    private final Map<Patterns, ArrayList<Value>> patterns;
+    private final Map<Patterns, List<List<Card>>> patterns;
     private String name;
 
     /**
@@ -108,19 +109,25 @@ public class Hand implements Comparable<Hand> {
     /**
      * Gets number of occurrences of each Value
      */
-    public Map<Value, Integer> occurrences() {
-        var values = new EnumMap<Value, Integer>(Value.class);
-        for (Card card : cards) values.merge(card.value(), 1, Integer::sum);
-        return values;
+    private Map<Value, List<Card>> groupCardsByValue() {
+        Map<Value, List<Card>> groups = new EnumMap<>(Value.class);
+        for (Card card : getCards()) {
+            groups.putIfAbsent(card.value(), new ArrayList<>());
+            groups.get(card.value()).add(card);
+        }
+        return groups;
     }
 
     /**
      * Gets number of occurrences of each Color
      */
-    public Map<Color, Integer> colorOccurrences() {
-        var values = new EnumMap<Color, Integer>(Color.class);
-        for (Card card : cards) values.merge(card.color(), 1, Integer::sum);
-        return values;
+    private Map<Color, List<Card>> groupCardsByColor() {
+        Map<Color, List<Card>> groups = new EnumMap<>(Color.class);
+        for (Card card : getCards()) {
+            groups.putIfAbsent(card.color(), new ArrayList<>());
+            groups.get(card.color()).add(card);
+        }
+        return groups;
     }
 
     /**
@@ -154,75 +161,55 @@ public class Hand implements Comparable<Hand> {
 
     /**
      * Is there a flush in the hand?
+     *
+     * @return Cards realising the flush or empty if there's no flush
      */
-    public boolean isFlush() {
-        if (cards.size() < 5) return false;
-        for (var entry : colorOccurrences().entrySet())
-            if (entry.getValue() >= 5) return true;
-        return false;
-    }
-
-    /**
-     * Add the Color pattern if it exists
-     */
-    public void colorPatternDetection(Map<Patterns, ArrayList<Value>> result) {
-        if (isFlush()) result.put(Patterns.FLUSH, new ArrayList<>(List.of(getCards().get(0).value())));
-    }
-
-    /**
-     * Detect the Straight pattern
-     */
-    public boolean straightPatternDetection(Map<Patterns, ArrayList<Value>> result) {
-        if (findStraight().size() >= 5) {
-            if (result.containsKey(Patterns.FLUSH)) {
-                result.remove(Patterns.FLUSH);
-                result.put(Patterns.STRAIGHT_FLUSH, new ArrayList<>(List.of(getCards().get(0).value())));
-            } else {
-                result.put(Patterns.STRAIGHT, new ArrayList<>(List.of(getCards().get(0).value())));
-            }
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Detect Full pattern
-     */
-    public void fullPatternDetection(Map<Patterns, ArrayList<Value>> result) {
-        if (result.containsKey(Patterns.PAIR) && result.containsKey(Patterns.THREE_OF_A_KIND)) {
-            result.put(Patterns.FULL, result.get(Patterns.THREE_OF_A_KIND));
-            result.remove(Patterns.PAIR);
-            result.remove(Patterns.THREE_OF_A_KIND);
-        }
+    public List<Card> flushDetection() {
+        if (cards.size() < 5) return Collections.emptyList();
+        for (var entry : groupCardsByColor().entrySet())
+            if (entry.getValue().size() >= 5) return entry.getValue();
+        return Collections.emptyList();
     }
 
     /**
      * Gets the patterns and card values that realize them
      **/
-    public Map<Patterns, ArrayList<Value>> getPatterns() {
-        if (patterns != null) return patterns;
-        EnumMap<Patterns, ArrayList<Value>> result = new EnumMap<>(Patterns.class);
+    public Map<Patterns, List<List<Card>>> getPatterns() {
+        EnumMap<Patterns, List<List<Card>>> result = new EnumMap<>(Patterns.class);
 
-        colorPatternDetection(result);
-        if (straightPatternDetection(result)) return result;
+        var flush = flushDetection();
+        if (!flush.isEmpty()) {
+            result.putIfAbsent(Patterns.FLUSH, new ArrayList<>());
+            result.get(Patterns.FLUSH).add(flush);
+        }
 
-        for (var entry : occurrences().entrySet()) {
-            Patterns p = switch (entry.getValue()) {
+        var entries = groupCardsByValue();
+        for (Value value : Arrays.stream(Value.values()).sorted((v1, v2) -> v2.ordinal() - v1.ordinal()).toList()) {
+            var entry = entries.getOrDefault(value, Collections.emptyList());
+            Patterns p = switch (entry.size()) {
                 case 1 -> Patterns.HIGHER;
                 case 2 -> Patterns.PAIR;
                 case 3 -> Patterns.THREE_OF_A_KIND;
                 case 4 -> Patterns.FOUR_OF_A_KIND;
                 default -> null;
             };
-            if (result.containsKey(p)) {
-                if (p == Patterns.PAIR) {
-                    result.put(Patterns.DOUBLE_PAIR, new ArrayList<>(List.of(entry.getKey(), result.get(p).get(0))));
-                    result.remove(p);
-                } else result.get(p).add(0, entry.getKey());
-            } else result.put(p, new ArrayList<>(List.of(entry.getKey())));
+            if (p == null) continue;
+            result.putIfAbsent(p, new ArrayList<>());
+            result.get(p).add(entry);
         }
 
-        fullPatternDetection(result);
+        if (result.containsKey(Patterns.FLUSH) && result.containsKey(Patterns.STRAIGHT)) {
+            result.putIfAbsent(Patterns.STRAIGHT_FLUSH, new ArrayList<>());
+            result.get(Patterns.STRAIGHT_FLUSH).add(Stream.of(result.get(Patterns.FLUSH).get(0), result.get(Patterns.STRAIGHT).get(0)).flatMap(Collection::stream).toList());
+        }
+        if (result.containsKey(Patterns.PAIR) && result.containsKey(Patterns.THREE_OF_A_KIND)) {
+            result.putIfAbsent(Patterns.FULL, new ArrayList<>());
+            result.get(Patterns.FULL).add(Stream.of(result.get(Patterns.THREE_OF_A_KIND).get(0), result.get(Patterns.PAIR).get(0)).flatMap(Collection::stream).toList());
+        }
+        if (result.containsKey(Patterns.PAIR) && result.get(Patterns.PAIR).size() > 1) {
+            result.putIfAbsent(Patterns.DOUBLE_PAIR, new ArrayList<>());
+            result.get(Patterns.DOUBLE_PAIR).add(result.get(Patterns.PAIR).stream().flatMap(Collection::stream).toList());
+        }
 
         return result;
     }
@@ -239,17 +226,18 @@ public class Hand implements Comparable<Hand> {
     }
 
     /**
+     * Compare the two arrays of Values given by pattern parameter from both hands
+     *
      * @param otherHand the other hand to be compared.
      * @param pattern   the pattern for which we will inspect the values
-     * @return Compare the two arrays of Values given by pattern parameter from both hands
      **/
     public Winner comparePatternValues(Patterns pattern, Hand otherHand) {
-        var handOneList = patterns.get(pattern);
-        var handTwoList = otherHand.patterns.get(pattern);
-        for (int i = 0; (i < handOneList.size() && (i < handTwoList.size())); i++) {
-            int res = Math.max(Math.min(handOneList.get(i).compareTo(handTwoList.get(i)), 1), -1);
+        var handOneList = getPatterns().get(pattern);
+        var handTwoList = otherHand.getPatterns().get(pattern);
+        for (int i = 0; (i < handOneList.size() && i < handTwoList.size()); i++) {
+            int res = Math.max(Math.min(handOneList.get(i).get(0).value().compareTo(handTwoList.get(i).get(0).value()), 1), -1);
             if (res != 0)
-                return new Winner(res > 0 ? this : otherHand, pattern, (res > 0 ? patterns : otherHand.patterns).get(pattern).get(i));
+                return new Winner(res > 0 ? this : otherHand, pattern, (res > 0 ? handOneList : handTwoList).get(i).get(0).value()); //TODO: .get(0) ?
         }
         return null;
     }
@@ -261,9 +249,9 @@ public class Hand implements Comparable<Hand> {
     public Winner comparePatterns(Hand otherHand) {
         for (Patterns p : Patterns.values()) {
             if (patterns.containsKey(p) && !otherHand.patterns.containsKey(p)) // Only this hand has the pattern
-                return new Winner(this, p, patterns.get(p).get(0));
+                return new Winner(this, p, patterns.get(p).get(0).get(0).value());
             else if (!patterns.containsKey(p) && otherHand.patterns.containsKey(p)) // Only the other hand has the pattern
-                return new Winner(otherHand, p, otherHand.patterns.get(p).get(0));
+                return new Winner(otherHand, p, otherHand.patterns.get(p).get(0).get(0).value());
             else if (patterns.containsKey(p) && otherHand.patterns.containsKey(p)) { // Both hands have the pattern
                 Winner comparisonResult = comparePatternValues(p, otherHand);
                 if (comparisonResult != null) return comparisonResult;
