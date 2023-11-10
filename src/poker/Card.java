@@ -1,9 +1,9 @@
 package poker;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * Card
@@ -47,8 +47,8 @@ public record Card(Value value, Color color) implements Comparable<Card> {
         return Optional.of(new Card(cardValue, cardColor));
     }
 
-    public static Set<Card> getDeck() {
-        var deck = new HashSet<Card>();
+    public static List<Card> getDeck() {
+        var deck = new ArrayList<Card>();
         for (Color color : Color.values())
             for (Value value : Value.values())
                 deck.add(new Card(value, color));

@@ -2,8 +2,8 @@ package poker;
 
 import java.io.PrintStream;
 import java.text.ParseException;
+import java.util.List;
 import java.util.Scanner;
-import java.util.Set;
 
 /**
  * A game
@@ -16,7 +16,7 @@ public class Game {
 
     @java.lang.SuppressWarnings("java:S106")
     protected static PrintStream outputStream = System.out;
-    private final Set<Card> deck;
+    private final List<Card> deck;
     private final Hand[] hands;
     private final int handSize;
 
