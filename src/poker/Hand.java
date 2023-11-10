@@ -129,16 +129,30 @@ public class Hand implements Comparable<Hand> {
     /**
      * Is there a straight in the hand?
      */
-    public boolean isStraight() {
-        if (cards.length < 5) return false;
+    public List<Card> findStraight() {
+        if (cards.length < 5) return Collections.emptyList();
         if (cards[0].value().ordinal() < 4)
-            return false; // if the highest card of the hand is less than a six, there cannot be a straight
+            return Collections.emptyList();
+        // if the highest card of the hand is less than a six, there cannot be a straight
+
+        List<Card> result = new ArrayList<>();
+
         for (int i = 0; i < cards.length - 1; i++) {
-            if (cards[i].value().ordinal() - cards[i + 1].value().ordinal() != 1) {
-                return false;
+            int currentCardsCompare = cards[i].value().ordinal() - cards[i + 1].value().ordinal();
+            if ((currentCardsCompare != 1) && (currentCardsCompare != 0)) {
+                if ((cards.length - 1 - i) < 5) {
+                    return Collections.emptyList();
+                }
+                result.clear();
+            } else {
+                result.add(cards[i]);
+                if ((result.get(0).value().ordinal() - result.get(result.size() - 1).value().ordinal()) >= 3) { // This statement add the 5th card of the straight
+                    result.add(cards[i + 1]);
+                    return result;
+                }
             }
         }
-        return true;
+        return result;
     }
 
     /**
@@ -165,7 +179,7 @@ public class Hand implements Comparable<Hand> {
      * Detect the Straight pattern
      */
     public boolean straightPatternDetection(Map<Patterns, ArrayList<Value>> result) {
-        if (isStraight()) {
+        if (findStraight().size() >= 5) {
             if (result.containsKey(Patterns.FLUSH)) {
                 result.remove(Patterns.FLUSH);
                 result.put(Patterns.STRAIGHT_FLUSH, new ArrayList<>(List.of(getCards()[0].value())));
