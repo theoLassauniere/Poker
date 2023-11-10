@@ -19,7 +19,6 @@ public class GameExtension {
     protected static PrintStream outputStream = System.out;
     private final List<Card> deck;
     private final Hand[] hands;
-    private final int handSize;
     private final Random random;
 
     public GameExtension() {
