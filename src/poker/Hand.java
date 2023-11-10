@@ -55,7 +55,6 @@ public class Hand implements Comparable<Hand> {
         return Optional.of(cards.get(index));
     }
 
-
     @Override
     public String toString() {
         StringBuilder string = new StringBuilder().append(getName()).append(" (");
@@ -89,17 +88,6 @@ public class Hand implements Comparable<Hand> {
         return new Hand(cards);
     }
 
-
-    /**
-     * Swap method used in the sort method ; swap two cards based on their indexes
-     */
-    private void swap(int indexCard1, int indexCard2) {
-        if (indexCard1 == indexCard2) return;
-        Card carteTest = cards.get(indexCard1);
-        cards.set(indexCard1, cards.get(indexCard2));
-        cards.set(indexCard2, carteTest);
-    }
-
     /**
      * Sort the hand in descending order
      */
@@ -113,7 +101,7 @@ public class Hand implements Comparable<Hand> {
                     throw new IllegalArgumentException("Duplicated card in hand");
                 }
             }
-            swap(i, swapIndex);
+            Collections.swap(cards, i, swapIndex);
         }
     }
 
