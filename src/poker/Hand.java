@@ -164,7 +164,7 @@ public class Hand implements Comparable<Hand> {
      * Add the Color pattern if it exists
      */
     public void colorPatternDetection(Map<Patterns, ArrayList<Value>> result) {
-        if (isFlush()) result.put(Patterns.FLUSH, new ArrayList<>(List.of(getCards()[0].value())));
+        if (isFlush()) result.put(Patterns.FLUSH, new ArrayList<>(List.of(getCards().get(0).value())));
     }
 
     /**
