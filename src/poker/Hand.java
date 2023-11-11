@@ -157,7 +157,7 @@ public class Hand implements Comparable<Hand> {
                 }
             }
         }
-        return result;
+        return Collections.emptyList();
     }
 
     /**
