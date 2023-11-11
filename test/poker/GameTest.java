@@ -24,11 +24,11 @@ class GameTest {
     void setUp() {
         outputStream = new ByteArrayOutputStream();
         Game.outputStream = new PrintStream(outputStream);
-        oneCardGame = new Game(1);
-        twoCardGame = new Game(2);
-        threeCardGame = new Game(3);
-        fourCardGame = new Game(4);
-        fiveCardGame = new Game(5);
+        oneCardGame = new Game(1, "Poker");
+        twoCardGame = new Game(2, "Poker");
+        threeCardGame = new Game(3, "Poker");
+        fourCardGame = new Game(4, "Poker");
+        fiveCardGame = new Game(5, "Poker");
     }
 
     @ParameterizedTest
