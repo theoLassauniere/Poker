@@ -2,6 +2,7 @@ package poker;
 
 import java.text.ParseException;
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
 /**
@@ -173,21 +174,18 @@ public class Hand implements Comparable<Hand> {
     }
 
     /**
-     * Gets the patterns and card values that realize them
+     * Gets the patterns and card that realize them
      **/
     public Map<Patterns, List<List<Card>>> getPatterns() {
         EnumMap<Patterns, List<List<Card>>> result = new EnumMap<>(Patterns.class);
+        BiConsumer<Patterns, List<Card>> addToEnum = (pattern, patternCards) -> {
+            if (pattern == null || patternCards.isEmpty()) return;
+            result.putIfAbsent(pattern, new ArrayList<>());
+            result.get(pattern).add(patternCards);
+        };
 
-        var flush = flushDetection();
-        if (!flush.isEmpty()) {
-            result.putIfAbsent(Patterns.FLUSH, new ArrayList<>());
-            result.get(Patterns.FLUSH).add(flush);
-        }
-        var straight = findStraight();
-        if (!straight.isEmpty()) {
-            result.putIfAbsent(Patterns.STRAIGHT, new ArrayList<>());
-            result.get(Patterns.STRAIGHT).add(straight);
-        }
+        addToEnum.accept(Patterns.FLUSH, flushDetection());
+        addToEnum.accept(Patterns.STRAIGHT, findStraight());
 
         var entries = groupCardsByValue();
         for (Value value : Arrays.stream(Value.values()).sorted((v1, v2) -> v2.ordinal() - v1.ordinal()).toList()) {
@@ -199,25 +197,18 @@ public class Hand implements Comparable<Hand> {
                 case 4 -> Patterns.FOUR_OF_A_KIND;
                 default -> null;
             };
-            if (p == null) continue;
-            result.putIfAbsent(p, new ArrayList<>());
-            result.get(p).add(entry);
+            addToEnum.accept(p, entry);
         }
 
         if (result.containsKey(Patterns.FLUSH) && result.containsKey(Patterns.STRAIGHT)) {
-            result.putIfAbsent(Patterns.STRAIGHT_FLUSH, new ArrayList<>());
             var straightCards = result.get(Patterns.STRAIGHT).get(0);
             var commonCards = result.get(Patterns.FLUSH).get(0).stream().filter(straightCards::contains).toList();
-            if (commonCards.size() >= 5) result.get(Patterns.STRAIGHT_FLUSH).add(commonCards);
+            if (commonCards.size() >= 5) addToEnum.accept(Patterns.STRAIGHT_FLUSH, commonCards);
         }
-        if (result.containsKey(Patterns.PAIR) && result.containsKey(Patterns.THREE_OF_A_KIND)) {
-            result.putIfAbsent(Patterns.FULL, new ArrayList<>());
-            result.get(Patterns.FULL).add(Stream.of(result.get(Patterns.THREE_OF_A_KIND).get(0), result.get(Patterns.PAIR).get(0)).flatMap(Collection::stream).toList());
-        }
-        if (result.containsKey(Patterns.PAIR) && result.get(Patterns.PAIR).size() > 1) {
-            result.putIfAbsent(Patterns.DOUBLE_PAIR, new ArrayList<>());
-            result.get(Patterns.DOUBLE_PAIR).add(result.get(Patterns.PAIR).stream().flatMap(Collection::stream).toList());
-        }
+        if (result.containsKey(Patterns.PAIR) && result.containsKey(Patterns.THREE_OF_A_KIND))
+            addToEnum.accept(Patterns.FULL, Stream.of(result.get(Patterns.THREE_OF_A_KIND).get(0), result.get(Patterns.PAIR).get(0)).flatMap(Collection::stream).toList());
+        if (result.containsKey(Patterns.PAIR) && result.get(Patterns.PAIR).size() > 1)
+            addToEnum.accept(Patterns.DOUBLE_PAIR, result.get(Patterns.PAIR).stream().flatMap(Collection::stream).toList());
 
         return result;
     }
