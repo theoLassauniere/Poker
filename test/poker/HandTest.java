@@ -414,18 +414,29 @@ class HandTest {
     }
 
     /**
-     * Test of the number of occurrences of each values in the hand
+     * Tests grouping cards by their values
      */
     @Test
-    void occurrencesTest() {
-        /*assertEquals(Map.of(
-                Value.TWO, 1,
-                Value.FIVE, 1,
-                Value.EIGHT, 2,
-                Value.KING, 1
-        ), pairOfEights.());*/
+    void testGroupCardsByValue() {
+        assertEquals(Map.of(
+                Value.TWO, List.of(new Card(Value.TWO, Color.CLUBS)),
+                Value.FIVE, List.of(new Card(Value.FIVE, Color.SPADES)),
+                Value.EIGHT, List.of(new Card(Value.EIGHT, Color.HEARTS), new Card(Value.EIGHT, Color.DIAMONDS)),
+                Value.KING, List.of(new Card(Value.KING, Color.HEARTS))
+        ), pairOfEights.groupCardsByValue());
+    }
 
-        //TODO : Refactor this to test groupCardsByValue and groupCardsByColor
+    /**
+     * Tests grouping cards by their colors
+     */
+    @Test
+    void testGroupCardsByColor() {
+        assertEquals(Map.of(
+                Color.CLUBS, List.of(new Card(Value.TWO, Color.CLUBS)),
+                Color.SPADES, List.of(new Card(Value.FIVE, Color.SPADES)),
+                Color.HEARTS, List.of(new Card(Value.KING, Color.HEARTS), new Card(Value.EIGHT, Color.HEARTS)),
+                Color.DIAMONDS, List.of(new Card(Value.EIGHT, Color.DIAMONDS))
+        ), pairOfEights.groupCardsByColor());
     }
 
     /**

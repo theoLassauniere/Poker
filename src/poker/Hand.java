@@ -109,7 +109,7 @@ public class Hand implements Comparable<Hand> {
     /**
      * Gets number of occurrences of each Value
      */
-    private Map<Value, List<Card>> groupCardsByValue() {
+    protected Map<Value, List<Card>> groupCardsByValue() {
         Map<Value, List<Card>> groups = new EnumMap<>(Value.class);
         for (Card card : getCards()) {
             groups.putIfAbsent(card.value(), new ArrayList<>());
@@ -121,7 +121,7 @@ public class Hand implements Comparable<Hand> {
     /**
      * Gets number of occurrences of each Color
      */
-    private Map<Color, List<Card>> groupCardsByColor() {
+    protected Map<Color, List<Card>> groupCardsByColor() {
         Map<Color, List<Card>> groups = new EnumMap<>(Color.class);
         for (Card card : getCards()) {
             groups.putIfAbsent(card.color(), new ArrayList<>());
@@ -153,7 +153,7 @@ public class Hand implements Comparable<Hand> {
                 result.add(cards.get(i)); //We add the card to result
                 if ((result.get(0).value().ordinal() - result.get(result.size() - 1).value().ordinal()) >= 3) { // This statement add the 5th card of the straight
                     result.add(cards.get(i + 1));
-                    return result;
+                    return result; // TODO: Support hands like A K Q J 10 10 10
                 }
             }
         }
