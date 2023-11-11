@@ -24,17 +24,19 @@ public record Winner(Hand winningHand, Patterns pattern, Card decisiveCard) {
                 .append(winningHand())
                 .append(" gagne avec ");
         switch (pattern()) {
-            case HIGHER -> stringRes.append("la carte la plus haute : ");
-            case PAIR -> stringRes.append("une paire de : ");
-            case DOUBLE_PAIR -> stringRes.append("une double paire dont la paire gagnante est ");
-            case THREE_OF_A_KIND -> stringRes.append("un brelan de : ");
-            case STRAIGHT -> stringRes.append("une suite dont la carte la plus haute est ");
-            case FLUSH -> stringRes.append("une couleur dont la carte décisive est ");
-            case FULL -> stringRes.append("un full contenant un brelan de : ");
-            case FOUR_OF_A_KIND -> stringRes.append("un carré de : ");
-            case STRAIGHT_FLUSH -> stringRes.append("une quinte flush dont la carte la plus haute est ");
-            default -> stringRes.append(pattern);
+            case HIGHER -> stringRes.append("la carte la plus haute : ").append(decisiveCard());
+            case PAIR -> stringRes.append("une paire de : ").append(decisiveCard().value());
+            case DOUBLE_PAIR ->
+                    stringRes.append("une double paire dont la paire gagnante est ").append(decisiveCard().value());
+            case THREE_OF_A_KIND -> stringRes.append("un brelan de : ").append(decisiveCard().value());
+            case STRAIGHT -> stringRes.append("une suite dont la carte la plus haute est ").append(decisiveCard());
+            case FLUSH -> stringRes.append("une couleur dont la carte décisive est ").append(decisiveCard());
+            case FULL -> stringRes.append("un full contenant un brelan de : ").append(decisiveCard().value());
+            case FOUR_OF_A_KIND -> stringRes.append("un carré de : ").append(decisiveCard().value());
+            case STRAIGHT_FLUSH ->
+                    stringRes.append("une quinte flush dont la carte la plus haute est ").append(decisiveCard());
+            default -> stringRes.append(pattern).append(decisiveCard());
         }
-        return stringRes.append(decisiveCard().value()).toString();
+        return stringRes.toString();
     }
 }
