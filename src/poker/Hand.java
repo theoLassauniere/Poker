@@ -240,15 +240,17 @@ public class Hand implements Comparable<Hand> {
      * @param pattern   the pattern for which we will inspect the values
      **/
     public Winner comparePatternValues(Patterns pattern, Hand otherHand) {
-        var handOneList = getPatterns().get(pattern);
-        var handTwoList = otherHand.getPatterns().get(pattern);
-        for (int i = 0; (i < handOneList.size() && i < handTwoList.size()); i++) {
-            var firstHandCards = handOneList.get(i);
-            var secondHandCards = handTwoList.get(i);
-            for (int cardIndex = 0; cardIndex < firstHandCards.size() && i < secondHandCards.size(); cardIndex++) {
-                int res = Math.max(Math.min(firstHandCards.get(cardIndex).value().compareTo(secondHandCards.get(cardIndex).value()), 1), -1);
+        var handOneList = getPatterns().get(pattern).iterator();
+        var handTwoList = otherHand.getPatterns().get(pattern).iterator();
+        while (handOneList.hasNext() && handTwoList.hasNext()) {
+            var firstHandCards = handOneList.next().iterator();
+            var secondHandCards = handTwoList.next().iterator();
+            while (firstHandCards.hasNext() && secondHandCards.hasNext()) {
+                var firstHandCard = firstHandCards.next();
+                var secondHandCard = secondHandCards.next();
+                int res = firstHandCard.compareTo(secondHandCard);
                 if (res != 0)
-                    return new Winner(res > 0 ? this : otherHand, pattern, (res > 0 ? handOneList : handTwoList).get(i).get(cardIndex));
+                    return new Winner(res > 0 ? this : otherHand, pattern, res > 0 ? firstHandCard : secondHandCard);
             }
         }
         return null;
