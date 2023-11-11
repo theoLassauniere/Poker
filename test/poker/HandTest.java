@@ -30,8 +30,6 @@ class HandTest {
             sevenCardHandStraightTriplicate, sevenCardHandAlmostStraight;
 
 
-
-
     @BeforeEach
     void setUp() {
         highestAce1 = new Hand(new ArrayList<>(List.of(
@@ -435,20 +433,23 @@ class HandTest {
      */
     @Test
     void testGetPattern() {
-        assertEquals(Map.of(Patterns.HIGHER, new ArrayList<>(List.of(
-                List.of(new Card(Value.ACE, Color.DIAMONDS)),
-                List.of(new Card(Value.KING, Color.HEARTS)),
-                List.of(new Card(Value.EIGHT, Color.DIAMONDS)),
-                List.of(new Card(Value.FIVE, Color.SPADES)),
-                List.of(new Card(Value.TWO, Color.CLUBS))
-        ))), highestAce1.getPatterns());
-        assertEquals(Map.of(Patterns.PAIR, List.of(List.of(
-                new Card(Value.EIGHT, Color.HEARTS),
-                new Card(Value.EIGHT, Color.DIAMONDS)
-        )), Patterns.HIGHER, List.of(
-                List.of(new Card(Value.KING, Color.SPADES)),
-                List.of(new Card(Value.FIVE, Color.SPADES)),
-                List.of(new Card(Value.TWO, Color.HEARTS)))), secondPairOfEights.getPatterns());
+        assertEquals(Map.of(
+                Patterns.HIGHER, List.of(
+                        List.of(new Card(Value.ACE, Color.DIAMONDS)),
+                        List.of(new Card(Value.KING, Color.HEARTS)),
+                        List.of(new Card(Value.EIGHT, Color.DIAMONDS)),
+                        List.of(new Card(Value.FIVE, Color.SPADES)),
+                        List.of(new Card(Value.TWO, Color.CLUBS))
+                )), highestAce1.getPatterns());
+        assertEquals(Map.of(
+                Patterns.PAIR, List.of(List.of(
+                        new Card(Value.EIGHT, Color.HEARTS),
+                        new Card(Value.EIGHT, Color.DIAMONDS)
+                )), Patterns.HIGHER, List.of(
+                        List.of(new Card(Value.KING, Color.SPADES)),
+                        List.of(new Card(Value.FIVE, Color.SPADES)),
+                        List.of(new Card(Value.TWO, Color.HEARTS))
+                )), secondPairOfEights.getPatterns());
         assertEquals(Map.of(
                 Patterns.DOUBLE_PAIR, List.of(List.of(
                         new Card(Value.EIGHT, Color.DIAMONDS), new Card(Value.EIGHT, Color.HEARTS),
@@ -456,37 +457,104 @@ class HandTest {
                 Patterns.PAIR, List.of(
                         List.of(new Card(Value.EIGHT, Color.DIAMONDS), new Card(Value.EIGHT, Color.HEARTS)),
                         List.of(new Card(Value.TWO, Color.CLUBS), new Card(Value.TWO, Color.SPADES))),
-                Patterns.HIGHER, List.of(List.of(new Card(Value.FIVE, Color.SPADES)))), doublePairOfTwosAndEights.getPatterns());
+                Patterns.HIGHER, List.of(List.of(new Card(Value.FIVE, Color.SPADES))
+                )), doublePairOfTwosAndEights.getPatterns());
         assertEquals(Map.of(
                 Patterns.THREE_OF_A_KIND, List.of(List.of(new Card(Value.TWO, Color.DIAMONDS), new Card(Value.TWO, Color.SPADES), new Card(Value.TWO, Color.HEARTS))),
-                Patterns.HIGHER, List.of(List.of(new Card(Value.EIGHT, Color.DIAMONDS)), List.of(new Card(Value.FIVE, Color.SPADES)))), threeTwos.getPatterns());
+                Patterns.HIGHER, List.of(List.of(new Card(Value.EIGHT, Color.DIAMONDS)), List.of(new Card(Value.FIVE, Color.SPADES))
+                )), threeTwos.getPatterns());
         assertEquals(Map.of(
                 Patterns.STRAIGHT, List.of(List.of(
-                        new Card(Value.ACE, Color.HEARTS),
-                        new Card(Value.KING, Color.HEARTS),
-                        new Card(Value.QUEEN, Color.HEARTS),
-                        new Card(Value.JACK, Color.DIAMONDS),
-                        new Card(Value.TEN, Color.HEARTS))), Patterns.HIGHER, List.of(List.of(new Card(Value.ACE, Color.HEARTS)),
-                        List.of(new Card(Value.KING, Color.HEARTS)), List.of(new Card(Value.QUEEN, Color.HEARTS)), List.of(new Card(Value.JACK, Color.DIAMONDS)),
-                        List.of(new Card(Value.TEN, Color.HEARTS)))), bigStraight.getPatterns());
+                        new Card(Value.ACE, Color.HEARTS), new Card(Value.KING, Color.HEARTS),
+                        new Card(Value.QUEEN, Color.HEARTS), new Card(Value.JACK, Color.DIAMONDS),
+                        new Card(Value.TEN, Color.HEARTS)
+                )), Patterns.HIGHER, List.of(
+                        List.of(new Card(Value.ACE, Color.HEARTS)), List.of(new Card(Value.KING, Color.HEARTS)),
+                        List.of(new Card(Value.QUEEN, Color.HEARTS)), List.of(new Card(Value.JACK, Color.DIAMONDS)),
+                        List.of(new Card(Value.TEN, Color.HEARTS))
+                )), bigStraight.getPatterns());
         assertEquals(Map.of(
-                Patterns.STRAIGHT, List.of(List.of(
-                        new Card(Value.SIX, Color.HEARTS),
-                        new Card(Value.FIVE, Color.HEARTS),
-                        new Card(Value.FOUR, Color.DIAMONDS),
-                        new Card(Value.THREE, Color.HEARTS),
-                        new Card(Value.TWO, Color.HEARTS)
-                )), Patterns.HIGHER, List.of(List.of(new Card(Value.SIX, Color.HEARTS)), List.of(new Card(Value.FIVE, Color.HEARTS)),
-                        List.of(new Card(Value.FOUR, Color.DIAMONDS)), List.of(new Card(Value.THREE, Color.HEARTS)),
-                        List.of(new Card(Value.TWO, Color.HEARTS)))), littleStraight.getPatterns());
-        assertEquals(Map.of(Patterns.STRAIGHT, new ArrayList<>(List.of(Value.SIX))), almostStraightFlush.getPatterns());
-        assertEquals(Map.of(Patterns.FLUSH, new ArrayList<>(List.of(Value.ACE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.ACE, Value.KING, Value.QUEEN, Value.JACK, Value.TWO))), aceDiamonds.getPatterns());
-        assertEquals(Map.of(Patterns.FLUSH, new ArrayList<>(List.of(Value.NINE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.NINE, Value.FIVE, Value.FOUR, Value.THREE, Value.TWO))), nineDiamonds.getPatterns());
-        assertEquals(Map.of(Patterns.FULL, new ArrayList<>(List.of(Value.EIGHT))), fullThreeEight.getPatterns());
-        assertEquals(Map.of(Patterns.FULL, new ArrayList<>(List.of(Value.ACE))), fullThreeAce.getPatterns());
-        assertEquals(Map.of(Patterns.FOUR_OF_A_KIND, new ArrayList<>(List.of(Value.ACE)), Patterns.HIGHER, new ArrayList<>(List.of(Value.KING))), fourAces.getPatterns());
-        assertEquals(Map.of(Patterns.STRAIGHT_FLUSH, new ArrayList<>(List.of(Value.ACE))), bigStraightFlush.getPatterns());
-        assertEquals(Map.of(Patterns.STRAIGHT_FLUSH, new ArrayList<>(List.of(Value.SIX))), littleStraightFlush.getPatterns());
+                Patterns.STRAIGHT, List.of(List.of(new Card(Value.SIX, Color.HEARTS),
+                        new Card(Value.FIVE, Color.HEARTS), new Card(Value.FOUR, Color.DIAMONDS),
+                        new Card(Value.THREE, Color.HEARTS), new Card(Value.TWO, Color.HEARTS)
+                )), Patterns.HIGHER, List.of(List.of(new Card(Value.SIX, Color.HEARTS)),
+                        List.of(new Card(Value.FIVE, Color.HEARTS)), List.of(new Card(Value.FOUR, Color.DIAMONDS)),
+                        List.of(new Card(Value.THREE, Color.HEARTS)), List.of(new Card(Value.TWO, Color.HEARTS))
+                )), littleStraight.getPatterns());
+        assertEquals(Map.of(
+                Patterns.STRAIGHT, List.of(List.of(new Card(Value.SIX, Color.HEARTS),
+                        new Card(Value.FIVE, Color.HEARTS), new Card(Value.FOUR, Color.HEARTS),
+                        new Card(Value.THREE, Color.HEARTS), new Card(Value.TWO, Color.SPADES)
+                )), Patterns.HIGHER, List.of(List.of(new Card(Value.SIX, Color.HEARTS)),
+                        List.of(new Card(Value.FIVE, Color.HEARTS)), List.of(new Card(Value.FOUR, Color.HEARTS)),
+                        List.of(new Card(Value.THREE, Color.HEARTS)), List.of(new Card(Value.TWO, Color.SPADES))
+                )), almostStraightFlush.getPatterns());
+        assertEquals(Map.of(
+                Patterns.FLUSH, List.of(List.of(new Card(Value.ACE, Color.DIAMONDS),
+                        new Card(Value.KING, Color.DIAMONDS), new Card(Value.QUEEN, Color.DIAMONDS),
+                        new Card(Value.JACK, Color.DIAMONDS), new Card(Value.TWO, Color.DIAMONDS)
+                )), Patterns.HIGHER, List.of(List.of(new Card(Value.ACE, Color.DIAMONDS)),
+                        List.of(new Card(Value.KING, Color.DIAMONDS)), List.of(new Card(Value.QUEEN, Color.DIAMONDS)),
+                        List.of(new Card(Value.JACK, Color.DIAMONDS)), List.of(new Card(Value.TWO, Color.DIAMONDS))
+                )), aceDiamonds.getPatterns());
+        assertEquals(Map.of(
+                Patterns.FLUSH, List.of(List.of(new Card(Value.NINE, Color.DIAMONDS),
+                        new Card(Value.FIVE, Color.DIAMONDS), new Card(Value.FOUR, Color.DIAMONDS),
+                        new Card(Value.THREE, Color.DIAMONDS), new Card(Value.TWO, Color.DIAMONDS)
+                )), Patterns.HIGHER, List.of(List.of(new Card(Value.NINE, Color.DIAMONDS)),
+                        List.of(new Card(Value.FIVE, Color.DIAMONDS)), List.of(new Card(Value.FOUR, Color.DIAMONDS)),
+                        List.of(new Card(Value.THREE, Color.DIAMONDS)), List.of(new Card(Value.TWO, Color.DIAMONDS))
+                )), nineDiamonds.getPatterns());
+        assertEquals(Map.of(
+                Patterns.FULL, List.of(List.of(new Card(Value.EIGHT, Color.DIAMONDS),
+                        new Card(Value.EIGHT, Color.SPADES), new Card(Value.EIGHT, Color.HEARTS),
+                        new Card(Value.TWO, Color.DIAMONDS), new Card(Value.TWO, Color.HEARTS)
+                )), Patterns.THREE_OF_A_KIND, List.of(List.of(new Card(Value.EIGHT, Color.DIAMONDS),
+                        new Card(Value.EIGHT, Color.SPADES), new Card(Value.EIGHT, Color.HEARTS)
+                )), Patterns.PAIR, List.of(List.of(new Card(Value.TWO, Color.DIAMONDS), new Card(Value.TWO, Color.HEARTS))
+                )), fullThreeEight.getPatterns());
+        assertEquals(Map.of(
+                Patterns.FULL, List.of(List.of(new Card(Value.ACE, Color.DIAMONDS),
+                        new Card(Value.ACE, Color.SPADES), new Card(Value.ACE, Color.HEARTS),
+                        new Card(Value.TWO, Color.DIAMONDS), new Card(Value.TWO, Color.HEARTS)
+                )), Patterns.THREE_OF_A_KIND, List.of(List.of(new Card(Value.ACE, Color.DIAMONDS),
+                        new Card(Value.ACE, Color.SPADES), new Card(Value.ACE, Color.HEARTS)
+                )), Patterns.PAIR, List.of(List.of(new Card(Value.TWO, Color.DIAMONDS), new Card(Value.TWO, Color.HEARTS))
+                )), fullThreeAce.getPatterns());
+        assertEquals(Map.of(
+                Patterns.FOUR_OF_A_KIND, List.of(List.of(
+                        new Card(Value.ACE, Color.DIAMONDS), new Card(Value.ACE, Color.CLUBS),
+                        new Card(Value.ACE, Color.SPADES), new Card(Value.ACE, Color.HEARTS)
+                )), Patterns.HIGHER, List.of(List.of(new Card(Value.KING, Color.SPADES))
+                )), fourAces.getPatterns());
+        assertEquals(Map.of(
+                Patterns.STRAIGHT_FLUSH, List.of(List.of(new Card(Value.ACE, Color.HEARTS),
+                        new Card(Value.KING, Color.HEARTS), new Card(Value.QUEEN, Color.HEARTS),
+                        new Card(Value.JACK, Color.HEARTS), new Card(Value.TEN, Color.HEARTS)
+                )), Patterns.STRAIGHT, List.of(List.of(new Card(Value.ACE, Color.HEARTS),
+                        new Card(Value.KING, Color.HEARTS), new Card(Value.QUEEN, Color.HEARTS),
+                        new Card(Value.JACK, Color.HEARTS), new Card(Value.TEN, Color.HEARTS)
+                )), Patterns.FLUSH, List.of(List.of(new Card(Value.ACE, Color.HEARTS),
+                        new Card(Value.KING, Color.HEARTS), new Card(Value.QUEEN, Color.HEARTS),
+                        new Card(Value.JACK, Color.HEARTS), new Card(Value.TEN, Color.HEARTS)
+                )), Patterns.HIGHER, List.of(List.of(new Card(Value.ACE, Color.HEARTS)),
+                        List.of(new Card(Value.KING, Color.HEARTS)), List.of(new Card(Value.QUEEN, Color.HEARTS)),
+                        List.of(new Card(Value.JACK, Color.HEARTS)), List.of(new Card(Value.TEN, Color.HEARTS))
+                )), bigStraightFlush.getPatterns());
+        assertEquals(Map.of(
+                Patterns.STRAIGHT_FLUSH, List.of(List.of(new Card(Value.SIX, Color.HEARTS),
+                        new Card(Value.FIVE, Color.HEARTS), new Card(Value.FOUR, Color.HEARTS),
+                        new Card(Value.THREE, Color.HEARTS), new Card(Value.TWO, Color.HEARTS)
+                )), Patterns.STRAIGHT, List.of(List.of(new Card(Value.SIX, Color.HEARTS),
+                        new Card(Value.FIVE, Color.HEARTS), new Card(Value.FOUR, Color.HEARTS),
+                        new Card(Value.THREE, Color.HEARTS), new Card(Value.TWO, Color.HEARTS)
+                )), Patterns.FLUSH, List.of(List.of(new Card(Value.SIX, Color.HEARTS),
+                        new Card(Value.FIVE, Color.HEARTS), new Card(Value.FOUR, Color.HEARTS),
+                        new Card(Value.THREE, Color.HEARTS), new Card(Value.TWO, Color.HEARTS)
+                )), Patterns.HIGHER, List.of(List.of(new Card(Value.SIX, Color.HEARTS)),
+                        List.of(new Card(Value.FIVE, Color.HEARTS)), List.of(new Card(Value.FOUR, Color.HEARTS)),
+                        List.of(new Card(Value.THREE, Color.HEARTS)), List.of(new Card(Value.TWO, Color.HEARTS))
+                )), littleStraightFlush.getPatterns());
     }
 
     /**
