@@ -24,11 +24,11 @@ class GameTest {
     void setUp() {
         outputStream = new ByteArrayOutputStream();
         Game.outputStream = new PrintStream(outputStream);
-        oneCardGame = new Game(1, "Poker");
-        twoCardGame = new Game(2, "Poker");
-        threeCardGame = new Game(3, "Poker");
-        fourCardGame = new Game(4, "Poker");
-        fiveCardGame = new Game(5, "Poker");
+        oneCardGame = new Game(1);
+        twoCardGame = new Game(2);
+        threeCardGame = new Game(3);
+        fourCardGame = new Game(4);
+        fiveCardGame = new Game(5);
     }
 
     @ParameterizedTest
@@ -115,7 +115,7 @@ class GameTest {
 
     private void gameTest(Game game, String firstHand, String secondHand, String output) {
         System.setIn(new ByteArrayInputStream((firstHand + "\n" + secondHand).getBytes())); // Redirect stdin
-        assertDoesNotThrow(game::start); // The game should start without errors
+        assertDoesNotThrow(game::poker); // The game should start without errors
 
         String methodOutput = outputStream.toString().trim(); // Reads the output stream
         assertEquals(output, methodOutput.substring("Main 1: Main 2: ".length()));
@@ -131,6 +131,6 @@ class GameTest {
     }, delimiter = ';')
     void duplicationTest(String firstHand, String secondHand) {
         System.setIn(new ByteArrayInputStream((firstHand + "\n" + secondHand).getBytes())); // Redirect stdin
-        assertThrowsExactly(IllegalArgumentException.class, fiveCardGame::start); // The game should start with errors
+        assertThrowsExactly(IllegalArgumentException.class, fiveCardGame::poker); // The game should start with errors
     }
 }

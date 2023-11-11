@@ -67,6 +67,15 @@ public class Hand implements Comparable<Hand> {
     }
 
     /**
+     * Add a card to the Hand
+     *
+     * @param card
+     */
+    public void addCard(Card card) {
+        cards.add(card);
+    }
+
+    /**
      * Parses hand
      *
      * @param text Hand input
