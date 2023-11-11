@@ -5,10 +5,10 @@ package poker;
  *
  * @param winningHand  The hand that is winning (null if equality)
  * @param pattern      How was the victory achieved
- * @param decisiveValue The value that has been decisive of this winning situation
+ * @param decisiveCard The card that has been decisive of this winning situation
  * @author Team B
  */
-public record Winner(Hand winningHand, Patterns pattern, Value decisiveValue) {
+public record Winner(Hand winningHand, Patterns pattern, Card decisiveCard) {
     /**
      * Is there an equality between hands ? (No winner)
      */
@@ -35,6 +35,6 @@ public record Winner(Hand winningHand, Patterns pattern, Value decisiveValue) {
             case STRAIGHT_FLUSH -> stringRes.append("une quinte flush dont la carte la plus haute est ");
             default -> stringRes.append(pattern);
         }
-        return stringRes.append(decisiveValue()).toString();
+        return stringRes.append(decisiveCard().value()).toString();
     }
 }

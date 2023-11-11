@@ -393,24 +393,24 @@ class HandTest {
      */
     @Test
     void testComparePattern() {
-        assertEquals(new Winner(secondPairOfEights, Patterns.PAIR, Value.EIGHT), secondPairOfEights.comparePatterns(highestAce1));
-        assertEquals(new Winner(pairOfEights, Patterns.PAIR, Value.EIGHT), highestAce1.comparePatterns(pairOfEights));
-        assertEquals(new Winner(secondPairOfEights, Patterns.PAIR, Value.EIGHT), secondPairOfEights.comparePatterns(pairOfTwos));
-        assertEquals(new Winner(threeTwos, Patterns.THREE_OF_A_KIND, Value.TWO), threeTwos.comparePatterns(pairOfTwos));
+        assertEquals(new Winner(secondPairOfEights, Patterns.PAIR, new Card(Value.EIGHT, Color.HEARTS)), secondPairOfEights.comparePatterns(highestAce1));
+        assertEquals(new Winner(pairOfEights, Patterns.PAIR, new Card(Value.EIGHT, Color.HEARTS)), highestAce1.comparePatterns(pairOfEights));
+        assertEquals(new Winner(secondPairOfEights, Patterns.PAIR, new Card(Value.EIGHT, Color.HEARTS)), secondPairOfEights.comparePatterns(pairOfTwos));
+        assertEquals(new Winner(threeTwos, Patterns.THREE_OF_A_KIND, new Card(Value.TWO, Color.DIAMONDS)), threeTwos.comparePatterns(pairOfTwos));
         assertEquals(new Winner(null, Patterns.EQUALITY, null), pairOfEights.comparePatterns(secondPairOfEights));
-        assertEquals(new Winner(highestAce1, Patterns.HIGHER, Value.ACE), highestAce1.comparePatterns(highestKing));
-        assertEquals(new Winner(pairOfEights, Patterns.PAIR, Value.EIGHT), pairOfEights.comparePatterns(highestAce1));
-        assertEquals(new Winner(pairOfEights, Patterns.PAIR, Value.EIGHT), pairOfEights.comparePatterns(pairOfTwos));
-        assertEquals(new Winner(thirdPairOfEights, Patterns.HIGHER, Value.ACE), pairOfEights.comparePatterns(thirdPairOfEights));
-        assertEquals(new Winner(doublePairOfTwosAndEights, Patterns.DOUBLE_PAIR, Value.EIGHT), doublePairOfTwosAndEights.comparePatterns(highestKing));
-        assertEquals(new Winner(fourAces, Patterns.FOUR_OF_A_KIND, Value.ACE), fourAces.comparePatterns(pairOfEights));
-        assertEquals(new Winner(bigStraight, Patterns.STRAIGHT, Value.ACE), bigStraight.comparePatterns(littleStraight));
-        assertEquals(new Winner(bigStraight, Patterns.STRAIGHT, Value.ACE), bigStraight.comparePatterns(pairOfEights));
-        assertEquals(new Winner(aceDiamonds, Patterns.FLUSH, Value.ACE), aceDiamonds.comparePatterns(nineDiamonds));
-        assertEquals(new Winner(fourAces, Patterns.FOUR_OF_A_KIND, Value.ACE), aceDiamonds.comparePatterns(fourAces));
-        assertEquals(new Winner(fullThreeEight, Patterns.FULL, Value.EIGHT), fullThreeEight.comparePatterns(aceDiamonds));
-        assertEquals(new Winner(fullThreeAce, Patterns.FULL, Value.ACE), fullThreeEight.comparePatterns(fullThreeAce));
-        assertEquals(new Winner(fullThreeAce, Patterns.FULL, Value.ACE), fullThreeAce.comparePatterns(thirdPairOfEights));
+        assertEquals(new Winner(highestAce1, Patterns.HIGHER, new Card(Value.ACE, Color.DIAMONDS)), highestAce1.comparePatterns(highestKing));
+        assertEquals(new Winner(pairOfEights, Patterns.PAIR, new Card(Value.EIGHT, Color.HEARTS)), pairOfEights.comparePatterns(highestAce1));
+        assertEquals(new Winner(pairOfEights, Patterns.PAIR, new Card(Value.EIGHT, Color.HEARTS)), pairOfEights.comparePatterns(pairOfTwos));
+        assertEquals(new Winner(thirdPairOfEights, Patterns.HIGHER, new Card(Value.ACE, Color.SPADES)), pairOfEights.comparePatterns(thirdPairOfEights));
+        assertEquals(new Winner(doublePairOfTwosAndEights, Patterns.DOUBLE_PAIR, new Card(Value.EIGHT, Color.DIAMONDS)), doublePairOfTwosAndEights.comparePatterns(highestKing));
+        assertEquals(new Winner(fourAces, Patterns.FOUR_OF_A_KIND, new Card(Value.ACE, Color.DIAMONDS)), fourAces.comparePatterns(pairOfEights));
+        assertEquals(new Winner(bigStraight, Patterns.STRAIGHT, new Card(Value.ACE, Color.HEARTS)), bigStraight.comparePatterns(littleStraight));
+        assertEquals(new Winner(bigStraight, Patterns.STRAIGHT, new Card(Value.ACE, Color.HEARTS)), bigStraight.comparePatterns(pairOfEights));
+        assertEquals(new Winner(aceDiamonds, Patterns.FLUSH, new Card(Value.ACE, Color.DIAMONDS)), aceDiamonds.comparePatterns(nineDiamonds));
+        assertEquals(new Winner(fourAces, Patterns.FOUR_OF_A_KIND, new Card(Value.ACE, Color.DIAMONDS)), aceDiamonds.comparePatterns(fourAces));
+        assertEquals(new Winner(fullThreeEight, Patterns.FULL, new Card(Value.EIGHT, Color.DIAMONDS)), fullThreeEight.comparePatterns(aceDiamonds));
+        assertEquals(new Winner(fullThreeAce, Patterns.FULL, new Card(Value.ACE, Color.DIAMONDS)), fullThreeEight.comparePatterns(fullThreeAce));
+        assertEquals(new Winner(fullThreeAce, Patterns.FULL, new Card(Value.ACE, Color.DIAMONDS)), fullThreeAce.comparePatterns(thirdPairOfEights));
     }
 
     /**

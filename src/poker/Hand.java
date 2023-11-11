@@ -248,7 +248,7 @@ public class Hand implements Comparable<Hand> {
             for (int cardIndex = 0; cardIndex < firstHandCards.size() && i < secondHandCards.size(); cardIndex++) {
                 int res = Math.max(Math.min(firstHandCards.get(cardIndex).value().compareTo(secondHandCards.get(cardIndex).value()), 1), -1);
                 if (res != 0)
-                    return new Winner(res > 0 ? this : otherHand, pattern, (res > 0 ? handOneList : handTwoList).get(i).get(cardIndex).value());
+                    return new Winner(res > 0 ? this : otherHand, pattern, (res > 0 ? handOneList : handTwoList).get(i).get(cardIndex));
             }
         }
         return null;
@@ -261,9 +261,9 @@ public class Hand implements Comparable<Hand> {
     public Winner comparePatterns(Hand otherHand) {
         for (Patterns p : Patterns.values()) {
             if (patterns.containsKey(p) && !otherHand.patterns.containsKey(p)) // Only this hand has the pattern
-                return new Winner(this, p, patterns.get(p).get(0).get(0).value());
+                return new Winner(this, p, patterns.get(p).get(0).get(0));
             else if (!patterns.containsKey(p) && otherHand.patterns.containsKey(p)) // Only the other hand has the pattern
-                return new Winner(otherHand, p, otherHand.patterns.get(p).get(0).get(0).value());
+                return new Winner(otherHand, p, otherHand.patterns.get(p).get(0).get(0));
             else if (patterns.containsKey(p) && otherHand.patterns.containsKey(p)) { // Both hands have the pattern
                 Winner comparisonResult = comparePatternValues(p, otherHand);
                 if (comparisonResult != null) return comparisonResult;
