@@ -206,7 +206,9 @@ public class Hand implements Comparable<Hand> {
 
         if (result.containsKey(Patterns.FLUSH) && result.containsKey(Patterns.STRAIGHT)) {
             result.putIfAbsent(Patterns.STRAIGHT_FLUSH, new ArrayList<>());
-            result.get(Patterns.STRAIGHT_FLUSH).add(Stream.of(result.get(Patterns.FLUSH).get(0), result.get(Patterns.STRAIGHT).get(0)).flatMap(Collection::stream).toList());
+            var straightCards = result.get(Patterns.STRAIGHT).get(0);
+            var commonCards = result.get(Patterns.FLUSH).get(0).stream().filter(straightCards::contains).toList();
+            if (commonCards.size() >= 5) result.get(Patterns.STRAIGHT_FLUSH).add(commonCards);
         }
         if (result.containsKey(Patterns.PAIR) && result.containsKey(Patterns.THREE_OF_A_KIND)) {
             result.putIfAbsent(Patterns.FULL, new ArrayList<>());
