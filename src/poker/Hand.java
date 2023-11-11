@@ -12,9 +12,10 @@ import java.util.stream.Stream;
  */
 
 public class Hand implements Comparable<Hand> {
-    private final List<Card> cards;
-    private final Map<Patterns, List<List<Card>>> patterns;
+    private List<Card> cards;
+    private Map<Patterns, List<List<Card>>> patterns;
     private String name;
+    private List<Card> facticeHand;
 
     /**
      * Hand constructor
@@ -28,6 +29,7 @@ public class Hand implements Comparable<Hand> {
     public Hand(String name, List<Card> hand) {
         this.name = name;
         this.cards = hand;
+        this.facticeHand = new ArrayList<>(hand);
         sortHand();
         patterns = findAllPatterns();
     }
@@ -66,15 +68,40 @@ public class Hand implements Comparable<Hand> {
         return string.append(')').toString();
     }
 
-    /**
-     * Add a card to the Hand
-     *
-     * @param card
-     */
     public void addCard(Card card) {
-        cards.add(card);
+        facticeHand.add(card);
+        patterns = getPatterns();
+        getBestHand();
+        sortHand();
+
     }
 
+    public void getBestHand() {
+        Patterns best = bestPattern();
+        List<Card> cardsArray = new ArrayList<>();
+        if (!best.equals(Patterns.HIGHER)) {
+            for (List<Card> c : patterns.get(best)) {
+                cardsArray.addAll(c);
+            }
+        }
+        for (Card c : facticeHand) {
+            if (!(cardsArray.contains(c)) && cardsArray.size() < 5) {
+                cardsArray.add(c);
+            }
+        }
+        this.cards = cardsArray;
+        sortHand();
+        patterns = getPatterns();
+    }
+
+    public Patterns bestPattern() {
+        patterns = getPatterns();
+        var i = 0;
+        while (!patterns.containsKey(Patterns.values()[i])) {
+            i = i + 1;
+        }
+        return Patterns.values()[i];
+    }
     /**
      * Parses hand
      *

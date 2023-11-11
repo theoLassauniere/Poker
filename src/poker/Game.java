@@ -36,7 +36,7 @@ public class Game {
     public Game(int handSize, int numberOfPlayers) throws IllegalArgumentException {
         if (numberOfPlayers < 2)
             throw new IllegalArgumentException("There must be at least two players");
-        if (numberOfPlayers != 2) throw new UnsupportedOperationException("Only two players are supported");
+        //if (numberOfPlayers != 2) throw new UnsupportedOperationException("Only two players are supported");
         this.handSize = handSize;
         deck = Card.getDeck();
         random = new Random();
@@ -95,6 +95,18 @@ public class Game {
         ArrayList<Card> river = extraction(1);
         outputStream.print("River : ");
         printArray(river);
+
+        ArrayList<Hand> tournament = new ArrayList<>();
+        tournament.addAll(List.of(hands));
+        while (tournament.size() > 2) {
+            Hand hand1 = tournament.get(0);
+            Hand hand2 = tournament.get(1);
+            tournament.remove(hand1);
+            tournament.remove(hand2);
+            Hand winningHand = hand1.comparePatterns(hand2).winningHand();
+            if (winningHand != null) tournament.add(0, winningHand);
+        }
+        outputStream.println(tournament.get(0).comparePatterns(tournament.get(1)));
     }
 
     public void poker() throws IllegalArgumentException, ParseException {
