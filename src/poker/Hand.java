@@ -29,7 +29,7 @@ public class Hand implements Comparable<Hand> {
         this.name = name;
         this.cards = hand;
         sortHand();
-        patterns = getPatterns();
+        patterns = findAllPatterns();
     }
 
     public String getName() {
@@ -132,7 +132,9 @@ public class Hand implements Comparable<Hand> {
     }
 
     /**
-     * Find the best straight in hand and return an array of this straight
+     * Find the best straight in hand
+     *
+     * @return Cards realising the straight or empty if there's no straight
      */
     public List<Card> findStraight() {
         if (cards.size() < 5) return Collections.emptyList();
@@ -162,11 +164,11 @@ public class Hand implements Comparable<Hand> {
     }
 
     /**
-     * Is there a flush in the hand?
+     * Finds flush in hand
      *
      * @return Cards realising the flush or empty if there's no flush
      */
-    public List<Card> flushDetection() {
+    public List<Card> findFlush() {
         if (cards.size() < 5) return Collections.emptyList();
         for (var entry : groupCardsByColor().entrySet())
             if (entry.getValue().size() >= 5) return entry.getValue();
@@ -174,9 +176,9 @@ public class Hand implements Comparable<Hand> {
     }
 
     /**
-     * Gets the patterns and card that realize them
+     * Gets all the patterns in hand and cards that realize them
      **/
-    public Map<Patterns, List<List<Card>>> getPatterns() {
+    public Map<Patterns, List<List<Card>>> findAllPatterns() {
         EnumMap<Patterns, List<List<Card>>> result = new EnumMap<>(Patterns.class);
         BiConsumer<Patterns, List<Card>> addToEnum = (pattern, patternCards) -> {
             if (pattern == null || patternCards.isEmpty()) return;
@@ -184,7 +186,7 @@ public class Hand implements Comparable<Hand> {
             result.get(pattern).add(patternCards);
         };
 
-        addToEnum.accept(Patterns.FLUSH, flushDetection());
+        addToEnum.accept(Patterns.FLUSH, findFlush());
         addToEnum.accept(Patterns.STRAIGHT, findStraight());
 
         var entries = groupCardsByValue();
@@ -211,6 +213,10 @@ public class Hand implements Comparable<Hand> {
             addToEnum.accept(Patterns.DOUBLE_PAIR, result.get(Patterns.PAIR).stream().flatMap(Collection::stream).toList());
 
         return result;
+    }
+
+    public Map<Patterns, List<List<Card>>> getPatterns() {
+        return patterns;
     }
 
     /**
@@ -253,11 +259,11 @@ public class Hand implements Comparable<Hand> {
      **/
     public Winner comparePatterns(Hand otherHand) {
         for (Patterns p : Patterns.values()) {
-            if (patterns.containsKey(p) && !otherHand.patterns.containsKey(p)) // Only this hand has the pattern
-                return new Winner(this, p, patterns.get(p).get(0).get(0));
-            else if (!patterns.containsKey(p) && otherHand.patterns.containsKey(p)) // Only the other hand has the pattern
-                return new Winner(otherHand, p, otherHand.patterns.get(p).get(0).get(0));
-            else if (patterns.containsKey(p) && otherHand.patterns.containsKey(p)) { // Both hands have the pattern
+            if (getPatterns().containsKey(p) && !otherHand.getPatterns().containsKey(p)) // Only this hand has the pattern
+                return new Winner(this, p, getPatterns().get(p).get(0).get(0));
+            else if (!getPatterns().containsKey(p) && otherHand.getPatterns().containsKey(p)) // Only the other hand has the pattern
+                return new Winner(otherHand, p, otherHand.getPatterns().get(p).get(0).get(0));
+            else if (getPatterns().containsKey(p) && otherHand.getPatterns().containsKey(p)) { // Both hands have the pattern
                 Winner comparisonResult = comparePatternValues(p, otherHand);
                 if (comparisonResult != null) return comparisonResult;
             }
