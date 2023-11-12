@@ -64,6 +64,9 @@ public class Game {
             }
             cardsArray.add(randomCard);
         }
+        for (Hand hand : hands) {
+            hand.findbestPattern();
+        }
         return cardsArray;
     }
 
@@ -131,10 +134,9 @@ public class Game {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             outputStream.print("1.Poker\n2.Texas Hold'em\nEntrez le numéro souhaité : ");
-            String typeGame;
-            typeGame = scanner.nextLine();
+            String typeGame = scanner.nextLine();
             try {
-                if (typeGame.equals("1")) new Game(2).poker();
+                if (typeGame.equals("1")) new Game().poker();
                 else if (typeGame.equals("2")) new Game(5, 4).texasHoldem();
                 else throw new IllegalArgumentException("The entry is not valid");
                 break;

@@ -12,10 +12,9 @@ import java.util.stream.Stream;
  */
 
 public class Hand implements Comparable<Hand> {
-    private List<Card> cards;
+    private final List<Card> cards;
     private Map<Patterns, List<List<Card>>> patterns;
     private String name;
-    private List<Card> facticeHand;
 
     /**
      * Hand constructor
@@ -29,7 +28,6 @@ public class Hand implements Comparable<Hand> {
     public Hand(String name, List<Card> hand) {
         this.name = name;
         this.cards = hand;
-        this.facticeHand = new ArrayList<>(hand);
         sortHand();
         patterns = findAllPatterns();
     }
@@ -72,38 +70,37 @@ public class Hand implements Comparable<Hand> {
     }
 
     public void addCard(Card card) {
-        facticeHand.add(card);
-        patterns = getPatterns();
-        getBestHand();
+        cards.add(card);
         sortHand();
-
     }
 
-    public void getBestHand() {
-        Patterns best = bestPattern();
-        List<Card> cardsArray = new ArrayList<>();
-        if (!best.equals(Patterns.HIGHER)) {
-            for (List<Card> c : patterns.get(best)) {
-                cardsArray.addAll(c);
-            }
-        }
-        for (Card c : facticeHand) {
-            if (!(cardsArray.contains(c)) && cardsArray.size() < 5) {
-                cardsArray.add(c);
-            }
-        }
-        this.cards = cardsArray;
-        sortHand();
-        patterns = getPatterns();
-    }
-
-    public Patterns bestPattern() {
-        patterns = getPatterns();
+    public void findbestPattern() {
+        Map<Patterns, List<List<Card>>> allPatterns = findAllPatterns();
         var i = 0;
-        while (!patterns.containsKey(Patterns.values()[i])) {
+        while (!allPatterns.containsKey(Patterns.values()[i])) {
             i = i + 1;
         }
-        return Patterns.values()[i];
+        Patterns best = Patterns.values()[i];
+
+        Map<Patterns, List<List<Card>>> bestPatternCombination = new HashMap<>();
+        if (!best.equals(Patterns.HIGHER)) {
+            bestPatternCombination.put(best, allPatterns.get(best));
+            for (int k = 0; k < 5 - allPatterns.get(best).get(0).size(); k++) {
+                if (bestPatternCombination.containsKey(Patterns.HIGHER))
+                    bestPatternCombination.get(Patterns.HIGHER).add(allPatterns.get(Patterns.HIGHER).get(k));
+                else
+                    bestPatternCombination.put(Patterns.HIGHER, new ArrayList<>(List.of(allPatterns.get(Patterns.HIGHER).get(k))));
+            }
+        } else {
+            for (int k = 0; k < 5; k++) {
+                if (bestPatternCombination.containsKey(Patterns.HIGHER))
+                    bestPatternCombination.get(Patterns.HIGHER).add(allPatterns.get(Patterns.HIGHER).get(k));
+                else
+                    bestPatternCombination.put(Patterns.HIGHER, new ArrayList<>(List.of(allPatterns.get(Patterns.HIGHER).get(k))));
+            }
+        }
+        patterns = bestPatternCombination;
+
     }
 
     /**
