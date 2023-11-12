@@ -29,7 +29,7 @@ public class Hand implements Comparable<Hand> {
         this.name = name;
         this.cards = hand;
         sortHand();
-        patterns = findAllPatterns();
+        patterns = findBestPatterns();
     }
 
     public String getName() {
@@ -69,38 +69,26 @@ public class Hand implements Comparable<Hand> {
         return string.append(')').toString();
     }
 
-    public void addCard(Card card) {
-        cards.add(card);
+    public void addCards(List<Card> cardsToAdd) {
+        cards.addAll(cardsToAdd);
         sortHand();
+        patterns = findBestPatterns();
     }
 
-    public void findbestPattern() {
-        Map<Patterns, List<List<Card>>> allPatterns = findAllPatterns();
-        var i = 0;
-        while (!allPatterns.containsKey(Patterns.values()[i])) {
-            i = i + 1;
-        }
-        Patterns best = Patterns.values()[i];
-
-        Map<Patterns, List<List<Card>>> bestPatternCombination = new HashMap<>();
-        if (!best.equals(Patterns.HIGHER)) {
-            bestPatternCombination.put(best, allPatterns.get(best));
-            for (int k = 0; k < 5 - allPatterns.get(best).get(0).size(); k++) {
-                if (bestPatternCombination.containsKey(Patterns.HIGHER))
-                    bestPatternCombination.get(Patterns.HIGHER).add(allPatterns.get(Patterns.HIGHER).get(k));
-                else
-                    bestPatternCombination.put(Patterns.HIGHER, new ArrayList<>(List.of(allPatterns.get(Patterns.HIGHER).get(k))));
-            }
-        } else {
-            for (int k = 0; k < 5; k++) {
-                if (bestPatternCombination.containsKey(Patterns.HIGHER))
-                    bestPatternCombination.get(Patterns.HIGHER).add(allPatterns.get(Patterns.HIGHER).get(k));
-                else
-                    bestPatternCombination.put(Patterns.HIGHER, new ArrayList<>(List.of(allPatterns.get(Patterns.HIGHER).get(k))));
+    public Map<Patterns, List<List<Card>>> findBestPatterns() {
+        Map<Patterns, List<List<Card>>> bestPatternCombination = new EnumMap<>(Patterns.class);
+        int currentHandSize = 0;
+        for (var entry : findAllPatterns().entrySet()) {
+            for (var patternCards : entry.getValue()) {
+                if (currentHandSize + patternCards.size() <= 5) {
+                    bestPatternCombination.putIfAbsent(entry.getKey(), new ArrayList<>());
+                    bestPatternCombination.get(entry.getKey()).add(patternCards);
+                    currentHandSize += patternCards.size();
+                    if (currentHandSize == 5) return bestPatternCombination;
+                }
             }
         }
-        patterns = bestPatternCombination;
-
+        return bestPatternCombination;
     }
 
     /**

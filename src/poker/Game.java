@@ -33,7 +33,6 @@ public class Game {
     public Game(int handSize, int numberOfPlayers) throws IllegalArgumentException {
         if (numberOfPlayers < 2)
             throw new IllegalArgumentException("There must be at least two players");
-        //if (numberOfPlayers != 2) throw new UnsupportedOperationException("Only two players are supported");
         this.handSize = handSize;
         deck = Card.getDeck();
         random = new Random();
@@ -48,21 +47,16 @@ public class Game {
     }
 
     private void waiting(Scanner scanner) {
-        outputStream.print("Pressez une touche pour continuer\n");
+        outputStream.print("Pressez une touche pour continuer");
         scanner.nextLine();
+        outputStream.println();
     }
 
     private ArrayList<Card> extraction(int numberOfCards) {
         ArrayList<Card> cardsArray = new ArrayList<>();
-        for (int i = 0; i < numberOfCards; i++) {
-            Card randomCard = getRandomCard();
-            for (Hand hand : hands) {
-                hand.addCard(randomCard);
-            }
-            cardsArray.add(randomCard);
-        }
+        for (int i = 0; i < numberOfCards; i++) cardsArray.add(getRandomCard());
         for (Hand hand : hands) {
-            hand.findbestPattern();
+            hand.addCards(cardsArray);
         }
         return cardsArray;
     }
@@ -94,8 +88,7 @@ public class Game {
 
     private void tournament() {
         Map<Hand, ArrayList<Winner>> result = new HashMap<>();
-        ArrayList<Hand> tournament = new ArrayList<>();
-        tournament.addAll(List.of(hands));
+        ArrayList<Hand> tournament = new ArrayList<>(List.of(hands));
         while (tournament.size() > 1) {
             Hand hand1 = tournament.get(0);
             Hand hand2 = tournament.get(1);
@@ -109,6 +102,7 @@ public class Game {
                 else result.put(compareResult.winningHand(), new ArrayList<>(List.of(compareResult)));
             }
         }
+        tournamentResult(result, tournament);
     }
 
     public void texasHoldem() throws IllegalArgumentException {

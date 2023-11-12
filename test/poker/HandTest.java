@@ -475,10 +475,10 @@ class HandTest {
     }
 
     /**
-     * Test of the function findPatterns in Hand class
+     * Test of the function findAllPatterns in Hand class
      */
     @Test
-    void testFindPatterns() {
+    void testFindAllPatterns() {
         assertEquals(Map.of(
                 Patterns.HIGHER, List.of(
                         List.of(new Card(Value.ACE, Color.DIAMONDS)),
@@ -601,6 +601,82 @@ class HandTest {
                         List.of(new Card(Value.FIVE, Color.HEARTS)), List.of(new Card(Value.FOUR, Color.HEARTS)),
                         List.of(new Card(Value.THREE, Color.HEARTS)), List.of(new Card(Value.TWO, Color.HEARTS))
                 )), littleStraightFlush.findAllPatterns());
+    }
+
+    /**
+     * Test of the function findBestPatterns in Hand class
+     */
+    @Test
+    void testFindBestPatterns() {
+        assertEquals(Map.of(
+                Patterns.HIGHER, List.of(List.of(new Card(Value.ACE, Color.DIAMONDS)),
+                        List.of(new Card(Value.KING, Color.HEARTS)), List.of(new Card(Value.EIGHT, Color.DIAMONDS)),
+                        List.of(new Card(Value.FIVE, Color.SPADES)), List.of(new Card(Value.TWO, Color.CLUBS))
+                )), highestAce1.findBestPatterns());
+        assertEquals(Map.of(
+                Patterns.PAIR, List.of(List.of(new Card(Value.EIGHT, Color.HEARTS), new Card(Value.EIGHT, Color.DIAMONDS))),
+                Patterns.HIGHER, List.of(List.of(new Card(Value.KING, Color.SPADES)), List.of(new Card(Value.FIVE, Color.SPADES)), List.of(new Card(Value.TWO, Color.HEARTS))
+                )), secondPairOfEights.findBestPatterns());
+        assertEquals(Map.of(
+                Patterns.DOUBLE_PAIR, List.of(List.of(
+                        new Card(Value.EIGHT, Color.DIAMONDS), new Card(Value.EIGHT, Color.HEARTS),
+                        new Card(Value.TWO, Color.CLUBS), new Card(Value.TWO, Color.SPADES)
+                )), Patterns.HIGHER, List.of(List.of(new Card(Value.FIVE, Color.SPADES))
+                )), doublePairOfTwosAndEights.findBestPatterns());
+        assertEquals(Map.of(
+                Patterns.THREE_OF_A_KIND, List.of(List.of(new Card(Value.TWO, Color.DIAMONDS), new Card(Value.TWO, Color.SPADES), new Card(Value.TWO, Color.HEARTS))),
+                Patterns.HIGHER, List.of(List.of(new Card(Value.EIGHT, Color.DIAMONDS)), List.of(new Card(Value.FIVE, Color.SPADES))
+                )), threeTwos.findBestPatterns());
+        assertEquals(Map.of(
+                Patterns.STRAIGHT, List.of(List.of(new Card(Value.ACE, Color.HEARTS),
+                        new Card(Value.KING, Color.HEARTS), new Card(Value.QUEEN, Color.HEARTS),
+                        new Card(Value.JACK, Color.DIAMONDS), new Card(Value.TEN, Color.HEARTS)
+                ))), bigStraight.findBestPatterns());
+        assertEquals(Map.of(
+                Patterns.STRAIGHT, List.of(List.of(new Card(Value.SIX, Color.HEARTS),
+                        new Card(Value.FIVE, Color.HEARTS), new Card(Value.FOUR, Color.DIAMONDS),
+                        new Card(Value.THREE, Color.HEARTS), new Card(Value.TWO, Color.HEARTS)
+                ))), littleStraight.findBestPatterns());
+        assertEquals(Map.of(
+                Patterns.STRAIGHT, List.of(List.of(new Card(Value.SIX, Color.HEARTS),
+                        new Card(Value.FIVE, Color.HEARTS), new Card(Value.FOUR, Color.HEARTS),
+                        new Card(Value.THREE, Color.HEARTS), new Card(Value.TWO, Color.SPADES)
+                ))), almostStraightFlush.findBestPatterns());
+        assertEquals(Map.of(
+                Patterns.FLUSH, List.of(List.of(new Card(Value.ACE, Color.DIAMONDS),
+                        new Card(Value.KING, Color.DIAMONDS), new Card(Value.QUEEN, Color.DIAMONDS),
+                        new Card(Value.JACK, Color.DIAMONDS), new Card(Value.TWO, Color.DIAMONDS)
+                ))), aceDiamonds.findBestPatterns());
+        assertEquals(Map.of(
+                Patterns.FLUSH, List.of(List.of(new Card(Value.NINE, Color.DIAMONDS),
+                        new Card(Value.FIVE, Color.DIAMONDS), new Card(Value.FOUR, Color.DIAMONDS),
+                        new Card(Value.THREE, Color.DIAMONDS), new Card(Value.TWO, Color.DIAMONDS)
+                ))), nineDiamonds.findBestPatterns());
+        assertEquals(Map.of(
+                Patterns.FULL, List.of(List.of(new Card(Value.EIGHT, Color.DIAMONDS),
+                        new Card(Value.EIGHT, Color.SPADES), new Card(Value.EIGHT, Color.HEARTS),
+                        new Card(Value.TWO, Color.DIAMONDS), new Card(Value.TWO, Color.HEARTS)
+                ))), fullThreeEight.findBestPatterns());
+        assertEquals(Map.of(
+                Patterns.FULL, List.of(List.of(new Card(Value.ACE, Color.DIAMONDS),
+                        new Card(Value.ACE, Color.SPADES), new Card(Value.ACE, Color.HEARTS),
+                        new Card(Value.TWO, Color.DIAMONDS), new Card(Value.TWO, Color.HEARTS)
+                ))), fullThreeAce.findBestPatterns());
+        assertEquals(Map.of(
+                Patterns.FOUR_OF_A_KIND, List.of(List.of(
+                        new Card(Value.ACE, Color.DIAMONDS), new Card(Value.ACE, Color.CLUBS),
+                        new Card(Value.ACE, Color.SPADES), new Card(Value.ACE, Color.HEARTS)
+                )), Patterns.HIGHER, List.of(List.of(new Card(Value.KING, Color.SPADES)))), fourAces.findBestPatterns());
+        assertEquals(Map.of(
+                Patterns.STRAIGHT_FLUSH, List.of(List.of(new Card(Value.ACE, Color.HEARTS),
+                        new Card(Value.KING, Color.HEARTS), new Card(Value.QUEEN, Color.HEARTS),
+                        new Card(Value.JACK, Color.HEARTS), new Card(Value.TEN, Color.HEARTS)
+                ))), bigStraightFlush.findBestPatterns());
+        assertEquals(Map.of(
+                Patterns.STRAIGHT_FLUSH, List.of(List.of(new Card(Value.SIX, Color.HEARTS),
+                        new Card(Value.FIVE, Color.HEARTS), new Card(Value.FOUR, Color.HEARTS),
+                        new Card(Value.THREE, Color.HEARTS), new Card(Value.TWO, Color.HEARTS)
+                ))), littleStraightFlush.findBestPatterns());
     }
 
     /**
