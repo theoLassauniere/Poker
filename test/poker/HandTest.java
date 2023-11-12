@@ -787,6 +787,5 @@ class HandTest {
                         new Card(Value.EIGHT, Color.DIAMONDS), new Card(Value.SEVEN, Color.CLUBS),
                         new Card(Value.SIX, Color.DIAMONDS), new Card(Value.FIVE, Color.SPADES)
                 ))), highestAce1.getPatterns());
-
     }
 }
