@@ -16,6 +16,13 @@ public record Winner(Hand winningHand, Patterns pattern, Card decisiveCard) {
         return winningHand == null;
     }
 
+    /**
+     * Detect the full decisive pattern and return the corresponding string
+     **/
+    public String fullDecisivePattern() {
+        return winningHand.getCards().indexOf(decisiveCard()) >= 3 ? "une paire" : "un brelan";
+    }
+
     @Override
     public String toString() {
         if (isEquality()) return "Égalité";
@@ -32,7 +39,7 @@ public record Winner(Hand winningHand, Patterns pattern, Card decisiveCard) {
             case STRAIGHT -> stringRes.append("une suite dont la carte la plus haute est ").append(decisiveCard());
             case FLUSH -> stringRes.append("une couleur dont la carte décisive est ").append(decisiveCard());
             case FULL ->
-                    stringRes.append("un full contenant un brelan de : ").append(decisiveCard().value()); //TODO attention problème quand ACo APi ATr JTr JCo, ACo APi ATr 3Co 3Tr avec Taxas Hold'em
+                    stringRes.append("un full contenant ").append(fullDecisivePattern()).append(" de : ").append(decisiveCard().value());
             case FOUR_OF_A_KIND -> stringRes.append("un carré de : ").append(decisiveCard().value());
             case STRAIGHT_FLUSH ->
                     stringRes.append("une quinte flush dont la carte la plus haute est ").append(decisiveCard());
