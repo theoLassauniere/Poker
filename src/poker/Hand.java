@@ -163,26 +163,20 @@ public class Hand implements Comparable<Hand> {
      */
     public List<Card> findStraight() {
         if (cards.size() < 5) return Collections.emptyList();
-        if (cards.get(0).value().ordinal() < 4)
+        if (cards.get(0).value().ordinal() < 4) // if the highest card of the hand is less than a six, there cannot be a straight
             return Collections.emptyList();
-        // if the highest card of the hand is less than a six, there cannot be a straight
 
-        List<Card> result = new ArrayList<>();
-
-        for (int i = 0; i < cards.size() - 1; i++) {
-            int currentCardsCompare = cards.get(i).compareOrdinal(cards.get(i + 1));
-            if (currentCardsCompare == 1 || currentCardsCompare == 0) {
-                //We add the card to result
-                if (!result.contains(cards.get(i))) result.add(cards.get(i));
-                // if the next card ends the straight we add it
-                if (result.get(0).compareOrdinal(result.get(result.size() - 1)) >= 3) result.add(cards.get(i + 1));
-            } else {
-                // if result is not empty and the last card is not four cards below the first clear the result
-                if (!result.isEmpty() && result.get(0).compareOrdinal(result.get(result.size() - 1)) != 4) {
-                    result.clear();
-                }
-                //if the number of cards is not enough to create a sequence
-                if (cards.size() - 1 - i < 5) return result;
+        List<Card> result = new ArrayList<>(List.of(cards.get(0)));
+        for (int i = 1; i < cards.size(); i++) {
+            int currentCardsCompare = cards.get(i - 1).compareOrdinal(cards.get(i));
+            if (currentCardsCompare == 1 || currentCardsCompare == 0)
+                result.add(cards.get(i)); //We add the card to result
+            else if (result.size() >= 5 && result.get(0).compareOrdinal(result.get(result.size() - 1)) >= 4) // if we already have a straight no need to continue
+                return result;
+            else {
+                result.clear();
+                result.add(cards.get(i));
+                if (cards.size() - i < 5) return Collections.emptyList();
             }
         }
         // if the size of the result is above 5 and the last card is four cards below the first return result else return empty list
