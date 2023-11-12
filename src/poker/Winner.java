@@ -20,7 +20,7 @@ public record Winner(Hand winningHand, Patterns pattern, Card decisiveCard) {
      * Detect the full decisive pattern and return the corresponding string
      **/
     public String fullDecisivePattern() {
-        return winningHand.getCards().indexOf(decisiveCard()) >= 3 ? "une paire" : "un brelan";
+        return winningHand.getPatterns().get(Patterns.FULL).get(0).indexOf(decisiveCard()) >= 3 ? "une paire" : "un brelan";
     }
 
     @Override
