@@ -46,7 +46,16 @@ public class Game {
         return randomCardOne;
     }
 
-    private void waiting(Scanner scanner) {
+    private void displayAndWait(Scanner scanner, ArrayList<Card> tab) {
+        if (tab != null) {
+            for (Card c : tab) {
+                outputStream.print(c + " ");
+            }
+        }
+        outputStream.println();
+        for (Hand hand : hands) {
+            outputStream.println(hand);
+        }
         outputStream.print("Pressez une touche pour continuer");
         scanner.nextLine();
         outputStream.println();
@@ -61,19 +70,9 @@ public class Game {
         return cardsArray;
     }
 
-    private void printArray(ArrayList<Card> tab) {
-        for (Card c : tab) {
-            outputStream.print(c + " ");
-        }
-        outputStream.println();
-        for (Hand hand : hands) {
-            outputStream.println(hand);
-        }
-    }
-
-    public void tournamentResult(Map<Hand, ArrayList<Winner>> result, List<Hand> tournament) {
+    public Winner tournamentResult(Map<Hand, ArrayList<Winner>> result, List<Hand> tournament) {
         Winner mostImportantResult = result.get(tournament.get(0)).get(0);
-        if (mostImportantResult.pattern().equals(Patterns.EQUALITY)) outputStream.println(mostImportantResult);
+        if (mostImportantResult.pattern().equals(Patterns.EQUALITY)) return mostImportantResult;
         else {
             result.get(tournament.get(0)).remove(mostImportantResult);
             for (Winner w : result.get(tournament.get(0))) {
@@ -82,11 +81,11 @@ public class Game {
                 } else if (w.pattern().compareTo(mostImportantResult.pattern()) == 0 && w.decisiveCard().compareTo(mostImportantResult.decisiveCard()) < 0)
                     mostImportantResult = w;
             }
-            outputStream.println(mostImportantResult);
+            return mostImportantResult;
         }
     }
 
-    private void tournament() {
+    private Winner tournament() {
         Map<Hand, ArrayList<Winner>> result = new HashMap<>();
         ArrayList<Hand> tournament = new ArrayList<>(List.of(hands));
         while (tournament.size() > 1) {
@@ -102,29 +101,25 @@ public class Game {
                 else result.put(compareResult.winningHand(), new ArrayList<>(List.of(compareResult)));
             }
         }
-        tournamentResult(result, tournament);
+        return tournamentResult(result, tournament);
     }
 
     public void texasHoldem() throws IllegalArgumentException {
         Scanner scanner = new Scanner(System.in);
         for (int i = 0; i < hands.length; i++) {
             hands[i] = new Hand("Main " + (i + 1), new ArrayList<>(List.of(getRandomCard(), getRandomCard())));
-            outputStream.println(hands[i]);
         }
-        waiting(scanner);
+        displayAndWait(scanner, null);
         ArrayList<Card> flop = extraction(3);
         outputStream.print("Flop : ");
-        printArray(flop);
-        waiting(scanner);
+        displayAndWait(scanner, flop);
         ArrayList<Card> turn = extraction(1);
         outputStream.print("Turn : ");
-        printArray(turn);
-        waiting(scanner);
+        displayAndWait(scanner, turn);
         ArrayList<Card> river = extraction(1);
         outputStream.print("River : ");
-        printArray(river);
-
-        tournament();
+        displayAndWait(scanner, river);
+        outputStream.println(tournament());
     }
 
     public void poker() throws IllegalArgumentException, ParseException {

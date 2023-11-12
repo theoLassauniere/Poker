@@ -25,6 +25,7 @@ class HandTest {
             bigStraight, littleStraight, almostStraight,
             aceDiamonds, nineDiamonds, almostDiamonds,
             bigStraightFlush, littleStraightFlush, almostStraightFlush,
+
     // 7 cards hands :
     sevenCardHandStraightEnd, sevenCardHandStraightBeginning, sevenCardHandStraightDuplicate,
             sevenCardHandStraightTriplicate, sevenCardHandAlmostStraight, sevenCardHandStraightDuplicateEnd,
@@ -759,5 +760,32 @@ class HandTest {
         assertEquals(Collections.emptyList(), threeTwos.findFlush());
         assertEquals(Collections.emptyList(), doublePairOfTwosAndEights.findFlush());
         assertEquals(Collections.emptyList(), fourAces.findFlush());
+    }
+
+    @Test
+    void addCardsTest() {
+        highestAce1.addCards(new ArrayList<>(List.of(new Card(Value.NINE, Color.DIAMONDS))));
+        List<Card> value = new ArrayList<>(List.of(new Card(Value.ACE, Color.DIAMONDS),
+                new Card(Value.KING, Color.HEARTS),
+                new Card(Value.NINE, Color.DIAMONDS),
+                new Card(Value.EIGHT, Color.DIAMONDS),
+                new Card(Value.FIVE, Color.SPADES),
+                new Card(Value.TWO, Color.CLUBS)));
+        assertEquals(value, highestAce1.getCards());
+        highestAce1.addCards(new ArrayList<>(List.of(new Card(Value.SEVEN, Color.CLUBS), new Card(Value.SIX, Color.DIAMONDS))));
+        List<Card> value2 = new ArrayList<>(List.of(new Card(Value.ACE, Color.DIAMONDS),
+                new Card(Value.KING, Color.HEARTS),
+                new Card(Value.NINE, Color.DIAMONDS),
+                new Card(Value.EIGHT, Color.DIAMONDS),
+                new Card(Value.SEVEN, Color.CLUBS),
+                new Card(Value.SIX, Color.DIAMONDS),
+                new Card(Value.FIVE, Color.SPADES),
+                new Card(Value.TWO, Color.CLUBS)));
+        assertEquals(value2, highestAce1.getCards());
+        assertEquals(Map.of(
+                Patterns.STRAIGHT, List.of(List.of(new Card(Value.NINE, Color.DIAMONDS),
+                        new Card(Value.EIGHT, Color.DIAMONDS), new Card(Value.SEVEN, Color.CLUBS),
+                        new Card(Value.SIX, Color.DIAMONDS), new Card(Value.FIVE, Color.SPADES)
+                ))), highestAce1.getPatterns());
     }
 }
