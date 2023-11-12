@@ -1,6 +1,7 @@
 package poker;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -32,7 +33,7 @@ class GameTest {
         threeCardGame = new Game(3);
         fourCardGame = new Game(4);
         fiveCardGame = new Game(5);
-        fourPlayerGame = new Game(5, 4, 1);
+        fourPlayerGame = new Game(5, 4, 0);
     }
 
     @ParameterizedTest
@@ -137,4 +138,15 @@ class GameTest {
         System.setIn(new ByteArrayInputStream((firstHand + "\n" + secondHand).getBytes())); // Redirect stdin
         assertThrowsExactly(IllegalArgumentException.class, fiveCardGame::poker); // The game should start with errors
     }
+
+    //Non-exhaustive test to know if it's possible to have an error in texasHold'em game
+    @Test
+    void texasTest() {
+        for (int k = 1; k < 100; k++) {
+            System.setIn(new ByteArrayInputStream(("a\na\na\na").getBytes())); // Redirect stdin
+            assertDoesNotThrow(fourPlayerGame::texasHoldem);// The game should start with errors
+            fourPlayerGame = new Game(5, 4, k);
+        }
+    }
+
 }

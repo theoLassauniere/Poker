@@ -2,9 +2,8 @@ package poker;
 
 import java.io.PrintStream;
 import java.text.ParseException;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.*;
-
-import static java.lang.Integer.parseInt;
 
 /**
  * A game
@@ -78,16 +77,15 @@ public class Game {
     }
 
     public Winner tournamentResult(Map<Hand, ArrayList<Winner>> result, List<Hand> tournament) {
+        Winner equality = new Winner(null, Patterns.EQUALITY, null);
+        if (result.get(tournament.get(0)).contains(equality)) return equality;
         Winner mostImportantResult = result.get(tournament.get(0)).get(0);
-        if (mostImportantResult.pattern().equals(Patterns.EQUALITY)) return mostImportantResult;
-        else {
-            result.get(tournament.get(0)).remove(mostImportantResult);
-            for (Winner w : result.get(tournament.get(0))) {
-                if (w.pattern().compareTo(mostImportantResult.pattern()) < 0 || (w.pattern().compareTo(mostImportantResult.pattern()) == 0 && w.decisiveCard().compareTo(mostImportantResult.decisiveCard()) < 0))
-                    mostImportantResult = w;
-            }
-            return mostImportantResult;
+        result.get(tournament.get(0)).remove(mostImportantResult);
+        for (Winner w : result.get(tournament.get(0))) {
+            if (w.pattern().compareTo(mostImportantResult.pattern()) < 0 || (w.pattern().compareTo(mostImportantResult.pattern()) == 0 && w.decisiveCard().compareTo(mostImportantResult.decisiveCard()) < 0))
+                mostImportantResult = w;
         }
+        return mostImportantResult;
     }
 
     private Winner tournament() {
@@ -104,6 +102,11 @@ public class Game {
                 if (result.containsKey(compareResult.winningHand()))
                     result.get(compareResult.winningHand()).add(compareResult);
                 else result.put(compareResult.winningHand(), new ArrayList<>(List.of(compareResult)));
+            } else {
+                tournament.add(0, hand1);
+                if (result.containsKey(hand1))
+                    result.get(hand1).add(compareResult);
+                else result.put(hand1, new ArrayList<>(List.of(compareResult)));
             }
         }
         return tournamentResult(result, tournament);
@@ -114,10 +117,9 @@ public class Game {
         for (int i = 0; i < hands.length; i++)
             hands[i] = new Hand("Main " + (i + 1), new ArrayList<>(List.of(getRandomCard(), getRandomCard())));
         displayAndWait(scanner, new ArrayList<>());
-        String[][] steps = {{"Flop", "3"}, {"Turn", "1"}, {"River", "1"}};
-        for (String[] step : steps) {
-            ArrayList<Card> extractionResult = extraction(parseInt(step[1]));
-            outputStream.print(step[0] + " : ");
+        for (var step : List.of(new SimpleEntry<>("Flop", 3), new SimpleEntry<>("Turn", 1), new SimpleEntry<>("River", 1))) {
+            ArrayList<Card> extractionResult = extraction(step.getValue());
+            outputStream.print(step.getKey() + " : ");
             displayAndWait(scanner, extractionResult);
         }
         outputStream.println(tournament());
@@ -148,7 +150,7 @@ public class Game {
             String typeGame = scanner.nextLine();
             try {
                 if (typeGame.equals("1")) new Game().poker();
-                else if (typeGame.equals("2")) new Game(5, 4).texasHoldem();
+                else if (typeGame.equals("2")) new Game(5, 4, 40).texasHoldem();
                 else throw new IllegalArgumentException("The entry is not valid");
                 break;
             } catch (IllegalArgumentException | ParseException e) {
