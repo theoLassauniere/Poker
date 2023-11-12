@@ -80,10 +80,10 @@ public class Hand implements Comparable<Hand> {
         int currentHandSize = 0;
         for (var entry : findAllPatterns().entrySet()) {
             for (var patternCards : entry.getValue()) {
-                if (currentHandSize + patternCards.size() <= 5) {
+                if (currentHandSize + entry.getKey().getMinCardNumber() <= 5) {
                     bestPatternCombination.putIfAbsent(entry.getKey(), new ArrayList<>());
-                    bestPatternCombination.get(entry.getKey()).add(patternCards);
-                    currentHandSize += patternCards.size();
+                    bestPatternCombination.get(entry.getKey()).add(entry.getKey().reduceToMinAmountOfCards(patternCards));
+                    currentHandSize += entry.getKey().getMinCardNumber();
                     if (currentHandSize == 5) return bestPatternCombination;
                 }
             }

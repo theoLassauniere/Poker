@@ -601,6 +601,15 @@ class HandTest {
                         List.of(new Card(Value.FIVE, Color.HEARTS)), List.of(new Card(Value.FOUR, Color.HEARTS)),
                         List.of(new Card(Value.THREE, Color.HEARTS)), List.of(new Card(Value.TWO, Color.HEARTS))
                 )), littleStraightFlush.findAllPatterns());
+        assertEquals(Map.of(
+                Patterns.STRAIGHT, List.of(List.of(new Card(Value.SIX, Color.SPADES),
+                        new Card(Value.FIVE, Color.DIAMONDS), new Card(Value.FOUR, Color.DIAMONDS),
+                        new Card(Value.THREE, Color.HEARTS), new Card(Value.TWO, Color.SPADES)
+                )), Patterns.HIGHER, List.of(List.of(new Card(Value.ACE, Color.HEARTS)),
+                        List.of(new Card(Value.KING, Color.HEARTS)), List.of(new Card(Value.SIX, Color.SPADES)),
+                        List.of(new Card(Value.FIVE, Color.DIAMONDS)), List.of(new Card(Value.FOUR, Color.DIAMONDS)),
+                        List.of(new Card(Value.THREE, Color.HEARTS)), List.of(new Card(Value.TWO, Color.SPADES))
+                )), sevenCardHandStraightEnd.findAllPatterns());
     }
 
     /**
@@ -677,6 +686,16 @@ class HandTest {
                         new Card(Value.FIVE, Color.HEARTS), new Card(Value.FOUR, Color.HEARTS),
                         new Card(Value.THREE, Color.HEARTS), new Card(Value.TWO, Color.HEARTS)
                 ))), littleStraightFlush.findBestPatterns());
+        assertEquals(Map.of(
+                Patterns.STRAIGHT, List.of(List.of(new Card(Value.SIX, Color.SPADES),
+                        new Card(Value.FIVE, Color.DIAMONDS), new Card(Value.FOUR, Color.DIAMONDS),
+                        new Card(Value.THREE, Color.HEARTS), new Card(Value.TWO, Color.SPADES)
+                ))), sevenCardHandStraightEnd.findBestPatterns());
+        assertEquals(Map.of(
+                Patterns.STRAIGHT, List.of(List.of(new Card(Value.ACE, Color.HEARTS),
+                        new Card(Value.KING, Color.HEARTS), new Card(Value.QUEEN, Color.SPADES),
+                        new Card(Value.JACK, Color.HEARTS), new Card(Value.TEN, Color.SPADES)
+                ))), sevenCardHandStraightTriplicate.findBestPatterns());
     }
 
     /**
