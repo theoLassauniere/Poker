@@ -2,10 +2,7 @@ package poker;
 
 import java.io.PrintStream;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * A game
@@ -80,6 +77,40 @@ public class Game {
         }
     }
 
+    public void tournamentResult(Map<Hand, ArrayList<Winner>> result, List<Hand> tournament) {
+        Winner mostImportantResult = result.get(tournament.get(0)).get(0);
+        if (mostImportantResult.pattern().equals(Patterns.EQUALITY)) outputStream.println(mostImportantResult);
+        else {
+            result.get(tournament.get(0)).remove(mostImportantResult);
+            for (Winner w : result.get(tournament.get(0))) {
+                if (w.pattern().compareTo(mostImportantResult.pattern()) < 0) {
+                    mostImportantResult = w;
+                } else if (w.pattern().compareTo(mostImportantResult.pattern()) == 0 && w.decisiveCard().compareTo(mostImportantResult.decisiveCard()) < 0)
+                    mostImportantResult = w;
+            }
+            outputStream.println(mostImportantResult);
+        }
+    }
+
+    private void tournament() {
+        Map<Hand, ArrayList<Winner>> result = new HashMap<>();
+        ArrayList<Hand> tournament = new ArrayList<>();
+        tournament.addAll(List.of(hands));
+        while (tournament.size() > 1) {
+            Hand hand1 = tournament.get(0);
+            Hand hand2 = tournament.get(1);
+            tournament.remove(hand1);
+            tournament.remove(hand2);
+            Winner compareResult = hand1.comparePatterns(hand2);
+            if (compareResult.winningHand() != null) {
+                tournament.add(0, compareResult.winningHand());
+                if (result.containsKey(compareResult.winningHand()))
+                    result.get(compareResult.winningHand()).add(compareResult);
+                else result.put(compareResult.winningHand(), new ArrayList<>(List.of(compareResult)));
+            }
+        }
+    }
+
     public void texasHoldem() throws IllegalArgumentException {
         Scanner scanner = new Scanner(System.in);
         for (int i = 0; i < hands.length; i++) {
@@ -99,17 +130,7 @@ public class Game {
         outputStream.print("River : ");
         printArray(river);
 
-        ArrayList<Hand> tournament = new ArrayList<>();
-        tournament.addAll(List.of(hands));
-        while (tournament.size() > 2) {
-            Hand hand1 = tournament.get(0);
-            Hand hand2 = tournament.get(1);
-            tournament.remove(hand1);
-            tournament.remove(hand2);
-            Hand winningHand = hand1.comparePatterns(hand2).winningHand();
-            if (winningHand != null) tournament.add(0, winningHand);
-        }
-        outputStream.println(tournament.get(0).comparePatterns(tournament.get(1)));
+        tournament();
     }
 
     public void poker() throws IllegalArgumentException, ParseException {
