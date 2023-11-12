@@ -15,7 +15,9 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class GameTest {
     ByteArrayOutputStream outputStream;
-    Game oneCardGame, twoCardGame, threeCardGame, fourCardGame, fiveCardGame;
+    Game defaultGame, oneCardGame, twoCardGame, threeCardGame, fourCardGame, fiveCardGame,
+
+    fourPlayerGame;
 
     /**
      * Initialize Game for testing
@@ -24,11 +26,13 @@ class GameTest {
     void setUp() {
         outputStream = new ByteArrayOutputStream();
         Game.outputStream = new PrintStream(outputStream);
+        defaultGame = new Game();
         oneCardGame = new Game(1);
         twoCardGame = new Game(2);
         threeCardGame = new Game(3);
         fourCardGame = new Game(4);
         fiveCardGame = new Game(5);
+        fourPlayerGame = new Game(5, 4);
     }
 
     @ParameterizedTest
