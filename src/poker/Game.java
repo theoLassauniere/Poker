@@ -4,6 +4,8 @@ import java.io.PrintStream;
 import java.text.ParseException;
 import java.util.*;
 
+import static java.lang.Integer.parseInt;
+
 /**
  * A game
  *
@@ -39,6 +41,15 @@ public class Game {
         hands = new Hand[numberOfPlayers];
     }
 
+    public Game(int handSize, int numberOfPlayers, long seed) throws IllegalArgumentException {
+        if (numberOfPlayers < 2)
+            throw new IllegalArgumentException("There must be at least two players");
+        this.handSize = handSize;
+        deck = Card.getDeck();
+        random = new Random(seed);
+        hands = new Hand[numberOfPlayers];
+    }
+
 
     private Card getRandomCard() {
         Card randomCardOne = deck.get(random.nextInt(deck.size()));
@@ -47,10 +58,8 @@ public class Game {
     }
 
     private void displayAndWait(Scanner scanner, ArrayList<Card> tab) {
-        if (tab != null) {
-            for (Card c : tab) {
-                outputStream.print(c + " ");
-            }
+        for (Card c : tab) {
+            outputStream.print(c + " ");
         }
         outputStream.println();
         for (Hand hand : hands) {
@@ -64,9 +73,7 @@ public class Game {
     private ArrayList<Card> extraction(int numberOfCards) {
         ArrayList<Card> cardsArray = new ArrayList<>();
         for (int i = 0; i < numberOfCards; i++) cardsArray.add(getRandomCard());
-        for (Hand hand : hands) {
-            hand.addCards(cardsArray);
-        }
+        for (Hand hand : hands) hand.addCards(cardsArray);
         return cardsArray;
     }
 
@@ -76,9 +83,7 @@ public class Game {
         else {
             result.get(tournament.get(0)).remove(mostImportantResult);
             for (Winner w : result.get(tournament.get(0))) {
-                if (w.pattern().compareTo(mostImportantResult.pattern()) < 0) {
-                    mostImportantResult = w;
-                } else if (w.pattern().compareTo(mostImportantResult.pattern()) == 0 && w.decisiveCard().compareTo(mostImportantResult.decisiveCard()) < 0)
+                if (w.pattern().compareTo(mostImportantResult.pattern()) < 0 || (w.pattern().compareTo(mostImportantResult.pattern()) == 0 && w.decisiveCard().compareTo(mostImportantResult.decisiveCard()) < 0))
                     mostImportantResult = w;
             }
             return mostImportantResult;
@@ -106,19 +111,15 @@ public class Game {
 
     public void texasHoldem() throws IllegalArgumentException {
         Scanner scanner = new Scanner(System.in);
-        for (int i = 0; i < hands.length; i++) {
+        for (int i = 0; i < hands.length; i++)
             hands[i] = new Hand("Main " + (i + 1), new ArrayList<>(List.of(getRandomCard(), getRandomCard())));
+        displayAndWait(scanner, new ArrayList<>());
+        String[][] steps = {{"Flop", "3"}, {"Turn", "1"}, {"River", "1"}};
+        for (String[] step : steps) {
+            ArrayList<Card> extractionResult = extraction(parseInt(step[1]));
+            outputStream.print(step[0] + " : ");
+            displayAndWait(scanner, extractionResult);
         }
-        displayAndWait(scanner, null);
-        ArrayList<Card> flop = extraction(3);
-        outputStream.print("Flop : ");
-        displayAndWait(scanner, flop);
-        ArrayList<Card> turn = extraction(1);
-        outputStream.print("Turn : ");
-        displayAndWait(scanner, turn);
-        ArrayList<Card> river = extraction(1);
-        outputStream.print("River : ");
-        displayAndWait(scanner, river);
         outputStream.println(tournament());
     }
 
