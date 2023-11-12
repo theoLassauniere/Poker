@@ -62,8 +62,11 @@ public class Hand implements Comparable<Hand> {
     @Override
     public String toString() {
         StringBuilder string = new StringBuilder().append(getName()).append(" (");
-        for (Card card : getCards())
-            string.append(card.toString()).append(" ");
+        var playedCards = getPatterns().values().stream()
+                .flatMap(Collection::stream).flatMap(Collection::stream) // flattens the tree to obtain a stream of cards
+                .distinct().sorted(Comparator.reverseOrder()).toList();
+        for (Card card : playedCards)
+            string.append(card).append(" ");
         string.setLength(string.length() - 1);
         return string.append(')').toString();
     }
@@ -102,6 +105,7 @@ public class Hand implements Comparable<Hand> {
         }
         return Patterns.values()[i];
     }
+
     /**
      * Parses hand
      *
