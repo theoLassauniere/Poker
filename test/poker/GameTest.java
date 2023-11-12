@@ -32,7 +32,7 @@ class GameTest {
         threeCardGame = new Game(3);
         fourCardGame = new Game(4);
         fiveCardGame = new Game(5);
-        fourPlayerGame = new Game(5, 4);
+        fourPlayerGame = new Game(5, 4, 1);
     }
 
     @ParameterizedTest
