@@ -31,7 +31,8 @@ public record Winner(Hand winningHand, Patterns pattern, Card decisiveCard) {
             case THREE_OF_A_KIND -> stringRes.append("un brelan de : ").append(decisiveCard().value());
             case STRAIGHT -> stringRes.append("une suite dont la carte la plus haute est ").append(decisiveCard());
             case FLUSH -> stringRes.append("une couleur dont la carte décisive est ").append(decisiveCard());
-            case FULL -> stringRes.append("un full contenant un brelan de : ").append(decisiveCard().value());
+            case FULL ->
+                    stringRes.append("un full contenant un brelan de : ").append(decisiveCard().value()); //TODO attention problème quand ACo APi ATr JTr JCo, ACo APi ATr 3Co 3Tr avec Taxas Hold'em
             case FOUR_OF_A_KIND -> stringRes.append("un carré de : ").append(decisiveCard().value());
             case STRAIGHT_FLUSH ->
                     stringRes.append("une quinte flush dont la carte la plus haute est ").append(decisiveCard());

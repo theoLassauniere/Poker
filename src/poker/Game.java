@@ -2,10 +2,7 @@ package poker;
 
 import java.io.PrintStream;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * A game
@@ -21,88 +18,119 @@ public class Game {
     private final Hand[] hands;
     private final int handSize;
 
-    private final String type;
+
     private final Random random;
 
 
-    public Game(String type) throws IllegalArgumentException {
-        this(DEFAULT_HAND_SIZE, type);
+    public Game() throws IllegalArgumentException {
+        this(DEFAULT_HAND_SIZE);
     }
 
-    public Game(int handSize, String type) throws IllegalArgumentException {
-        this(handSize, DEFAULT_NUMBER_OF_PLAYERS, type);
+    public Game(int handSize) throws IllegalArgumentException {
+        this(handSize, DEFAULT_NUMBER_OF_PLAYERS);
     }
 
-    public Game(int handSize, int numberOfPlayers, String type) throws IllegalArgumentException {
+    public Game(int handSize, int numberOfPlayers) throws IllegalArgumentException {
         if (numberOfPlayers < 2)
             throw new IllegalArgumentException("There must be at least two players");
-        if (numberOfPlayers != 2) throw new UnsupportedOperationException("Only two players are supported");
+        //if (numberOfPlayers != 2) throw new UnsupportedOperationException("Only two players are supported");
         this.handSize = handSize;
-
-        if (type.equals("Poker") || type.equals("Texas Hold'em")) this.type = type;
-        else throw new IllegalArgumentException("The type of game is not valid (Poker or Texas Hold'em)");
-
         deck = Card.getDeck();
         random = new Random();
         hands = new Hand[numberOfPlayers];
     }
 
+
+    private Card getRandomCard() {
+        Card randomCardOne = deck.get(random.nextInt(deck.size()));
+        deck.remove(randomCardOne);
+        return randomCardOne;
+    }
+
+    private void waiting(Scanner scanner) {
+        outputStream.print("Pressez une touche pour continuer\n");
+        scanner.nextLine();
+    }
+
+    private ArrayList<Card> extraction(int numberOfCards) {
+        ArrayList<Card> cardsArray = new ArrayList<>();
+        for (int i = 0; i < numberOfCards; i++) {
+            Card randomCard = getRandomCard();
+            for (Hand hand : hands) {
+                hand.addCard(randomCard);
+            }
+            cardsArray.add(randomCard);
+        }
+        for (Hand hand : hands) {
+            hand.findbestPattern();
+        }
+        return cardsArray;
+    }
+
+    private void printArray(ArrayList<Card> tab) {
+        for (Card c : tab) {
+            outputStream.print(c + " ");
+        }
+        outputStream.println();
+        for (Hand hand : hands) {
+            outputStream.println(hand);
+        }
+    }
+
+    public void tournamentResult(Map<Hand, ArrayList<Winner>> result, List<Hand> tournament) {
+        Winner mostImportantResult = result.get(tournament.get(0)).get(0);
+        if (mostImportantResult.pattern().equals(Patterns.EQUALITY)) outputStream.println(mostImportantResult);
+        else {
+            result.get(tournament.get(0)).remove(mostImportantResult);
+            for (Winner w : result.get(tournament.get(0))) {
+                if (w.pattern().compareTo(mostImportantResult.pattern()) < 0) {
+                    mostImportantResult = w;
+                } else if (w.pattern().compareTo(mostImportantResult.pattern()) == 0 && w.decisiveCard().compareTo(mostImportantResult.decisiveCard()) < 0)
+                    mostImportantResult = w;
+            }
+            outputStream.println(mostImportantResult);
+        }
+    }
+
+    private void tournament() {
+        Map<Hand, ArrayList<Winner>> result = new HashMap<>();
+        ArrayList<Hand> tournament = new ArrayList<>();
+        tournament.addAll(List.of(hands));
+        while (tournament.size() > 1) {
+            Hand hand1 = tournament.get(0);
+            Hand hand2 = tournament.get(1);
+            tournament.remove(hand1);
+            tournament.remove(hand2);
+            Winner compareResult = hand1.comparePatterns(hand2);
+            if (compareResult.winningHand() != null) {
+                tournament.add(0, compareResult.winningHand());
+                if (result.containsKey(compareResult.winningHand()))
+                    result.get(compareResult.winningHand()).add(compareResult);
+                else result.put(compareResult.winningHand(), new ArrayList<>(List.of(compareResult)));
+            }
+        }
+    }
+
     public void texasHoldem() throws IllegalArgumentException {
         Scanner scanner = new Scanner(System.in);
-        String nextStep = "Passer à l'étape suivante (o/n) ? ";
         for (int i = 0; i < hands.length; i++) {
-            hands[i] = new Hand("Main " + (i + 1), new ArrayList<>());
-            Card randomCardOne = deck.get(random.nextInt(deck.size()));
-            Card randomCardTwo = deck.get(random.nextInt(deck.size()));
-            hands[i].getCards().add(randomCardOne);
-            hands[i].getCards().add(randomCardTwo);
-            deck.remove(randomCardOne);
-            deck.remove(randomCardTwo);
+            hands[i] = new Hand("Main " + (i + 1), new ArrayList<>(List.of(getRandomCard(), getRandomCard())));
             outputStream.println(hands[i]);
         }
-        do {
-            outputStream.print(nextStep);
-        } while (scanner.nextLine().equals("n"));
-        ArrayList<Card> flop = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            Card randomCard = deck.get(random.nextInt(deck.size()));
-            for (Hand hand : hands) {
-                hand.getCards().add(randomCard);
-            }
-            flop.add(randomCard);
-            deck.remove(randomCard);
-        }
+        waiting(scanner);
+        ArrayList<Card> flop = extraction(3);
         outputStream.print("Flop : ");
-        for (Card card : flop) {
-            outputStream.print(card + " ");
-        }
-        outputStream.print("\n");
-        for (Hand value : hands) {
-            outputStream.println(value);
-        }
+        printArray(flop);
+        waiting(scanner);
+        ArrayList<Card> turn = extraction(1);
+        outputStream.print("Turn : ");
+        printArray(turn);
+        waiting(scanner);
+        ArrayList<Card> river = extraction(1);
+        outputStream.print("River : ");
+        printArray(river);
 
-        do {
-            outputStream.print(nextStep);
-        } while (scanner.nextLine().equals("n"));
-        Card turn = deck.get(random.nextInt(deck.size()));
-        for (Hand hand : hands) {
-            hand.getCards().add(turn);
-        }
-        deck.remove(turn);
-
-        outputStream.println("Turn : " + turn);
-        for (Hand value : hands) {
-            outputStream.println(value);
-        }
-
-        Card river = deck.get(random.nextInt(deck.size()));
-        for (Hand hand : hands) {
-            hand.getCards().add(river);
-        }
-        deck.remove(river);
-
-        outputStream.println("River : " + river);
-
+        tournament();
     }
 
     public void poker() throws IllegalArgumentException, ParseException {
@@ -123,22 +151,15 @@ public class Game {
         outputStream.println(hands[0].comparePatterns(hands[1]));
     }
 
-    /**
-     * Start the game, create the hands with the entries
-     */
-    public void start() throws IllegalArgumentException, ParseException {
-        if (type.equals("Poker")) poker();
-        else texasHoldem();
-    }
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         while (true) {
-            outputStream.print("A quel jeu voulez vous jouez, Poker ou Texas Hold'em ? ");
-            String typeGame;
-            typeGame = scanner.nextLine();
+            outputStream.print("1.Poker\n2.Texas Hold'em\nEntrez le numéro souhaité : ");
+            String typeGame = scanner.nextLine();
             try {
-                new Game(typeGame).start();
+                if (typeGame.equals("1")) new Game().poker();
+                else if (typeGame.equals("2")) new Game(5, 4).texasHoldem();
+                else throw new IllegalArgumentException("The entry is not valid");
                 break;
             } catch (IllegalArgumentException | ParseException e) {
                 outputStream.println("ERROR: " + e.getMessage() + "\n");

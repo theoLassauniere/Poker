@@ -475,10 +475,10 @@ class HandTest {
     }
 
     /**
-     * Test of the function getPatterns in Hand class with all the case possible of pattern in a Hand
+     * Test of the function findPatterns in Hand class
      */
     @Test
-    void testGetPattern() {
+    void testFindPatterns() {
         assertEquals(Map.of(
                 Patterns.HIGHER, List.of(
                         List.of(new Card(Value.ACE, Color.DIAMONDS)),
@@ -486,7 +486,7 @@ class HandTest {
                         List.of(new Card(Value.EIGHT, Color.DIAMONDS)),
                         List.of(new Card(Value.FIVE, Color.SPADES)),
                         List.of(new Card(Value.TWO, Color.CLUBS))
-                )), highestAce1.getPatterns());
+                )), highestAce1.findAllPatterns());
         assertEquals(Map.of(
                 Patterns.PAIR, List.of(List.of(
                         new Card(Value.EIGHT, Color.HEARTS),
@@ -495,7 +495,7 @@ class HandTest {
                         List.of(new Card(Value.KING, Color.SPADES)),
                         List.of(new Card(Value.FIVE, Color.SPADES)),
                         List.of(new Card(Value.TWO, Color.HEARTS))
-                )), secondPairOfEights.getPatterns());
+                )), secondPairOfEights.findAllPatterns());
         assertEquals(Map.of(
                 Patterns.DOUBLE_PAIR, List.of(List.of(
                         new Card(Value.EIGHT, Color.DIAMONDS), new Card(Value.EIGHT, Color.HEARTS),
@@ -504,11 +504,11 @@ class HandTest {
                         List.of(new Card(Value.EIGHT, Color.DIAMONDS), new Card(Value.EIGHT, Color.HEARTS)),
                         List.of(new Card(Value.TWO, Color.CLUBS), new Card(Value.TWO, Color.SPADES))),
                 Patterns.HIGHER, List.of(List.of(new Card(Value.FIVE, Color.SPADES))
-                )), doublePairOfTwosAndEights.getPatterns());
+                )), doublePairOfTwosAndEights.findAllPatterns());
         assertEquals(Map.of(
                 Patterns.THREE_OF_A_KIND, List.of(List.of(new Card(Value.TWO, Color.DIAMONDS), new Card(Value.TWO, Color.SPADES), new Card(Value.TWO, Color.HEARTS))),
                 Patterns.HIGHER, List.of(List.of(new Card(Value.EIGHT, Color.DIAMONDS)), List.of(new Card(Value.FIVE, Color.SPADES))
-                )), threeTwos.getPatterns());
+                )), threeTwos.findAllPatterns());
         assertEquals(Map.of(
                 Patterns.STRAIGHT, List.of(List.of(
                         new Card(Value.ACE, Color.HEARTS), new Card(Value.KING, Color.HEARTS),
@@ -518,7 +518,7 @@ class HandTest {
                         List.of(new Card(Value.ACE, Color.HEARTS)), List.of(new Card(Value.KING, Color.HEARTS)),
                         List.of(new Card(Value.QUEEN, Color.HEARTS)), List.of(new Card(Value.JACK, Color.DIAMONDS)),
                         List.of(new Card(Value.TEN, Color.HEARTS))
-                )), bigStraight.getPatterns());
+                )), bigStraight.findAllPatterns());
         assertEquals(Map.of(
                 Patterns.STRAIGHT, List.of(List.of(new Card(Value.SIX, Color.HEARTS),
                         new Card(Value.FIVE, Color.HEARTS), new Card(Value.FOUR, Color.DIAMONDS),
@@ -526,7 +526,7 @@ class HandTest {
                 )), Patterns.HIGHER, List.of(List.of(new Card(Value.SIX, Color.HEARTS)),
                         List.of(new Card(Value.FIVE, Color.HEARTS)), List.of(new Card(Value.FOUR, Color.DIAMONDS)),
                         List.of(new Card(Value.THREE, Color.HEARTS)), List.of(new Card(Value.TWO, Color.HEARTS))
-                )), littleStraight.getPatterns());
+                )), littleStraight.findAllPatterns());
         assertEquals(Map.of(
                 Patterns.STRAIGHT, List.of(List.of(new Card(Value.SIX, Color.HEARTS),
                         new Card(Value.FIVE, Color.HEARTS), new Card(Value.FOUR, Color.HEARTS),
@@ -534,7 +534,7 @@ class HandTest {
                 )), Patterns.HIGHER, List.of(List.of(new Card(Value.SIX, Color.HEARTS)),
                         List.of(new Card(Value.FIVE, Color.HEARTS)), List.of(new Card(Value.FOUR, Color.HEARTS)),
                         List.of(new Card(Value.THREE, Color.HEARTS)), List.of(new Card(Value.TWO, Color.SPADES))
-                )), almostStraightFlush.getPatterns());
+                )), almostStraightFlush.findAllPatterns());
         assertEquals(Map.of(
                 Patterns.FLUSH, List.of(List.of(new Card(Value.ACE, Color.DIAMONDS),
                         new Card(Value.KING, Color.DIAMONDS), new Card(Value.QUEEN, Color.DIAMONDS),
@@ -542,7 +542,7 @@ class HandTest {
                 )), Patterns.HIGHER, List.of(List.of(new Card(Value.ACE, Color.DIAMONDS)),
                         List.of(new Card(Value.KING, Color.DIAMONDS)), List.of(new Card(Value.QUEEN, Color.DIAMONDS)),
                         List.of(new Card(Value.JACK, Color.DIAMONDS)), List.of(new Card(Value.TWO, Color.DIAMONDS))
-                )), aceDiamonds.getPatterns());
+                )), aceDiamonds.findAllPatterns());
         assertEquals(Map.of(
                 Patterns.FLUSH, List.of(List.of(new Card(Value.NINE, Color.DIAMONDS),
                         new Card(Value.FIVE, Color.DIAMONDS), new Card(Value.FOUR, Color.DIAMONDS),
@@ -550,7 +550,7 @@ class HandTest {
                 )), Patterns.HIGHER, List.of(List.of(new Card(Value.NINE, Color.DIAMONDS)),
                         List.of(new Card(Value.FIVE, Color.DIAMONDS)), List.of(new Card(Value.FOUR, Color.DIAMONDS)),
                         List.of(new Card(Value.THREE, Color.DIAMONDS)), List.of(new Card(Value.TWO, Color.DIAMONDS))
-                )), nineDiamonds.getPatterns());
+                )), nineDiamonds.findAllPatterns());
         assertEquals(Map.of(
                 Patterns.FULL, List.of(List.of(new Card(Value.EIGHT, Color.DIAMONDS),
                         new Card(Value.EIGHT, Color.SPADES), new Card(Value.EIGHT, Color.HEARTS),
@@ -558,7 +558,7 @@ class HandTest {
                 )), Patterns.THREE_OF_A_KIND, List.of(List.of(new Card(Value.EIGHT, Color.DIAMONDS),
                         new Card(Value.EIGHT, Color.SPADES), new Card(Value.EIGHT, Color.HEARTS)
                 )), Patterns.PAIR, List.of(List.of(new Card(Value.TWO, Color.DIAMONDS), new Card(Value.TWO, Color.HEARTS))
-                )), fullThreeEight.getPatterns());
+                )), fullThreeEight.findAllPatterns());
         assertEquals(Map.of(
                 Patterns.FULL, List.of(List.of(new Card(Value.ACE, Color.DIAMONDS),
                         new Card(Value.ACE, Color.SPADES), new Card(Value.ACE, Color.HEARTS),
@@ -566,13 +566,13 @@ class HandTest {
                 )), Patterns.THREE_OF_A_KIND, List.of(List.of(new Card(Value.ACE, Color.DIAMONDS),
                         new Card(Value.ACE, Color.SPADES), new Card(Value.ACE, Color.HEARTS)
                 )), Patterns.PAIR, List.of(List.of(new Card(Value.TWO, Color.DIAMONDS), new Card(Value.TWO, Color.HEARTS))
-                )), fullThreeAce.getPatterns());
+                )), fullThreeAce.findAllPatterns());
         assertEquals(Map.of(
                 Patterns.FOUR_OF_A_KIND, List.of(List.of(
                         new Card(Value.ACE, Color.DIAMONDS), new Card(Value.ACE, Color.CLUBS),
                         new Card(Value.ACE, Color.SPADES), new Card(Value.ACE, Color.HEARTS)
                 )), Patterns.HIGHER, List.of(List.of(new Card(Value.KING, Color.SPADES))
-                )), fourAces.getPatterns());
+                )), fourAces.findAllPatterns());
         assertEquals(Map.of(
                 Patterns.STRAIGHT_FLUSH, List.of(List.of(new Card(Value.ACE, Color.HEARTS),
                         new Card(Value.KING, Color.HEARTS), new Card(Value.QUEEN, Color.HEARTS),
@@ -586,7 +586,7 @@ class HandTest {
                 )), Patterns.HIGHER, List.of(List.of(new Card(Value.ACE, Color.HEARTS)),
                         List.of(new Card(Value.KING, Color.HEARTS)), List.of(new Card(Value.QUEEN, Color.HEARTS)),
                         List.of(new Card(Value.JACK, Color.HEARTS)), List.of(new Card(Value.TEN, Color.HEARTS))
-                )), bigStraightFlush.getPatterns());
+                )), bigStraightFlush.findAllPatterns());
         assertEquals(Map.of(
                 Patterns.STRAIGHT_FLUSH, List.of(List.of(new Card(Value.SIX, Color.HEARTS),
                         new Card(Value.FIVE, Color.HEARTS), new Card(Value.FOUR, Color.HEARTS),
@@ -600,7 +600,7 @@ class HandTest {
                 )), Patterns.HIGHER, List.of(List.of(new Card(Value.SIX, Color.HEARTS)),
                         List.of(new Card(Value.FIVE, Color.HEARTS)), List.of(new Card(Value.FOUR, Color.HEARTS)),
                         List.of(new Card(Value.THREE, Color.HEARTS)), List.of(new Card(Value.TWO, Color.HEARTS))
-                )), littleStraightFlush.getPatterns());
+                )), littleStraightFlush.findAllPatterns());
     }
 
     /**
@@ -635,34 +635,34 @@ class HandTest {
                 new Card(Value.KING, Color.DIAMONDS),
                 new Card(Value.QUEEN, Color.DIAMONDS),
                 new Card(Value.JACK, Color.DIAMONDS),
-                new Card(Value.TWO, Color.DIAMONDS)), aceDiamonds.flushDetection());
+                new Card(Value.TWO, Color.DIAMONDS)), aceDiamonds.findFlush());
         assertEquals(List.of(new Card(Value.NINE, Color.DIAMONDS),
                 new Card(Value.FIVE, Color.DIAMONDS),
                 new Card(Value.FOUR, Color.DIAMONDS),
                 new Card(Value.THREE, Color.DIAMONDS),
-                new Card(Value.TWO, Color.DIAMONDS)), nineDiamonds.flushDetection());
+                new Card(Value.TWO, Color.DIAMONDS)), nineDiamonds.findFlush());
         assertEquals(List.of(new Card(Value.ACE, Color.HEARTS),
                 new Card(Value.KING, Color.HEARTS),
                 new Card(Value.QUEEN, Color.HEARTS),
                 new Card(Value.JACK, Color.HEARTS),
-                new Card(Value.TEN, Color.HEARTS)), bigStraightFlush.flushDetection());
+                new Card(Value.TEN, Color.HEARTS)), bigStraightFlush.findFlush());
         assertEquals(List.of(new Card(Value.SIX, Color.HEARTS),
                 new Card(Value.FIVE, Color.HEARTS),
                 new Card(Value.FOUR, Color.HEARTS),
                 new Card(Value.THREE, Color.HEARTS),
-                new Card(Value.TWO, Color.HEARTS)), littleStraightFlush.flushDetection());
+                new Card(Value.TWO, Color.HEARTS)), littleStraightFlush.findFlush());
 
-        assertEquals(Collections.emptyList(), almostDiamonds.flushDetection());
-        assertEquals(Collections.emptyList(), bigStraight.flushDetection());
-        assertEquals(Collections.emptyList(), almostStraight.flushDetection());
-        assertEquals(Collections.emptyList(), almostStraightFlush.flushDetection());
-        assertEquals(Collections.emptyList(), littleStraight.flushDetection());
-        assertEquals(Collections.emptyList(), pairOfEights.flushDetection());
-        assertEquals(Collections.emptyList(), secondPairOfEights.flushDetection());
-        assertEquals(Collections.emptyList(), thirdPairOfEights.flushDetection());
-        assertEquals(Collections.emptyList(), pairOfTwos.flushDetection());
-        assertEquals(Collections.emptyList(), threeTwos.flushDetection());
-        assertEquals(Collections.emptyList(), doublePairOfTwosAndEights.flushDetection());
-        assertEquals(Collections.emptyList(), fourAces.flushDetection());
+        assertEquals(Collections.emptyList(), almostDiamonds.findFlush());
+        assertEquals(Collections.emptyList(), bigStraight.findFlush());
+        assertEquals(Collections.emptyList(), almostStraight.findFlush());
+        assertEquals(Collections.emptyList(), almostStraightFlush.findFlush());
+        assertEquals(Collections.emptyList(), littleStraight.findFlush());
+        assertEquals(Collections.emptyList(), pairOfEights.findFlush());
+        assertEquals(Collections.emptyList(), secondPairOfEights.findFlush());
+        assertEquals(Collections.emptyList(), thirdPairOfEights.findFlush());
+        assertEquals(Collections.emptyList(), pairOfTwos.findFlush());
+        assertEquals(Collections.emptyList(), threeTwos.findFlush());
+        assertEquals(Collections.emptyList(), doublePairOfTwosAndEights.findFlush());
+        assertEquals(Collections.emptyList(), fourAces.findFlush());
     }
 }

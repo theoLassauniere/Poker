@@ -2,6 +2,7 @@ package poker;
 
 import java.text.ParseException;
 import java.util.*;
+import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
 /**
@@ -12,7 +13,7 @@ import java.util.stream.Stream;
 
 public class Hand implements Comparable<Hand> {
     private final List<Card> cards;
-    private final Map<Patterns, List<List<Card>>> patterns;
+    private Map<Patterns, List<List<Card>>> patterns;
     private String name;
 
     /**
@@ -28,7 +29,7 @@ public class Hand implements Comparable<Hand> {
         this.name = name;
         this.cards = hand;
         sortHand();
-        patterns = getPatterns();
+        patterns = findAllPatterns();
     }
 
     public String getName() {
@@ -59,10 +60,47 @@ public class Hand implements Comparable<Hand> {
     @Override
     public String toString() {
         StringBuilder string = new StringBuilder().append(getName()).append(" (");
-        for (Card card : getCards())
-            string.append(card.toString()).append(" ");
+        var playedCards = getPatterns().values().stream()
+                .flatMap(Collection::stream).flatMap(Collection::stream) // flattens the tree to obtain a stream of cards
+                .distinct().sorted(Comparator.reverseOrder()).toList();
+        for (Card card : playedCards)
+            string.append(card).append(" ");
         string.setLength(string.length() - 1);
         return string.append(')').toString();
+    }
+
+    public void addCard(Card card) {
+        cards.add(card);
+        sortHand();
+    }
+
+    public void findbestPattern() {
+        Map<Patterns, List<List<Card>>> allPatterns = findAllPatterns();
+        var i = 0;
+        while (!allPatterns.containsKey(Patterns.values()[i])) {
+            i = i + 1;
+        }
+        Patterns best = Patterns.values()[i];
+
+        Map<Patterns, List<List<Card>>> bestPatternCombination = new HashMap<>();
+        if (!best.equals(Patterns.HIGHER)) {
+            bestPatternCombination.put(best, allPatterns.get(best));
+            for (int k = 0; k < 5 - allPatterns.get(best).get(0).size(); k++) {
+                if (bestPatternCombination.containsKey(Patterns.HIGHER))
+                    bestPatternCombination.get(Patterns.HIGHER).add(allPatterns.get(Patterns.HIGHER).get(k));
+                else
+                    bestPatternCombination.put(Patterns.HIGHER, new ArrayList<>(List.of(allPatterns.get(Patterns.HIGHER).get(k))));
+            }
+        } else {
+            for (int k = 0; k < 5; k++) {
+                if (bestPatternCombination.containsKey(Patterns.HIGHER))
+                    bestPatternCombination.get(Patterns.HIGHER).add(allPatterns.get(Patterns.HIGHER).get(k));
+                else
+                    bestPatternCombination.put(Patterns.HIGHER, new ArrayList<>(List.of(allPatterns.get(Patterns.HIGHER).get(k))));
+            }
+        }
+        patterns = bestPatternCombination;
+
     }
 
     /**
@@ -131,7 +169,9 @@ public class Hand implements Comparable<Hand> {
     }
 
     /**
-     * Find the best straight in hand and return an array of this straight
+     * Find the best straight in hand
+     *
+     * @return Cards realising the straight or empty if there's no straight
      */
     public List<Card> findStraight() {
         if (cards.size() < 5) return Collections.emptyList();
@@ -162,11 +202,11 @@ public class Hand implements Comparable<Hand> {
     }
 
     /**
-     * Is there a flush in the hand?
+     * Finds flush in hand
      *
      * @return Cards realising the flush or empty if there's no flush
      */
-    public List<Card> flushDetection() {
+    public List<Card> findFlush() {
         if (cards.size() < 5) return Collections.emptyList();
         for (var entry : groupCardsByColor().entrySet())
             if (entry.getValue().size() >= 5) return entry.getValue();
@@ -174,21 +214,18 @@ public class Hand implements Comparable<Hand> {
     }
 
     /**
-     * Gets the patterns and card values that realize them
+     * Gets all the patterns in hand and cards that realize them
      **/
-    public Map<Patterns, List<List<Card>>> getPatterns() {
+    public Map<Patterns, List<List<Card>>> findAllPatterns() {
         EnumMap<Patterns, List<List<Card>>> result = new EnumMap<>(Patterns.class);
+        BiConsumer<Patterns, List<Card>> addToEnum = (pattern, patternCards) -> {
+            if (pattern == null || patternCards.isEmpty()) return;
+            result.putIfAbsent(pattern, new ArrayList<>());
+            result.get(pattern).add(patternCards);
+        };
 
-        var flush = flushDetection();
-        if (!flush.isEmpty()) {
-            result.putIfAbsent(Patterns.FLUSH, new ArrayList<>());
-            result.get(Patterns.FLUSH).add(flush);
-        }
-        var straight = findStraight();
-        if (!straight.isEmpty()) {
-            result.putIfAbsent(Patterns.STRAIGHT, new ArrayList<>());
-            result.get(Patterns.STRAIGHT).add(straight);
-        }
+        addToEnum.accept(Patterns.FLUSH, findFlush());
+        addToEnum.accept(Patterns.STRAIGHT, findStraight());
 
         var entries = groupCardsByValue();
         for (Value value : Arrays.stream(Value.values()).sorted((v1, v2) -> v2.ordinal() - v1.ordinal()).toList()) {
@@ -200,27 +237,24 @@ public class Hand implements Comparable<Hand> {
                 case 4 -> Patterns.FOUR_OF_A_KIND;
                 default -> null;
             };
-            if (p == null) continue;
-            result.putIfAbsent(p, new ArrayList<>());
-            result.get(p).add(entry);
+            addToEnum.accept(p, entry);
         }
 
         if (result.containsKey(Patterns.FLUSH) && result.containsKey(Patterns.STRAIGHT)) {
-            result.putIfAbsent(Patterns.STRAIGHT_FLUSH, new ArrayList<>());
             var straightCards = result.get(Patterns.STRAIGHT).get(0);
             var commonCards = result.get(Patterns.FLUSH).get(0).stream().filter(straightCards::contains).toList();
-            if (commonCards.size() >= 5) result.get(Patterns.STRAIGHT_FLUSH).add(commonCards);
+            if (commonCards.size() >= 5) addToEnum.accept(Patterns.STRAIGHT_FLUSH, commonCards);
         }
-        if (result.containsKey(Patterns.PAIR) && result.containsKey(Patterns.THREE_OF_A_KIND)) {
-            result.putIfAbsent(Patterns.FULL, new ArrayList<>());
-            result.get(Patterns.FULL).add(Stream.of(result.get(Patterns.THREE_OF_A_KIND).get(0), result.get(Patterns.PAIR).get(0)).flatMap(Collection::stream).toList());
-        }
-        if (result.containsKey(Patterns.PAIR) && result.get(Patterns.PAIR).size() > 1) {
-            result.putIfAbsent(Patterns.DOUBLE_PAIR, new ArrayList<>());
-            result.get(Patterns.DOUBLE_PAIR).add(result.get(Patterns.PAIR).stream().flatMap(Collection::stream).toList());
-        }
+        if (result.containsKey(Patterns.PAIR) && result.containsKey(Patterns.THREE_OF_A_KIND))
+            addToEnum.accept(Patterns.FULL, Stream.of(result.get(Patterns.THREE_OF_A_KIND).get(0), result.get(Patterns.PAIR).get(0)).flatMap(Collection::stream).toList());
+        if (result.containsKey(Patterns.PAIR) && result.get(Patterns.PAIR).size() > 1)
+            addToEnum.accept(Patterns.DOUBLE_PAIR, result.get(Patterns.PAIR).stream().flatMap(Collection::stream).toList());
 
         return result;
+    }
+
+    public Map<Patterns, List<List<Card>>> getPatterns() {
+        return patterns;
     }
 
     /**
@@ -263,11 +297,11 @@ public class Hand implements Comparable<Hand> {
      **/
     public Winner comparePatterns(Hand otherHand) {
         for (Patterns p : Patterns.values()) {
-            if (patterns.containsKey(p) && !otherHand.patterns.containsKey(p)) // Only this hand has the pattern
-                return new Winner(this, p, patterns.get(p).get(0).get(0));
-            else if (!patterns.containsKey(p) && otherHand.patterns.containsKey(p)) // Only the other hand has the pattern
-                return new Winner(otherHand, p, otherHand.patterns.get(p).get(0).get(0));
-            else if (patterns.containsKey(p) && otherHand.patterns.containsKey(p)) { // Both hands have the pattern
+            if (getPatterns().containsKey(p) && !otherHand.getPatterns().containsKey(p)) // Only this hand has the pattern
+                return new Winner(this, p, getPatterns().get(p).get(0).get(0));
+            else if (!getPatterns().containsKey(p) && otherHand.getPatterns().containsKey(p)) // Only the other hand has the pattern
+                return new Winner(otherHand, p, otherHand.getPatterns().get(p).get(0).get(0));
+            else if (getPatterns().containsKey(p) && otherHand.getPatterns().containsKey(p)) { // Both hands have the pattern
                 Winner comparisonResult = comparePatternValues(p, otherHand);
                 if (comparisonResult != null) return comparisonResult;
             }
