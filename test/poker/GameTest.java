@@ -144,7 +144,7 @@ class GameTest {
     void texasTest() {
         for (int k = 1; k < 100; k++) {
             System.setIn(new ByteArrayInputStream(("a\na\na\na").getBytes())); // Redirect stdin
-            assertDoesNotThrow(fourPlayerGame::texasHoldem);// The game should start with errors
+            assertDoesNotThrow(fourPlayerGame::texasHoldem);// The game should start without errors
             fourPlayerGame = new Game(5, 4, k);
         }
     }
