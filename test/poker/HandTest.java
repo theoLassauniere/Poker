@@ -27,7 +27,8 @@ class HandTest {
             bigStraightFlush, littleStraightFlush, almostStraightFlush,
     // 7 cards hands :
     sevenCardHandStraightEnd, sevenCardHandStraightBeginning, sevenCardHandStraightDuplicate,
-            sevenCardHandStraightTriplicate, sevenCardHandAlmostStraight;
+            sevenCardHandStraightTriplicate, sevenCardHandAlmostStraight, sevenCardHandStraightDuplicateEnd,
+            sevenCardHandStraightDuplicateWithLast;
 
 
     @BeforeEach
@@ -249,6 +250,26 @@ class HandTest {
                 new Card(Value.JACK, Color.HEARTS),
                 new Card(Value.TWO, Color.SPADES)
         )));
+
+        sevenCardHandStraightDuplicateEnd = new Hand(new ArrayList<>(List.of(
+                new Card(Value.ACE, Color.HEARTS),
+                new Card(Value.KING, Color.HEARTS),
+                new Card(Value.QUEEN, Color.SPADES),
+                new Card(Value.JACK, Color.HEARTS),
+                new Card(Value.TEN, Color.SPADES),
+                new Card(Value.TEN, Color.HEARTS),
+                new Card(Value.TEN, Color.DIAMONDS)
+        )));
+
+        sevenCardHandStraightDuplicateWithLast = new Hand(new ArrayList<>(List.of(
+                new Card(Value.ACE, Color.HEARTS),
+                new Card(Value.KING, Color.HEARTS),
+                new Card(Value.QUEEN, Color.SPADES),
+                new Card(Value.JACK, Color.HEARTS),
+                new Card(Value.TEN, Color.SPADES),
+                new Card(Value.TEN, Color.HEARTS),
+                new Card(Value.EIGHT, Color.DIAMONDS)
+        )));
     }
 
     /**
@@ -373,7 +394,21 @@ class HandTest {
                 new Card(Value.QUEEN, Color.CLUBS),
                 new Card(Value.JACK, Color.HEARTS),
                 new Card(Value.TEN, Color.SPADES)), sevenCardHandStraightTriplicate.findStraight());
-
+        assertEquals(List.of(
+                new Card(Value.ACE, Color.HEARTS),
+                new Card(Value.KING, Color.HEARTS),
+                new Card(Value.QUEEN, Color.SPADES),
+                new Card(Value.JACK, Color.HEARTS),
+                new Card(Value.TEN, Color.SPADES),
+                new Card(Value.TEN, Color.HEARTS),
+                new Card(Value.TEN, Color.DIAMONDS)), sevenCardHandStraightDuplicateEnd.findStraight());
+        assertEquals(List.of(
+                new Card(Value.ACE, Color.HEARTS),
+                new Card(Value.KING, Color.HEARTS),
+                new Card(Value.QUEEN, Color.SPADES),
+                new Card(Value.JACK, Color.HEARTS),
+                new Card(Value.TEN, Color.SPADES),
+                new Card(Value.TEN, Color.HEARTS)), sevenCardHandStraightDuplicateWithLast.findStraight());
     }
 
     /**

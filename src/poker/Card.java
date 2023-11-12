@@ -54,4 +54,11 @@ public record Card(Value value, Color color) implements Comparable<Card> {
                 deck.add(new Card(value, color));
         return deck;
     }
+
+    /**
+     * Return the difference between the ordinal value of the card and that of the other card
+     */
+    public int compareOrdinal(Card other) {
+        return value.ordinal() - other.value().ordinal();
+    }
 }

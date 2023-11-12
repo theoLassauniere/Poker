@@ -12,6 +12,7 @@ class CardTest {
     Card c1;
     Card c2;
     Card c3;
+    Card c4;
 
     /**
      * Initialize Cards for testing
@@ -21,6 +22,7 @@ class CardTest {
         c1 = new Card(Value.EIGHT, Color.HEARTS);
         c2 = new Card(Value.KING, Color.DIAMONDS);
         c3 = new Card(Value.EIGHT, Color.CLUBS);
+        c4 = new Card(Value.TWO, Color.HEARTS);
     }
 
     /**
@@ -64,5 +66,14 @@ class CardTest {
         assertEquals(new Card(Value.TEN, Color.SPADES), Card.tryParse("10Pi").orElseThrow());
         assertEquals(new Card(Value.KING, Color.CLUBS), Card.tryParse("KTr").orElseThrow());
         assertEquals(new Card(Value.KING, Color.HEARTS), Card.tryParse("KCo").orElseThrow());
+    }
+
+    /**
+     * Test the compareOrdinal
+     */
+    @Test
+    void testCompareOrdinal() {
+        assertEquals(-5, c1.compareOrdinal(c2));
+        assertEquals(11, c2.compareOrdinal(c4));
     }
 }
