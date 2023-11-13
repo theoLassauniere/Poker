@@ -8,6 +8,9 @@ import org.junit.jupiter.params.provider.CsvSource;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -149,4 +152,42 @@ class GameTest {
         }
     }
 
+    @Test
+    void getCard() {
+        fourPlayerGame = new Game(5, 4, 40);
+        List<Card> deckCopy = new ArrayList<>();
+        List<Card> cardsGets = new ArrayList<>();
+        deckCopy.addAll(fourPlayerGame.getDeck());
+        for (int i = 0; i < deckCopy.size(); i++) cardsGets.add(fourPlayerGame.getRandomCard());
+        assertTrue(fourPlayerGame.getDeck().isEmpty());
+        for (Card c : deckCopy) assertTrue(cardsGets.contains(c));
+    }
+
+    @Test
+    void extractionTest() {
+        fourPlayerGame = new Game(5, 4, 40);
+        Hand hand1 = new Hand(new ArrayList<>(List.of(new Card(Value.QUEEN, Color.HEARTS), new Card(Value.TWO, Color.SPADES))));
+        Hand hand2 = new Hand(new ArrayList<>(List.of(new Card(Value.JACK, Color.DIAMONDS), new Card(Value.TWO, Color.CLUBS))));
+        Hand hand3 = new Hand(new ArrayList<>(List.of(new Card(Value.TEN, Color.HEARTS), new Card(Value.THREE, Color.HEARTS))));
+        Hand hand4 = new Hand(new ArrayList<>(List.of(new Card(Value.TEN, Color.CLUBS), new Card(Value.NINE, Color.HEARTS))));
+        Hand[] handVerify = {hand1, hand2, hand3, hand4};
+        for (int i = 0; i < fourPlayerGame.getHand().length; i++) {
+            fourPlayerGame.getHand()[i] = new Hand(new ArrayList<>(List.of(fourPlayerGame.getRandomCard())));
+            fourPlayerGame.getHand()[i].addCards(List.of(fourPlayerGame.getRandomCard()));
+            assertEquals(fourPlayerGame.getHand()[i], handVerify[i]);
+        }
+        List<Card> flopVerify = new ArrayList<>(List.of(new Card(Value.KING, Color.DIAMONDS), new Card(Value.FIVE, Color.CLUBS), new Card(Value.QUEEN, Color.DIAMONDS)));
+        List<Card> turnVerify = new ArrayList<>(List.of(new Card(Value.ACE, Color.DIAMONDS)));
+        List<Card> riverVerify = new ArrayList<>(List.of(new Card(Value.JACK, Color.CLUBS)));
+        List<List<Card>> stepVerify = new ArrayList<>(List.of(flopVerify, turnVerify, riverVerify));
+        List<AbstractMap.SimpleEntry<String, Integer>> steps = List.of(new AbstractMap.SimpleEntry<>("Flop", 3), new AbstractMap.SimpleEntry<>("Turn", 1), new AbstractMap.SimpleEntry<>("River", 1));
+        for (int k = 0; k < steps.size(); k++) {
+            List<Card> step = fourPlayerGame.extraction(steps.get(k).getValue());
+            assertEquals(step, stepVerify.get(k));
+            for (int i = 0; i < fourPlayerGame.getHand().length; i++) {
+                handVerify[i].addCards(stepVerify.get(k));
+                assertEquals(fourPlayerGame.getHand()[i], handVerify[i]);
+            }
+        }
+    }
 }

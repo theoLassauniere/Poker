@@ -49,14 +49,22 @@ public class Game {
         hands = new Hand[numberOfPlayers];
     }
 
+    public Hand[] getHand() {
+        return hands;
+    }
 
-    private Card getRandomCard() {
+    public List<Card> getDeck() {
+        return deck;
+    }
+
+    public Card getRandomCard() {
         Card randomCardOne = deck.get(random.nextInt(deck.size()));
         deck.remove(randomCardOne);
         return randomCardOne;
     }
 
-    private void displayAndWait(Scanner scanner, ArrayList<Card> tab) {
+
+    public void displayAndWait(Scanner scanner, List<Card> tab) {
         for (Card c : tab) {
             outputStream.print(c + " ");
         }
@@ -69,12 +77,14 @@ public class Game {
         outputStream.println();
     }
 
-    private ArrayList<Card> extraction(int numberOfCards) {
+
+    public List<Card> extraction(int numberOfCards) {
         ArrayList<Card> cardsArray = new ArrayList<>();
         for (int i = 0; i < numberOfCards; i++) cardsArray.add(getRandomCard());
         for (Hand hand : hands) hand.addCards(cardsArray);
         return cardsArray;
     }
+
 
     public Winner tournamentResult(Map<Hand, ArrayList<Winner>> result, List<Hand> tournament) {
         Winner equality = new Winner(null, Patterns.EQUALITY, null);
@@ -88,7 +98,7 @@ public class Game {
         return mostImportantResult;
     }
 
-    private Winner tournament() {
+    public Winner tournament() {
         Map<Hand, ArrayList<Winner>> result = new HashMap<>();
         ArrayList<Hand> tournament = new ArrayList<>(List.of(hands));
         while (tournament.size() > 1) {
@@ -118,7 +128,7 @@ public class Game {
             hands[i] = new Hand("Main " + (i + 1), new ArrayList<>(List.of(getRandomCard(), getRandomCard())));
         displayAndWait(scanner, new ArrayList<>());
         for (var step : List.of(new SimpleEntry<>("Flop", 3), new SimpleEntry<>("Turn", 1), new SimpleEntry<>("River", 1))) {
-            ArrayList<Card> extractionResult = extraction(step.getValue());
+            List<Card> extractionResult = extraction(step.getValue());
             outputStream.print(step.getKey() + " : ");
             displayAndWait(scanner, extractionResult);
         }
@@ -150,7 +160,7 @@ public class Game {
             String typeGame = scanner.nextLine();
             try {
                 if (typeGame.equals("1")) new Game().poker();
-                else if (typeGame.equals("2")) new Game(5, 4, 40).texasHoldem();
+                else if (typeGame.equals("2")) new Game(5, 4).texasHoldem();
                 else throw new IllegalArgumentException("The entry is not valid");
                 break;
             } catch (IllegalArgumentException | ParseException e) {
