@@ -8,9 +8,8 @@ import org.junit.jupiter.params.provider.CsvSource;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.AbstractMap.SimpleEntry;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -152,17 +151,18 @@ class GameTest {
         }
     }
 
+    //Test for getRandomCard method
     @Test
-    void getCard() {
+    void getCRandomCardTest() {
         fourPlayerGame = new Game(5, 4, 40);
-        List<Card> deckCopy = new ArrayList<>();
         List<Card> cardsGets = new ArrayList<>();
-        deckCopy.addAll(fourPlayerGame.getDeck());
+        List<Card> deckCopy = new ArrayList<>(fourPlayerGame.getDeck());
         for (int i = 0; i < deckCopy.size(); i++) cardsGets.add(fourPlayerGame.getRandomCard());
-        assertTrue(fourPlayerGame.getDeck().isEmpty());
-        for (Card c : deckCopy) assertTrue(cardsGets.contains(c));
+        assertTrue(fourPlayerGame.getDeck().isEmpty()); //Check if the deck is empty after removing all cards
+        for (Card c : deckCopy) assertTrue(cardsGets.contains(c));//Check if the collection of remove cards is the deck
     }
 
+    //Test for extraction method
     @Test
     void extractionTest() {
         fourPlayerGame = new Game(5, 4, 40);
@@ -189,5 +189,90 @@ class GameTest {
                 assertEquals(fourPlayerGame.getHand()[i], handVerify[i]);
             }
         }
+    }
+
+    //Four different tests for tournament and tournamentResult methods, each time we compare the result of the method on a precise game which we know all the steps during the "tournament" and the result
+    @Test
+    void tournamentTest() {
+        fourPlayerGame = new Game(5, 4, 40);
+        Hand hand1 = new Hand("Main 1", new ArrayList<>(List.of(new Card(Value.ACE, Color.DIAMONDS), new Card(Value.KING, Color.DIAMONDS), new Card(Value.QUEEN, Color.DIAMONDS), new Card(Value.QUEEN, Color.HEARTS), new Card(Value.JACK, Color.CLUBS))));
+        Hand hand2 = new Hand("Main 2", new ArrayList<>(List.of(new Card(Value.ACE, Color.DIAMONDS), new Card(Value.KING, Color.DIAMONDS), new Card(Value.QUEEN, Color.DIAMONDS), new Card(Value.JACK, Color.CLUBS), new Card(Value.JACK, Color.DIAMONDS))));
+        Hand hand3 = new Hand("Main 3", new ArrayList<>(List.of(new Card(Value.ACE, Color.DIAMONDS), new Card(Value.KING, Color.DIAMONDS), new Card(Value.QUEEN, Color.DIAMONDS), new Card(Value.JACK, Color.CLUBS), new Card(Value.TEN, Color.HEARTS))));
+        Hand hand4 = new Hand("Main 4", new ArrayList<>(List.of(new Card(Value.ACE, Color.DIAMONDS), new Card(Value.KING, Color.DIAMONDS), new Card(Value.QUEEN, Color.DIAMONDS), new Card(Value.JACK, Color.CLUBS), new Card(Value.TEN, Color.CLUBS))));
+        Hand[] hands = {hand1, hand2, hand3, hand4};
+        for (int k = 0; k < fourPlayerGame.getHand().length; k++) {
+            fourPlayerGame.getHand()[k] = hands[k];
+        }
+        SimpleEntry<ArrayList<Hand>, Map<Hand, ArrayList<Winner>>> result = fourPlayerGame.tournament();
+        SimpleEntry<ArrayList<Hand>, Map<Hand, ArrayList<Winner>>> resultExpected = new SimpleEntry<>(new ArrayList<>(List.of(hand3)), new HashMap<>());
+        Winner winner1 = new Winner(hand1, Patterns.PAIR, new Card(Value.QUEEN, Color.DIAMONDS));
+        Winner winner2 = new Winner(hand3, Patterns.STRAIGHT, new Card(Value.ACE, Color.DIAMONDS));
+        Winner winner3 = new Winner(null, Patterns.EQUALITY, null);
+        resultExpected.getValue().put(hand1, new ArrayList<>(List.of(winner1)));
+        resultExpected.getValue().put(hand3, new ArrayList<>(List.of(winner2)));
+        resultExpected.getValue().get(hand3).add(winner3);
+        assertEquals(resultExpected, result);
+        assertEquals(fourPlayerGame.tournamentResult(resultExpected), winner3);
+
+        fourPlayerGame = new Game(5, 4, 8);
+        hand1 = new Hand("Main 1", new ArrayList<>(List.of(new Card(Value.ACE, Color.DIAMONDS), new Card(Value.KING, Color.DIAMONDS), new Card(Value.JACK, Color.HEARTS), new Card(Value.NINE, Color.CLUBS), new Card(Value.SEVEN, Color.HEARTS))));
+        hand2 = new Hand("Main 2", new ArrayList<>(List.of(new Card(Value.ACE, Color.DIAMONDS), new Card(Value.KING, Color.DIAMONDS), new Card(Value.JACK, Color.HEARTS), new Card(Value.NINE, Color.CLUBS), new Card(Value.SEVEN, Color.HEARTS))));
+        hand3 = new Hand("Main 3", new ArrayList<>(List.of(new Card(Value.ACE, Color.DIAMONDS), new Card(Value.ACE, Color.SPADES), new Card(Value.KING, Color.DIAMONDS), new Card(Value.JACK, Color.HEARTS), new Card(Value.TEN, Color.HEARTS))));
+        hand4 = new Hand("Main 4", new ArrayList<>(List.of(new Card(Value.ACE, Color.DIAMONDS), new Card(Value.KING, Color.DIAMONDS), new Card(Value.JACK, Color.HEARTS), new Card(Value.SEVEN, Color.HEARTS), new Card(Value.SEVEN, Color.SPADES))));
+        hands = new Hand[]{hand1, hand2, hand3, hand4};
+        for (int k = 0; k < fourPlayerGame.getHand().length; k++) {
+            fourPlayerGame.getHand()[k] = hands[k];
+        }
+        result = fourPlayerGame.tournament();
+        resultExpected = new SimpleEntry<>(new ArrayList<>(List.of(hand3)), new HashMap<>());
+        winner1 = new Winner(null, Patterns.EQUALITY, null);
+        winner2 = new Winner(hand3, Patterns.PAIR, new Card(Value.ACE, Color.DIAMONDS));
+        resultExpected.getValue().put(hand1, new ArrayList<>(List.of(winner1)));
+        resultExpected.getValue().put(hand3, new ArrayList<>(List.of(winner2)));
+        resultExpected.getValue().get(hand3).add(winner2);
+        assertEquals(resultExpected, result);
+        assertEquals(fourPlayerGame.tournamentResult(resultExpected), winner2);
+
+        fourPlayerGame = new Game(5, 4, 8);
+        hand1 = new Hand("Main 1", new ArrayList<>(List.of(new Card(Value.ACE, Color.HEARTS), new Card(Value.ACE, Color.SPADES), new Card(Value.QUEEN, Color.HEARTS), new Card(Value.FOUR, Color.HEARTS), new Card(Value.FOUR, Color.SPADES))));
+        hand2 = new Hand("Main 2", new ArrayList<>(List.of(new Card(Value.ACE, Color.HEARTS), new Card(Value.ACE, Color.SPADES), new Card(Value.QUEEN, Color.HEARTS), new Card(Value.JACK, Color.DIAMONDS), new Card(Value.EIGHT, Color.DIAMONDS))));
+        hand3 = new Hand("Main 3", new ArrayList<>(List.of(new Card(Value.ACE, Color.HEARTS), new Card(Value.ACE, Color.SPADES), new Card(Value.QUEEN, Color.HEARTS), new Card(Value.TEN, Color.HEARTS), new Card(Value.FIVE, Color.SPADES))));
+        hand4 = new Hand("Main 4", new ArrayList<>(List.of(new Card(Value.ACE, Color.HEARTS), new Card(Value.ACE, Color.SPADES), new Card(Value.KING, Color.HEARTS), new Card(Value.KING, Color.CLUBS), new Card(Value.QUEEN, Color.HEARTS))));
+        hands = new Hand[]{hand1, hand2, hand3, hand4};
+        for (int k = 0; k < fourPlayerGame.getHand().length; k++) {
+            fourPlayerGame.getHand()[k] = hands[k];
+        }
+        result = fourPlayerGame.tournament();
+
+        resultExpected = new SimpleEntry<>(new ArrayList<>(List.of(hand4)), new HashMap<>());
+        winner1 = new Winner(hand1, Patterns.DOUBLE_PAIR, new Card(Value.ACE, Color.HEARTS));
+        winner2 = new Winner(hand4, Patterns.DOUBLE_PAIR, new Card(Value.KING, Color.HEARTS));
+        resultExpected.getValue().put(hand1, new ArrayList<>(List.of(winner1)));
+        resultExpected.getValue().get(hand1).add(winner1);
+        resultExpected.getValue().put(hand4, new ArrayList<>(List.of(winner2)));
+
+        assertEquals(resultExpected, result);
+        assertEquals(fourPlayerGame.tournamentResult(resultExpected), winner2);
+
+        fourPlayerGame = new Game(5, 4, 89);
+        hand1 = new Hand("Main 1", new ArrayList<>(List.of(new Card(Value.KING, Color.DIAMONDS), new Card(Value.QUEEN, Color.SPADES), new Card(Value.TEN, Color.DIAMONDS), new Card(Value.FIVE, Color.DIAMONDS), new Card(Value.FIVE, Color.HEARTS))));
+        hand2 = new Hand("Main 2", new ArrayList<>(List.of(new Card(Value.KING, Color.DIAMONDS), new Card(Value.QUEEN, Color.SPADES), new Card(Value.TEN, Color.DIAMONDS), new Card(Value.TEN, Color.HEARTS), new Card(Value.NINE, Color.DIAMONDS))));
+        hand3 = new Hand("Main 3", new ArrayList<>(List.of(new Card(Value.KING, Color.DIAMONDS), new Card(Value.QUEEN, Color.SPADES), new Card(Value.QUEEN, Color.CLUBS), new Card(Value.JACK, Color.SPADES), new Card(Value.TEN, Color.DIAMONDS))));
+        hand4 = new Hand("Main 4", new ArrayList<>(List.of(new Card(Value.KING, Color.DIAMONDS), new Card(Value.QUEEN, Color.SPADES), new Card(Value.QUEEN, Color.HEARTS), new Card(Value.TEN, Color.DIAMONDS), new Card(Value.FIVE, Color.HEARTS))));
+        hands = new Hand[]{hand1, hand2, hand3, hand4};
+        for (int k = 0; k < fourPlayerGame.getHand().length; k++) {
+            fourPlayerGame.getHand()[k] = hands[k];
+        }
+        result = fourPlayerGame.tournament();
+
+        resultExpected = new SimpleEntry<>(new ArrayList<>(List.of(hand3)), new HashMap<>());
+        winner1 = new Winner(hand2, Patterns.PAIR, new Card(Value.TEN, Color.DIAMONDS));
+        winner2 = new Winner(hand3, Patterns.PAIR, new Card(Value.QUEEN, Color.SPADES));
+        winner3 = new Winner(hand3, Patterns.HIGHER, new Card(Value.JACK, Color.SPADES));
+        resultExpected.getValue().put(hand2, new ArrayList<>(List.of(winner1)));
+        resultExpected.getValue().put(hand3, new ArrayList<>(List.of(winner2)));
+        resultExpected.getValue().get(hand3).add(winner3);
+        assertEquals(resultExpected, result);
+        assertEquals(fourPlayerGame.tournamentResult(resultExpected), winner3);
     }
 }

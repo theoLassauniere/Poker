@@ -86,19 +86,19 @@ public class Game {
     }
 
 
-    public Winner tournamentResult(Map<Hand, ArrayList<Winner>> result, List<Hand> tournament) {
+    public Winner tournamentResult(SimpleEntry<ArrayList<Hand>, Map<Hand, ArrayList<Winner>>> entry) {
         Winner equality = new Winner(null, Patterns.EQUALITY, null);
-        if (result.get(tournament.get(0)).contains(equality)) return equality;
-        Winner mostImportantResult = result.get(tournament.get(0)).get(0);
-        result.get(tournament.get(0)).remove(mostImportantResult);
-        for (Winner w : result.get(tournament.get(0))) {
-            if (w.pattern().compareTo(mostImportantResult.pattern()) < 0 || (w.pattern().compareTo(mostImportantResult.pattern()) == 0 && w.decisiveCard().compareTo(mostImportantResult.decisiveCard()) < 0))
+        if (entry.getValue().get(entry.getKey().get(0)).contains(equality)) return equality;
+        Winner mostImportantResult = entry.getValue().get(entry.getKey().get(0)).get(0);
+        entry.getValue().get(entry.getKey().get(0)).remove(mostImportantResult);
+        for (Winner w : entry.getValue().get(entry.getKey().get(0))) {
+            if (w.pattern().compareTo(mostImportantResult.pattern()) > 0 || (w.pattern().compareTo(mostImportantResult.pattern()) == 0 && w.decisiveCard().compareTo(mostImportantResult.decisiveCard()) < 0))
                 mostImportantResult = w;
         }
         return mostImportantResult;
     }
 
-    public Winner tournament() {
+    public SimpleEntry<ArrayList<Hand>, Map<Hand, ArrayList<Winner>>> tournament() {
         Map<Hand, ArrayList<Winner>> result = new HashMap<>();
         ArrayList<Hand> tournament = new ArrayList<>(List.of(hands));
         while (tournament.size() > 1) {
@@ -119,7 +119,7 @@ public class Game {
                 else result.put(hand1, new ArrayList<>(List.of(compareResult)));
             }
         }
-        return tournamentResult(result, tournament);
+        return new SimpleEntry<>(tournament, result);
     }
 
     public void texasHoldem() throws IllegalArgumentException {
@@ -132,7 +132,7 @@ public class Game {
             outputStream.print(step.getKey() + " : ");
             displayAndWait(scanner, extractionResult);
         }
-        outputStream.println(tournament());
+        outputStream.println(tournamentResult(tournament()));
     }
 
     public void poker() throws IllegalArgumentException, ParseException {
@@ -160,7 +160,7 @@ public class Game {
             String typeGame = scanner.nextLine();
             try {
                 if (typeGame.equals("1")) new Game().poker();
-                else if (typeGame.equals("2")) new Game(5, 4).texasHoldem();
+                else if (typeGame.equals("2")) new Game(5, 4, 89).texasHoldem();
                 else throw new IllegalArgumentException("The entry is not valid");
                 break;
             } catch (IllegalArgumentException | ParseException e) {
