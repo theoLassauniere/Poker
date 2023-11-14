@@ -160,7 +160,7 @@ public class Game {
             String typeGame = scanner.nextLine();
             try {
                 if (typeGame.equals("1")) new Game().poker();
-                else if (typeGame.equals("2")) new Game(5, 4, 89).texasHoldem();
+                else if (typeGame.equals("2")) new Game(5, 4).texasHoldem();
                 else throw new IllegalArgumentException("The entry is not valid");
                 break;
             } catch (IllegalArgumentException | ParseException e) {
