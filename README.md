@@ -4,11 +4,15 @@
 [Lubrat Jilian](https://github.com/LubratJilian), [Michelozzi Antoine-Marie](https://github.com/mantoniu)**  
 Polytech Nice-Sophia - SI3 PS5
 
+**Objectifs :** Déterminer la main gagnante parmi 2 mains de Poker
+
+**Bonus :** Création d'un jeu de Texas Hold'em
+
 ------------------------
 
-### Objectifs : Déterminer la main gagnante parmi 2 mains de Poker
+## Présentation :
 
-### Bonus : Création d'un jeu de Texas Hold'em
+### Main de Poker :
 
 Le but de ce projet est d’entrer 2 mains de poker de 5 cartes sur l’entrée standard et de renvoyer la main gagnante suivie de la raison de la victoire ou « égalité ».
 
@@ -55,4 +59,6 @@ Une fois que les 3 tours sont passés, on affiche le gagnant sur l'entrée stand
 
 ![Demo_Jeu_Poker](https://github.com/pns-si3-projects/dojo-poker-23-24-ps5-23-24-poker-b/assets/120557548/84e39fa5-e35d-4886-9c00-c2224027ca0c)
 
+## Structure du code :
 
+![src](https://github.com/pns-si3-projects/dojo-poker-23-24-ps5-23-24-poker-b/assets/24252743/c1d3a535-34a3-4eb6-b53c-64fc9caeed20)
