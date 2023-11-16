@@ -5,6 +5,8 @@ import java.text.ParseException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.*;
 
+import static java.lang.Integer.parseInt;
+
 /**
  * A game
  *
@@ -158,7 +160,12 @@ public class Game {
             String typeGame = scanner.nextLine();
             try {
                 if (typeGame.equals("1")) new Game().poker();
-                else if (typeGame.equals("2")) new Game(5, 4).texasHoldem();
+                else if (typeGame.equals("2")) {
+                    outputStream.print("Entrez une seed (laissez vide pour ignorer) : ");
+                    String typeSeed = scanner.nextLine().trim();
+                    if (!typeSeed.isEmpty()) new Game(5, 4, parseInt(typeSeed)).texasHoldem();
+                    else new Game(5, 4).texasHoldem();
+                }
                 else throw new IllegalArgumentException("The entry is not valid");
                 break;
             } catch (IllegalArgumentException | ParseException e) {
