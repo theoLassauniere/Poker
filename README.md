@@ -62,3 +62,10 @@ Une fois que les 3 tours sont passés, on affiche le gagnant sur l'entrée stand
 ## Structure du code :
 
 ![src](https://github.com/pns-si3-projects/dojo-poker-23-24-ps5-23-24-poker-b/assets/24252743/c1d3a535-34a3-4eb6-b53c-64fc9caeed20)
+
+## Pour lancer le code : 
+Utiliser la méthode main de la classe Game située dans src
+
+## Pour lancer les Tests :
+Les tests sont placés dans le répertoire test, les noms des classes de test correspondent aux classes testées
+
