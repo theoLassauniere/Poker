@@ -30,6 +30,9 @@ la plus haute dans le cas d’une égalité au niveau du type.
 
 #### Démo de la comparaison de 2 mains :
 
+![Demo_Poker](https://github.com/pns-si3-projects/dojo-poker-23-24-ps5-23-24-poker-b/assets/120557548/f0f1abb6-572d-42c9-ae9e-6a5c9165d280)
+
+
 ### Jeu de Texas Hold'em :
 
 Ici, le but est de faire évoluer la comparaison entre 2 mains pour passer à un jeu entier de Texas Hold'em sans mises.
@@ -43,6 +46,9 @@ Les règles du jeu sont les suivantes :
 Durant chacun des trois tours, on affiche la **meilleure main possible** pour chaque joueur.
 Une fois que les 3 tours sont passés, on affiche le gagnant sur l'entrée standard, et la raison de sa victoire.
 
+
 #### Démo du jeu de Texas Hold'em : 
+
+![Demo_Jeu_Poker](https://github.com/pns-si3-projects/dojo-poker-23-24-ps5-23-24-poker-b/assets/120557548/84e39fa5-e35d-4886-9c00-c2224027ca0c)
 
 
