@@ -41,8 +41,6 @@ public class Game {
         deck = Card.getDeck();
         random = new Random();
         hands = new Hand[numberOfPlayers];
-
-
     }
 
     public Game(int handSize, int numberOfPlayers, long seed) throws IllegalArgumentException {
