@@ -10,10 +10,14 @@ Polytech Nice-Sophia - SI3 PS5
 
 ### Bonus : Création d'un jeu de Texas Hold'em
 
-Dans ce projet le but est de créer un programme qui demande d’entrer 2 mains de poker de 5 cartes sur l’entrée standard
-et renvoi la main gagnante suivie de la raison de la victoire ou « égalité ». S’il y a une erreur dans les mains
-rentrées que ça soit un problème de duplication de carte entre les mains ou au sein de la même main, un nombre de cartes
-par mains différent de 5, des cartes inconnues, une erreur s’affichera et le jeu redémarrera.  
+Le but de ce projet est d’entrer 2 mains de poker de 5 cartes sur l’entrée standard et de renvoyer la main gagnante suivie de la raison de la victoire ou « égalité ». 
+S’il y a une des erreurs suivantes dans les mains entrées : 
+ - duplication de carte entre les mains,
+ - duplication de carte au sein de la même main,
+ - un nombre de cartes entrées différent de 5,
+ - des cartes inconnues,
+Une erreur s’affiche et le jeu redémarre.
+  
 Tous les types de mains de poker sont implémentés :
 
 - Paire
