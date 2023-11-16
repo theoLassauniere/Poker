@@ -2,7 +2,6 @@ package poker;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 /**
@@ -14,27 +13,48 @@ public enum Patterns {
     /**
      * Five cards in a row with the same color
      */
-    STRAIGHT_FLUSH(5, cards -> cards.stream().limit(5).toList()),
+    STRAIGHT_FLUSH(5) {
+        @Override
+        public List<Card> reduceToMinAmountOfCards(List<Card> cards) {
+            return cards.stream().limit(5).toList();
+        }
+    },
+
     /**
      * Four cards of the same value
      */
     FOUR_OF_A_KIND(4),
+
     /**
      * Three card of the same value and two cards of the same value
      */
-    FULL(5, cards -> cards.stream().limit(5).toList()),
+    FULL(5) {
+        @Override
+        public List<Card> reduceToMinAmountOfCards(List<Card> cards) {
+            return cards.stream().limit(5).toList();
+        }
+    },
+
     /**
      * Five cards have the same color
      */
-    FLUSH(5, cards -> cards.stream().limit(5).toList()),
+    FLUSH(5) {
+        @Override
+        public List<Card> reduceToMinAmountOfCards(List<Card> cards) {
+            return cards.stream().limit(5).toList();
+        }
+    },
 
     /**
      * Five cards in a row
      */
-    STRAIGHT(5, cards -> cards
-            .stream().collect(Collectors.toMap(Card::value, p -> p, (p, q) -> p)).values() // Only one card per value
-            .stream().sorted(Comparator.reverseOrder()).limit(5).toList() // Only first 5 cards in reverse order
-    ),
+    STRAIGHT(5) {
+        @Override
+        public List<Card> reduceToMinAmountOfCards(List<Card> cards) {
+            return cards.stream().collect(Collectors.toMap(Card::value, p -> p, (p, q) -> p)).values() // Only one card per value
+                    .stream().sorted(Comparator.reverseOrder()).limit(5).toList(); // Only first 5 cards in reverse order
+        }
+    },
 
     /**
      * Three cards of the same value
@@ -63,15 +83,9 @@ public enum Patterns {
 
 
     private final int minCardNumber;
-    private final UnaryOperator<List<Card>> reduceToMinAmount;
 
     Patterns(int minCardNumber) {
-        this(minCardNumber, cards -> cards);
-    }
-
-    Patterns(int minCardNumber, UnaryOperator<List<Card>> reduceToMinAmount) {
         this.minCardNumber = minCardNumber;
-        this.reduceToMinAmount = reduceToMinAmount;
     }
 
     public int getMinCardNumber() {
@@ -79,6 +93,6 @@ public enum Patterns {
     }
 
     public List<Card> reduceToMinAmountOfCards(List<Card> cards) {
-        return reduceToMinAmount.apply(cards);
+        return cards;
     }
 }
