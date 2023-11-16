@@ -38,15 +38,13 @@ public class Game {
         deck = Card.getDeck();
         random = new Random();
         hands = new Hand[numberOfPlayers];
+
+
     }
 
     public Game(int handSize, int numberOfPlayers, long seed) throws IllegalArgumentException {
-        if (numberOfPlayers < 2)
-            throw new IllegalArgumentException("There must be at least two players");
-        this.handSize = handSize;
-        deck = Card.getDeck();
-        random = new Random(seed);
-        hands = new Hand[numberOfPlayers];
+        this(handSize, numberOfPlayers);
+        random.setSeed(seed);
     }
 
     public Hand[] getHand() {
