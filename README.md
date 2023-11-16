@@ -12,15 +12,13 @@ Polytech Nice-Sophia - SI3 PS5
 
 Le but de ce projet est d’entrer 2 mains de poker de 5 cartes sur l’entrée standard et de renvoyer la main gagnante suivie de la raison de la victoire ou « égalité ».
 
-S’il y a une des erreurs suivantes dans les mains entrées : 
- - duplication de carte entre les mains,
- - duplication de carte au sein de la même main,
- - un nombre de cartes entrées différent de 5,
- - des cartes inconnues,
-
-Une erreur s’affiche et le jeu redémarre.
-  
-Tous les types de mains de poker sont implémentés :
+Une erreur s’affiche et le jeu redémarre, si une des erreurs suivantes est rencontrée :
+ - des cartes inconnues
+ - un nombre de cartes entrées différent de 5
+ - duplication de carte au sein de la même main
+ - duplication de carte entre les mains
+ 
+ Les types standards de mains de poker sont implémentés :
 
 - Paire
 - Double paire
@@ -31,7 +29,7 @@ Tous les types de mains de poker sont implémentés :
 - Carré
 - Quinte flush
 
-Ainsi chacun de ces types de mains peuvent être et sont ensuite classé suivant la force ou suivant la règle de la carte
+Chacun de ces types de mains sont classés suivant la force ou suivant la règle de la carte
 la plus haute dans le cas d’une égalité au niveau du type.
 
 #### Démo de la comparaison de 2 mains :
@@ -44,8 +42,8 @@ la plus haute dans le cas d’une égalité au niveau du type.
 Ici, le but est de faire évoluer la comparaison entre 2 mains pour passer à un jeu entier de Texas Hold'em sans mises.
 Les règles du jeu sont les suivantes :
 
-- On tire X mains de 2 cartes aléatoires, où X représente le nombre de joueurs,
-- Au premier tour, on tire 3 cartes aléatoires au milieu de la table (tour de jeu appelé flop),
+- On tire 4 mains pour 4 joueurs de 2 cartes aléatoires
+- Au premier tour, on tire 3 cartes aléatoires au milieu de la table (tour de jeu appelé flop)
 - Au deuxième tour, on tire une carte supplémentaire au milieu de la table (tour de jeu appelé turn)
 - Au troisième tour, on tire la dernière carte du milieu de table (tour appelé river)
 
