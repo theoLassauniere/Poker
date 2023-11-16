@@ -305,8 +305,8 @@ class GameTest {
         add(river, fourPlayerGame, scanner);
         String methodOutput = outputStream.toString().trim(); // Reads the output stream
         String newLine = System.getProperty("line.separator");
-        assertEquals("APi 3Co 5Pi " + newLine + "Main 1 (ATr APi 5Pi 3Co 3Ca)" + newLine + "Main 2 (APi QCo 8Pi 5Pi 3Co)" + newLine + "Main 3 (APi 10Co 5Tr 5Pi 3Co)" + newLine + "Main 4 (APi KCo QTr 5Pi 3Co)" + newLine + "Pressez une touche pour continuer" + newLine +
-                "7Ca " + newLine + "Main 1 (ATr APi 7Ca 3Ca 3Co)" + newLine + "Main 2 (APi QCo 8Pi 7Ca 5Pi)" + newLine + "Main 3 (APi 10Co 7Ca 5Pi 5Tr)" + newLine + "Main 4 (APi KCo QTr 7Ca 5Pi)" + newLine + "Pressez une touche pour continuer" + newLine +
-                "ACa " + newLine + "Main 1 (ATr APi ACa 3Co 3Ca)" + newLine + "Main 2 (APi ACa QCo 8Pi 7Ca)" + newLine + "Main 3 (APi ACa 10Co 5Tr 5Pi)" + newLine + "Main 4 (APi ACa KCo QTr 7Ca)" + newLine + "Pressez une touche pour continuer", methodOutput);
+        assertEquals("APi 3Co 5Pi" + newLine + "Main 1 (ATr APi 5Pi 3Co 3Ca)" + newLine + "Main 2 (APi QCo 8Pi 5Pi 3Co)" + newLine + "Main 3 (APi 10Co 5Tr 5Pi 3Co)" + newLine + "Main 4 (APi KCo QTr 5Pi 3Co)" + newLine + "Pressez une touche pour continuer" + newLine +
+                "7Ca" + newLine + "Main 1 (ATr APi 7Ca 3Ca 3Co)" + newLine + "Main 2 (APi QCo 8Pi 7Ca 5Pi)" + newLine + "Main 3 (APi 10Co 7Ca 5Pi 5Tr)" + newLine + "Main 4 (APi KCo QTr 7Ca 5Pi)" + newLine + "Pressez une touche pour continuer" + newLine +
+                "ACa" + newLine + "Main 1 (ATr APi ACa 3Co 3Ca)" + newLine + "Main 2 (APi ACa QCo 8Pi 7Ca)" + newLine + "Main 3 (APi ACa 10Co 5Tr 5Pi)" + newLine + "Main 4 (APi ACa KCo QTr 7Ca)" + newLine + "Pressez une touche pour continuer", methodOutput);
     }
 }

@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.text.ParseException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * A game
@@ -63,20 +64,16 @@ public class Game {
         return randomCardOne;
     }
 
-
     public void displayAndWait(Scanner scanner, List<Card> tab) {
-        for (Card c : tab) {
-            outputStream.print(c + " ");
-        }
-        outputStream.println();
-        for (Hand hand : hands) {
-            outputStream.println(hand);
-        }
-        outputStream.print("Pressez une touche pour continuer");
+        StringBuilder result = new StringBuilder();
+        String newLine = System.getProperty("line.separator");
+        result.append(tab.stream().map(Card::toString).collect(Collectors.joining(" "))).append(newLine)
+                .append(Arrays.stream(hands).map(Hand::toString).collect(Collectors.joining(newLine)))
+                .append(newLine).append("Pressez une touche pour continuer");
+        outputStream.print(result);
         scanner.nextLine();
         outputStream.println();
     }
-
 
     public List<Card> extraction(int numberOfCards) {
         ArrayList<Card> cardsArray = new ArrayList<>();
