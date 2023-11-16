@@ -189,6 +189,8 @@ class GameTest {
                 assertEquals(fourPlayerGame.getHand()[i], handVerify[i]);
             }
         }
+        assertEquals(fourPlayerGame.getHand()[0].getPatterns().get(Patterns.PAIR), List.of(List.of(new Card(Value.QUEEN, Color.DIAMONDS), new Card(Value.QUEEN, Color.HEARTS))));
+        assertEquals(fourPlayerGame.getHand()[1].getPatterns().get(Patterns.PAIR), List.of(List.of(new Card(Value.JACK, Color.DIAMONDS), new Card(Value.JACK, Color.CLUBS))));
     }
 
     //Four different tests for tournament and tournamentResult methods, each time we compare the result of the method on a precise game which we know all the steps during the "tournament" and the result

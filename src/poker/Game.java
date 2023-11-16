@@ -6,6 +6,8 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.lang.Integer.parseInt;
+
 /**
  * A game
  *
@@ -39,15 +41,13 @@ public class Game {
         deck = Card.getDeck();
         random = new Random();
         hands = new Hand[numberOfPlayers];
+
+
     }
 
     public Game(int handSize, int numberOfPlayers, long seed) throws IllegalArgumentException {
-        if (numberOfPlayers < 2)
-            throw new IllegalArgumentException("There must be at least two players");
-        this.handSize = handSize;
-        deck = Card.getDeck();
-        random = new Random(seed);
-        hands = new Hand[numberOfPlayers];
+        this(handSize, numberOfPlayers);
+        random.setSeed(seed);
     }
 
     public Hand[] getHand() {
@@ -157,7 +157,12 @@ public class Game {
             String typeGame = scanner.nextLine();
             try {
                 if (typeGame.equals("1")) new Game().poker();
-                else if (typeGame.equals("2")) new Game(5, 4, 89).texasHoldem();
+                else if (typeGame.equals("2")) {
+                    outputStream.print("Entrez une seed (laissez vide pour ignorer) : ");
+                    String typeSeed = scanner.nextLine().trim();
+                    if (!typeSeed.isEmpty()) new Game(5, 4, parseInt(typeSeed)).texasHoldem();
+                    else new Game(5, 4).texasHoldem();
+                }
                 else throw new IllegalArgumentException("The entry is not valid");
                 break;
             } catch (IllegalArgumentException | ParseException e) {
